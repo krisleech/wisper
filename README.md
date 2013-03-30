@@ -106,8 +106,10 @@ end
 ### Service/Use case object
 
 The downside to publishing directly from ActiveRecord models is that an event
-can get fired prematurely since an update could get rolled back if a
-transaction fails.
+can get fired and then rolled back if a transaction fails.
+
+Since I am trying to make my models dumb I tend to use a separate object
+which contains all the logic and wraps it all in a transaction.
 
 ```ruby
 class CreateThing
@@ -131,6 +133,9 @@ end
 
 ### Example listeners
 
+These are typical app wide listeners which have a method for pretty much every
+event which is broadcast.
+
 ```ruby
 class PusherListener
   def create_thing_successful(thing)
@@ -152,6 +157,10 @@ end
 ```
 
 ## Subscribing to selected events
+
+By default a listener will get notified of all events it responds to. You can
+limit which events a listener is notified of by passing an event or array of
+events to `:on`.
 
 ```ruby
 post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
