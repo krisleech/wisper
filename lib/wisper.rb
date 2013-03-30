@@ -1,8 +1,6 @@
 require "wisper/version"
 
 module Wisper
-  include ActiveSupport::Concern
-
   def listeners
     @listeners ||= Set.new
   end

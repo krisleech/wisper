@@ -1,7 +1,6 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'active_support'
 require 'wisper'
 
 RSpec.configure do |config|
