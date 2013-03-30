@@ -20,7 +20,7 @@ Add this line to your application's Gemfile:
 
 ## Usage
 
-```
+```ruby
 class CreateThing
   include Wisper
 
