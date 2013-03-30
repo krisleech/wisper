@@ -74,8 +74,12 @@ publish(:done_something, self, 'hello', 'world')
 class Post < ActiveRecord::Base
   include Wisper
 
-  after_save do
-    publish(:post_updated, self)
+  def create
+    if save
+      publish(:create_post_successful, self)
+    else
+      publish(:create_post_failed, self)
+    end
   end
 end
 ```
@@ -94,7 +98,7 @@ class PostsController < ApplicationController
     @post.on(:create_post_successful) { |post| redirect_to post }
     @post.on(:create_post_failed)     { |post| render :action => :new }
 
-    @post.save
+    @post.create
   end
 end
 ```
