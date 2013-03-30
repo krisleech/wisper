@@ -41,7 +41,7 @@ describe Wisper do
   end
 
   describe 'Block listeners' do
-    it 'subscribes block to all events' do
+    it '.add_block_listener subscribes block to all events' do
       insider = double('insider')
       insider.should_receive(:it_happened)
 
@@ -52,11 +52,33 @@ describe Wisper do
       publisher.send(:broadcast, 'something_happened')
     end
 
-    it 'subscribes block to selected events' do
+    it '.add_block_listener subscribes block to selected events' do
       insider = double('insider')
       insider.should_not_receive(:it_happened)
 
       publisher.add_block_listener(:on => 'this_thing_happened') do
+        insider.it_happened
+      end
+
+      publisher.send(:broadcast, 'something_happened')
+    end
+
+    it '.respond_to subscribes block to all events' do
+      insider = double('insider')
+      insider.should_receive(:it_happened)
+
+      publisher.respond_to(:something_happened) do
+        insider.it_happened
+      end
+
+      publisher.send(:broadcast, 'something_happened')
+    end
+
+    it '.on subscribes block to all events' do
+      insider = double('insider')
+      insider.should_receive(:it_happened)
+
+      publisher.on(:something_happened) do
         insider.it_happened
       end
 

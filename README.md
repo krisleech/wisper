@@ -46,11 +46,11 @@ class ThingsController < ApplicationController
     command.add_listener(ActivityListener.new)
     command.add_listener(StatisticsListener.new)
 
-    command.respond_to(:create_thing_successful) do |thing|
+    command.on(:create_thing_successful) do |thing|
       redirect_to thing
     end
 
-    command.respond_to(:create_thing_failed) do |thing|
+    command.on(:create_thing_failed) do |thing|
       @thing = thing
       render :action => :new
     end

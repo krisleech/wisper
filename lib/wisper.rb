@@ -15,7 +15,12 @@ module Wisper
 
   # sugar
   def respond_to(event, &block)
-    listeners << BlockRegistration.new(block, :on => event)
+    add_block_listener({:on => event}, &block)
+  end
+
+  # sugar
+  def on(event, &block)
+    add_block_listener({:on => event}, &block)
   end
 
   class BlockRegistration
