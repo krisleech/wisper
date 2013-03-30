@@ -78,6 +78,11 @@ class StatisticsListener
 end
 ```
 
+## Compatibility
+
+Tested with 1.9.x on MRI, JRuby and Rubinius.
+See the [build status](https://travis-ci.org/krisleech/wisper) for details.
+
 ## License
 
 (The MIT License)
