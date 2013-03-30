@@ -18,10 +18,7 @@ module Wisper
     add_block_listener({:on => event}, &block)
   end
 
-  # sugar
-  def on(event, &block)
-    add_block_listener({:on => event}, &block)
-  end
+  alias :on :respond_to
 
   class BlockRegistration
     attr_reader :on, :listener
@@ -52,6 +49,9 @@ module Wisper
         listener.public_send(event, *args) 
       end
     end
+
+    alias :publish  :broadcast
+    alias :announce :broadcast
   end
 
   private
