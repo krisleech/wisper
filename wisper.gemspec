@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["kris.leech@gmail.com"]
   gem.description   = %q{pub/sub for Ruby objects}
   gem.summary       = %q{pub/sub for Ruby objects}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/krisleech/wisper"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
