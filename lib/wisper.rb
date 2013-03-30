@@ -9,6 +9,8 @@ module Wisper
     listeners << ObjectRegistration.new(listener, options)
   end
 
+  alias :subscribe :add_listener
+
   def add_block_listener(options = {}, &block)
     listeners << BlockRegistration.new(block, options)
   end

@@ -23,6 +23,84 @@ Add this line to your application's Gemfile:
 
 ## Usage
 
+Any class with the Wisper module included can broadcast events to subscribed
+listeners. Listeners are added, at runtime, to the publishing object.
+
+### Publishing
+
+```ruby
+class MyPublisher
+  include Wisper
+
+  def do_something
+    publish(:done_something, self)
+  end
+end
+```
+
+### Subscribing
+
+#### Listeners
+
+The listener is subscribed to all events it responds to.
+
+```ruby
+listener = Object.new # any object
+my_publisher = MyPublisher.new
+my_publisher.subscribe(listener)
+```
+
+#### Blocks
+
+The block is subscribed to a single event.
+
+```ruby
+my_publisher = MyPublisher.new
+my_publisher.on(:done_something) do |publisher|
+  # ...
+end
+```
+
+When the publisher broadcasts an event it can pass any number of arguments to
+the listeners.
+
+```ruby
+publish(:done_something, self, 'hello', 'world')
+```
+
+### ActiveRecord
+
+```ruby
+class Post < ActiveRecord::Base
+  include Wisper
+
+  after_save do
+    publish(:post_updated, self)
+  end
+end
+```
+
+### ActionController
+
+```ruby
+class PostsController < ApplicationController
+  def create
+    @post = Post.new(params[:post])
+
+    @post.subscribe(PusherListener.new)
+    @post.subscribe(ActivityListener.new)
+    @post.subscribe(StatisticsListener.new)
+
+    @post.on(:create_post_successful) { |post| redirect_to post }
+    @post.on(:create_post_failed)     { |post| render :action => :new }
+
+    @post.save
+  end
+end
+```
+
+### Rails/Service object example
+
 ```ruby
 class CreateThing
   include Wisper
@@ -31,9 +109,9 @@ class CreateThing
     thing = Thing.new(attributes)
     if thing.valid?
       thing.save!
-      broadcast(:create_thing_successful, thing)
+      publish(:create_thing_successful, thing)
     else
-      broadcast(:create_thing_failed, thing)
+      publish(:create_thing_failed, thing)
     end
   end
 end
@@ -42,9 +120,9 @@ class ThingsController < ApplicationController
   def create
     command = CreateThing.new
 
-    command.add_listener(PusherListener.new)
-    command.add_listener(ActivityListener.new)
-    command.add_listener(StatisticsListener.new)
+    command.subscribe(PusherListener.new)
+    command.subscribe(ActivityListener.new)
+    command.subscribe(StatisticsListener.new)
 
     command.on(:create_thing_successful) do |thing|
       redirect_to thing
@@ -76,6 +154,12 @@ class StatisticsListener
     # ...
   end
 end
+```
+
+## Subscribing to selected events
+
+```ruby
+post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
 ```
 
 ## Compatibility
