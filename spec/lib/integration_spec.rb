@@ -38,4 +38,16 @@ describe Wisper do
 
     command.execute(true)
   end
+
+  it 'subscribes block can be chained' do
+    insider = double('Insider')
+    insider.should_receive(:render).with('success')
+
+    command = MyCommand.new
+
+    command.on(:success) { |message| insider.render('success') }
+           .on(:failure) { |message| insider.render('failure') }
+
+    command.execute(true)
+  end
 end

@@ -7,12 +7,14 @@ module Wisper
 
   def add_listener(listener, options = {})
     listeners << ObjectRegistration.new(listener, options)
+    self
   end
 
   alias :subscribe :add_listener
 
   def add_block_listener(options = {}, &block)
     listeners << BlockRegistration.new(block, options)
+    self
   end
 
   # sugar

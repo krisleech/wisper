@@ -38,6 +38,10 @@ describe Wisper do
 
       publisher.send(:broadcast, 'so_did_this')
     end
+
+    it 'adding listeners can be chained' do
+      publisher.add_listener(listener, :on => 'so_did_this').should == publisher
+    end
   end
 
   describe 'Block listeners' do
@@ -61,6 +65,11 @@ describe Wisper do
       end
 
       publisher.send(:broadcast, 'something_happened')
+    end
+
+    it '.add_block_listener can be chained' do
+      publisher.add_block_listener(:on => 'this_thing_happened') do
+      end.should == publisher
     end
 
     it '.respond_to subscribes block to all events' do
