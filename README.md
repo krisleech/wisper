@@ -103,7 +103,11 @@ class PostsController < ApplicationController
 end
 ```
 
-### Rails/Service object example
+### Service/Use case object
+
+The downside to publishing directly from ActiveRecord models is that an event
+can get fired prematurely since an update could get rolled back if a
+transaction fails.
 
 ```ruby
 class CreateThing
@@ -111,36 +115,23 @@ class CreateThing
 
   def execute(attributes)
     thing = Thing.new(attributes)
+
     if thing.valid?
-      thing.save!
+      ActiveRecord::Base.transaction do
+        thing.save
+        # ...
+      end
       publish(:create_thing_successful, thing)
     else
       publish(:create_thing_failed, thing)
     end
   end
 end
+```
 
-class ThingsController < ApplicationController
-  def create
-    command = CreateThing.new
+### Example listeners
 
-    command.subscribe(PusherListener.new)
-    command.subscribe(ActivityListener.new)
-    command.subscribe(StatisticsListener.new)
-
-    command.on(:create_thing_successful) do |thing|
-      redirect_to thing
-    end
-
-    command.on(:create_thing_failed) do |thing|
-      @thing = thing
-      render :action => :new
-    end
-
-    command.execute(params[:thing])
-  end
-end
-
+```ruby
 class PusherListener
   def create_thing_successful(thing)
     # ...
