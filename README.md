@@ -38,6 +38,13 @@ class MyPublisher
 end
 ```
 
+When the publisher publishes an event it can pass any number of arguments which 
+are passed on to the listeners.
+
+```ruby
+publish(:done_something, self, 'hello', 'world')
+```
+
 ### Subscribing
 
 #### Listeners
@@ -59,13 +66,6 @@ my_publisher = MyPublisher.new
 my_publisher.on(:done_something) do |publisher|
   # ...
 end
-```
-
-When the publisher broadcasts an event it can pass any number of arguments to
-the listeners.
-
-```ruby
-publish(:done_something, self, 'hello', 'world')
 ```
 
 ### ActiveRecord
@@ -108,8 +108,11 @@ end
 The downside to publishing directly from ActiveRecord models is that an event
 can get fired and then rolled back if a transaction fails.
 
-Since I am trying to make my models dumb I tend to use a separate object
-which contains all the logic and wraps it all in a transaction.
+Since I am trying to make my models dumb I tend to use a separate service 
+object which contains all the logic and wraps it all in a transaction.
+
+The follow is contrived, but you can imagine it doing more than just updating a
+record, maybe sending an email or updating other records.
 
 ```ruby
 class CreateThing
@@ -164,6 +167,13 @@ events to `:on`.
 
 ```ruby
 post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
+```
+
+## Chaining subscriptions
+
+```ruby
+post.on(:success) { |post| redirect_to post }
+    .on(:failure) { |post| render :action => :edit, :locals => :post => post }
 ```
 
 ## Compatibility
