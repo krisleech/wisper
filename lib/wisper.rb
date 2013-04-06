@@ -40,22 +40,32 @@ module Wisper
   end
 
   class ObjectRegistration
-    attr_reader :on, :listener
+    attr_reader :on, :with, :listener
 
     def initialize(listener, options)
       @listener   = listener
       @method     = options[:method]
       @on = Array(options.fetch(:on) { 'all' }).map(&:to_s)
+      @with = options[:with]
     end
 
     def broadcast(event, *args)
-      if (on.include?(event) || on.include?('all')) && listener.respond_to?(event)
-        listener.public_send(event, *args) 
+      method_to_call = map_event_to_method(event)
+      if should_broadcast?(event) && listener.respond_to?(method_to_call)
+        listener.public_send(method_to_call, *args)
       end
     end
 
-    alias :publish  :broadcast
-    alias :announce :broadcast
+    private
+
+    def should_broadcast?(event)
+      on.include?(event) || on.include?('all')
+    end
+
+    def map_event_to_method(event)
+      self.with || event
+    end
+
   end
 
   private
@@ -65,6 +75,9 @@ module Wisper
       listener.broadcast(clean_event(event), *args) 
     end
   end
+
+  alias :publish  :broadcast
+  alias :announce :broadcast
 
   def clean_event(event)
     event.to_s.gsub('-', '_')

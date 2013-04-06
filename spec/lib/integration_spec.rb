@@ -39,6 +39,21 @@ describe Wisper do
     command.execute(true)
   end
 
+  it 'maps events to different methods' do
+    listener_1 = double('listener')
+    listener_2 = double('listener')
+    listener_1.should_receive(:happy_days).with('hello')
+    listener_2.should_receive(:sad_days).with('world')
+
+    command = MyCommand.new
+
+    command.add_listener(listener_1, :on => :success, :with => :happy_days)
+    command.add_listener(listener_2, :on => :failure, :with => :sad_days)
+
+    command.execute(true)
+    command.execute(false)
+  end
+
   it 'subscribes block can be chained' do
     insider = double('Insider')
     insider.should_receive(:render).with('success')

@@ -39,6 +39,15 @@ describe Wisper do
       publisher.send(:broadcast, 'so_did_this')
     end
 
+    it 'subscriber is called with a different method' do
+      listener.should_receive(:different_method).twice
+
+      publisher.add_listener(listener, :with => :different_method)
+
+      publisher.send(:broadcast, 'this_happened')
+      publisher.send(:broadcast, 'so_did_this')
+    end
+
     it 'adding listeners can be chained' do
       publisher.add_listener(listener, :on => 'so_did_this').should == publisher
     end

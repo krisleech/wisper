@@ -169,6 +169,37 @@ events to `:on`.
 post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
 ```
 
+## Mapping event to a different method
+
+By default the method called on the subscriber is the same as the event
+broadcast. However it can be mapped to a different method using `:with`.
+
+```ruby
+report_creator.subscribe(MailResponder.new, :with => :successful)
+```
+
+In the above case it is pretty useless unless used in conjuction with `:on`
+since all events will get mapped to `:successful`. Instead you might do
+something like this:
+
+```ruby
+report_creator.subscribe(MailResponder.new, :on   => :create_report_successful,
+                                            :with => :successful)
+```
+
+If you pass an array of events to `:on` each event will be mapped to the same
+method when `:with` is specified. If you need to listen for select events
+_and_ map each one to a different method subscribe the listener once for
+each mapping:
+
+```ruby
+report_creator.subscribe(MailResponder.new, :on   => :create_report_successful,
+                                            :with => :successful)
+
+report_creator.subscribe(MailResponder.new, :on   => :create_report_failed,
+                                            :with => :failed)
+```
+
 ## Chaining subscriptions
 
 ```ruby
