@@ -94,4 +94,26 @@ describe Wisper do
       publisher.send(:broadcast, 'something_happened')
     end
   end
+
+  describe '.broadcast' do
+    describe 'event argument' do
+      it 'is indifferent to string and symbol' do
+        listener.should_receive(:this_happened).twice
+
+        publisher.add_listener(listener)
+
+        publisher.send(:broadcast, 'this_happened')
+        publisher.send(:broadcast, :this_happened)
+      end
+
+      it 'is indifferent to dasherized and underscored strings' do
+        listener.should_receive(:this_happened).twice
+
+        publisher.add_listener(listener)
+
+        publisher.send(:broadcast, 'this_happened')
+        publisher.send(:broadcast, 'this-happened')
+      end
+    end
+  end
 end
