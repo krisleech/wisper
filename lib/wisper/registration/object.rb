@@ -1,12 +1,10 @@
 module Wisper
-  class ObjectRegistration
-    attr_reader :on, :with, :listener
+  class ObjectRegistration < Registration
+    attr_reader :with
 
     def initialize(listener, options)
-      @listener   = listener
-      @method     = options[:method]
-      @on         = Array(options.fetch(:on) { 'all' }).map(&:to_s)
-      @with       = options[:with]
+      super(listener, options)
+      @with = options[:with]
     end
 
     def broadcast(event, *args)
@@ -18,12 +16,8 @@ module Wisper
 
     private
 
-    def should_broadcast?(event)
-      on.include?(event) || on.include?('all')
-    end
-
     def map_event_to_method(event)
-      self.with || event
+      with || event
     end
   end
 end

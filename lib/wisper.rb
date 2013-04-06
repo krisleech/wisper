@@ -1,4 +1,5 @@
 require "wisper/version"
+require "wisper/registration/registration"
 require "wisper/registration/object"
 require "wisper/registration/block"
 
