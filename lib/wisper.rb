@@ -29,7 +29,7 @@ module Wisper
 
     def initialize(block, options)
       @listener   = block
-      @on = Array(options.fetch(:on) { 'all' }).map(&:to_s)
+      @on         = Array(options.fetch(:on) { 'all' }).map(&:to_s)
     end
 
     def broadcast(event, *args)
@@ -45,8 +45,8 @@ module Wisper
     def initialize(listener, options)
       @listener   = listener
       @method     = options[:method]
-      @on = Array(options.fetch(:on) { 'all' }).map(&:to_s)
-      @with = options[:with]
+      @on         = Array(options.fetch(:on) { 'all' }).map(&:to_s)
+      @with       = options[:with]
     end
 
     def broadcast(event, *args)
@@ -65,14 +65,13 @@ module Wisper
     def map_event_to_method(event)
       self.with || event
     end
-
   end
 
   private
 
   def broadcast(event, *args)
     listeners.each do | listener |
-      listener.broadcast(clean_event(event), *args) 
+      listener.broadcast(clean_event(event), *args)
     end
   end
 
