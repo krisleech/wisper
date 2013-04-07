@@ -16,7 +16,7 @@ describe Wisper do
     end
 
     describe ':on argument' do
-      it 'subscribes given listener to selected events' do
+      it 'subscribes given listener to a single event' do
         listener.should_receive(:this_happened)
         listener.stub(:so_did_this)
         listener.should_not_receive(:so_did_this)
@@ -27,6 +27,21 @@ describe Wisper do
 
         publisher.send(:broadcast, 'this_happened')
         publisher.send(:broadcast, 'so_did_this')
+      end
+
+      it 'subscribes given listener to many events' do
+        listener.should_receive(:this_happened)
+        listener.should_receive(:and_this)
+        listener.stub(:so_did_this)
+        listener.should_not_receive(:so_did_this)
+
+        listener.respond_to?(:so_did_this).should be_true
+
+        publisher.add_listener(listener, :on => ['this_happened', 'and_this'])
+
+        publisher.send(:broadcast, 'this_happened')
+        publisher.send(:broadcast, 'so_did_this')
+        publisher.send(:broadcast, 'and_this')
       end
     end
 
