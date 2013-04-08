@@ -62,8 +62,9 @@ describe Wisper do
   end
 
   describe '.add_block_listener' do
+    let(:insider) { double('insider') }
+
     it 'subscribes given block to all events' do
-      insider = double('insider')
       insider.should_receive(:it_happened).twice
 
       publisher.add_block_listener do
@@ -76,7 +77,6 @@ describe Wisper do
 
     describe ':on argument' do
       it '.add_block_listener subscribes block to an event' do
-        insider = double('insider')
         insider.should_not_receive(:it_happened).once
 
         publisher.add_block_listener(:on => 'something_happened') do
