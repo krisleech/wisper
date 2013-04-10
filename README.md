@@ -207,6 +207,57 @@ post.on(:success) { |post| redirect_to post }
     .on(:failure) { |post| render :action => :edit, :locals => :post => post }
 ```
 
+## RSpec
+
+Wisper comes with a method for stubbing event publishers so that you can create isolation tests
+that only care about reacting to events.
+
+Given this piece of code:
+
+```ruby
+class CodeThatReactsToEvents
+  def do_something
+    publisher = MyPublisher.new
+    publisher.on(:some_event) do |variable|
+      return "Hello with #{variable}!"
+    end
+    publisher.execute
+  end
+end
+```
+
+You can test it like this:
+
+```ruby
+require 'wisper/rspec/stub_wisper_publisher'
+
+describe CodeThatReactsToEvents do
+  context "on some_event" do
+    before do
+      stub_wisper_publisher("MyPublisher", :execute, :some_event, "foo")
+    end
+
+    it "renders" do
+      response = CodeThatReactsToEvents.new.do_something
+      response.should == "Hello with foo!"
+    end
+  end
+end
+```
+
+This becomes important when testing, for example, Rails controllers in
+isolation from the business logic.  This technique is used at the controller
+layer to isolate testing the controller from testing the encapsulated business
+logic.
+
+You can use any number of args to pass to the event:
+
+```ruby
+stub_wisper_publisher("MyPublisher", :execute, :some_event, "foo1", "foo2", ...)
+```
+
+See `spec/lib/rspec_extensions_spec.rb` for a runnable example.
+
 ## Compatibility
 
 Tested with 1.9.x on MRI, JRuby and Rubinius.
