@@ -1,16 +1,21 @@
 module Wisper
   class ObjectRegistration < Registration
-    attr_reader :with
+    attr_reader :with, :async
 
     def initialize(listener, options)
       super(listener, options)
       @with = options[:with]
+      @async = options.fetch(:async, false)
     end
 
     def broadcast(event, *args)
       method_to_call = map_event_to_method(event)
       if should_broadcast?(event) && listener.respond_to?(method_to_call)
-        listener.public_send(method_to_call, *args)
+        unless async
+          listener.public_send(method_to_call, *args)
+        else
+          listener.async.public_send(method_to_call, *args)
+        end
       end
     end
 
