@@ -1,6 +1,6 @@
 # Wisper
 
-Simple pub/sub for Ruby objects with support for asynchronous events.
+Simple pub/sub for Ruby objects
 
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.png)](https://codeclimate.com/github/krisleech/wisper)
 [![Build Status](https://travis-ci.org/krisleech/wisper.png)](https://travis-ci.org/krisleech/wisper)
@@ -71,7 +71,7 @@ my_publisher.on(:done_something) do |publisher|
 end
 ```
 
-### Asynchronous Publishing
+### Asynchronous Publishing (Experimental)
 
 There is support for publishing events asynchronously using Celluloid by
 passing the `async` option.
@@ -91,8 +91,11 @@ my_publisher.add_subscriber(MySubscriber.new, :async => true)
 ```
 
 When passing the `async` option the event is sent to the subscriber with a
-prefixed `async` method call, equivalent to
+prefixed `async` method call, equivalent to calling
 `MySubscriber.new.async.it_happened`.
+
+The `terminate` is important otherwise garbage collection will never happen
+and you will leak memory.
 
 Please refer to [Celluloid](https://github.com/celluloid/celluloid/wiki)
 for more informaiton, particually the
