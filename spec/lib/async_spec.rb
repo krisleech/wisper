@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'celluloid/autostart'
-
 class MyService
   include Wisper
 
@@ -14,11 +12,8 @@ end
 $global = 'no'
 
 class MyListener
-  include Celluloid
-
   def success(command)
     $global = 'yes'
-    terminate
   end
 end
 
@@ -32,7 +27,7 @@ describe Wisper do
     command.add_listener(listener, :async => true)
 
     command.execute
-    sleep(0.1) # seriously...
+    sleep(1) # seriously...
     $global.should == 'yes'
   end
 end
