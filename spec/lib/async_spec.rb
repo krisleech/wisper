@@ -32,7 +32,7 @@ describe Wisper do
     command.add_listener(listener, :async => true)
 
     command.execute
-    sleep(1) # seriously...
+    sleep(0.1) # seriously...
     $global.should == 'yes'
   end
 end
