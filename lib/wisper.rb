@@ -2,6 +2,7 @@ require "wisper/version"
 require "wisper/registration/registration"
 require "wisper/registration/object"
 require "wisper/registration/block"
+require 'wisper/global_listeners'
 
 module Wisper
   def listeners
@@ -29,8 +30,12 @@ module Wisper
 
   private
 
+  def all_listeners
+    listeners.merge(GlobalListeners.listeners)
+  end
+
   def broadcast(event, *args)
-    listeners.each do | listener |
+    all_listeners.each do | listener |
       listener.broadcast(clean_event(event), *args)
     end
   end
