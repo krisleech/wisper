@@ -174,6 +174,20 @@ class IndexingListener
 end
 ```
 
+## Global listeners
+
+If you become tired of adding the same listeners to _every_ publisher you can
+add global listeners. These receive all events published.
+
+However it means that when looking at the code it will not be obvious that the
+global listeners are being executed in additional to the regular listeners.
+
+```ruby
+Wisper::GlobalListeners.add_listener(MyListener.new)
+```
+
+In a Rails app you might want to add your global listeners in an initalizer.
+
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it responds to. You can
