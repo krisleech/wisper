@@ -19,7 +19,9 @@ models.
 
 Add this line to your application's Gemfile:
 
-    gem 'wisper'
+```ruby
+gem 'wisper'
+```
 
 ## Usage
 
