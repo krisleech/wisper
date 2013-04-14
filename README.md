@@ -33,6 +33,7 @@ class MyPublisher
   include Wisper
 
   def do_something
+    # ...
     publish(:done_something, self)
   end
 end
@@ -52,7 +53,7 @@ publish(:done_something, self, 'hello', 'world')
 The listener is subscribed to all events it responds to.
 
 ```ruby
-listener = Object.new # any object
+listener = MyListener.new # any object
 my_publisher = MyPublisher.new
 my_publisher.subscribe(listener)
 ```
@@ -103,33 +104,35 @@ class PostsController < ApplicationController
 end
 ```
 
-### Service/Use case object
+### Service/Use Case/Command objects
 
-The downside to publishing directly from ActiveRecord models is that an event
-can get fired and then rolled back if a transaction fails.
-
-Since I am trying to make my models dumb I tend to use a separate service 
-object which contains all the logic and wraps it all in a transaction.
-
-The follow is contrived, but you can imagine it doing more than just updating a
-record, maybe sending an email or updating other records.
+A Service object is useful when an operation is complex, interacts with more
+than one model, accesses an external API or would burden a model with too much
+responsibility.
 
 ```ruby
-class CreateThing
+class PlayerJoiningTeam
   include Wisper
 
-  def execute(attributes)
-    thing = Thing.new(attributes)
+  def execute(player, team)
+    membership = Membership.new(player, team)
 
-    if thing.valid?
+    if membership.valid?
       ActiveRecord::Base.transaction do
-        thing.save
-        # ...
+        membership.save!
+        assign_first_mission(player, team)
+        TeamMailer.new_player_joined(player, team).deliver
       end
-      publish(:create_thing_successful, thing)
+      publish(:player_joining_team_successful, player, team)
     else
-      publish(:create_thing_failed, thing)
+      publish(:player_joining_team_failed, player, team)
     end
+  end
+
+  private
+
+  def assign_first_mission(player, team)
+    # ...
   end
 end
 ```
@@ -153,6 +156,18 @@ class ActivityListener
 end
 
 class StatisticsListener
+  def create_thing_successful(thing)
+    # ...
+  end
+end
+
+class CacheListener
+  def create_thing_successful(thing)
+    # ...
+  end
+end
+
+class IndexingListener
   def create_thing_successful(thing)
     # ...
   end
