@@ -1,10 +1,12 @@
+require 'celluloid/autostart' rescue LoadError
+
 module Wisper
   class ObjectRegistration < Registration
     attr_reader :with, :async
 
     def initialize(listener, options)
       super(listener, options)
-      @with = options[:with]
+      @with  = options[:with]
       @async = options.fetch(:async, false)
     end
 
@@ -14,7 +16,7 @@ module Wisper
         unless async
           listener.public_send(method_to_call, *args)
         else
-          listener.async.public_send(method_to_call, *args)
+          AsyncListener.new(listener, method_to_call).async.public_send(method_to_call, *args)
         end
       end
     end
