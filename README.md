@@ -3,7 +3,7 @@
 Simple pub/sub for Ruby objects
 
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.png)](https://codeclimate.com/github/krisleech/wisper)
-[![Build Status](https://travis-ci.org/krisleech/wisper.png)](https://travis-ci.org/krisleech/wisper)
+[![Build Status](https://travis-ci.org/krisleech/wisper.png?branch=master)](https://travis-ci.org/krisleech/wisper)
 
 While this is not dependent on Rails in any way it was extracted from a Rails
 project and is used as an alternative to ActiveRecord callbacks and Observers.
