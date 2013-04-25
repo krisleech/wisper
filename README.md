@@ -6,7 +6,7 @@ Simple pub/sub for Ruby objects
 [![Build Status](https://travis-ci.org/krisleech/wisper.png?branch=master)](https://travis-ci.org/krisleech/wisper)
 
 While this is not dependent on Rails in any way it was extracted from a Rails
-project and is used as an alternative to ActiveRecord callbacks and Observers.
+project and can used as an alternative to ActiveRecord callbacks and Observers.
 
 The problem with callbacks and Observers is that they always happen. How many
 times have you wanted to do `User.create` without firing off a welcome email?
@@ -52,17 +52,17 @@ publish(:done_something, self, 'hello', 'world')
 
 #### Listeners
 
-The listener is subscribed to all events it responds to.
+Any object can be a listener and by default they are only subscribed to events
+they can respond to.
 
 ```ruby
-listener = MyListener.new # any object
 my_publisher = MyPublisher.new
-my_publisher.subscribe(listener)
+my_publisher.subscribe(MyListener.new)
 ```
 
 #### Blocks
 
-The block is subscribed to a single event.
+Blocks are subscribed to single events.
 
 ```ruby
 my_publisher = MyPublisher.new
@@ -137,11 +137,9 @@ class PlayerJoiningTeam
     membership = Membership.new(player, team)
 
     if membership.valid?
-      ActiveRecord::Base.transaction do
-        membership.save!
-        assign_first_mission(player, team)
-        TeamMailer.new_player_joined(player, team).deliver
-      end
+      membership.save!
+      email_player(player, team)
+      assign_first_mission(player, team)
       publish(:player_joining_team_successful, player, team)
     else
       publish(:player_joining_team_failed, player, team)
@@ -149,6 +147,10 @@ class PlayerJoiningTeam
   end
 
   private
+
+  def email_player(player, team)
+    # ...
+  end
 
   def assign_first_mission(player, team)
     # ...
@@ -196,7 +198,8 @@ end
 ## Global listeners
 
 If you become tired of adding the same listeners to _every_ publisher you can
-add global listeners. These receive all events published.
+add global listeners. They receive all published events which they can respond
+to.
 
 However it means that when looking at the code it will not be obvious that the
 global listeners are being executed in additional to the regular listeners.
@@ -209,9 +212,9 @@ In a Rails app you might want to add your global listeners in an initalizer.
 
 ## Subscribing to selected events
 
-By default a listener will get notified of all events it responds to. You can
-limit which events a listener is notified of by passing an event or array of
-events to `:on`.
+By default a listener will get notified of all events it can respond to. You
+can limit which events a listener is notified of by passing an event or array
+of events to `:on`.
 
 ```ruby
 post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
