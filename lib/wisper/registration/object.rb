@@ -1,4 +1,8 @@
-require 'celluloid/autostart' rescue LoadError
+begin
+  require 'celluloid/autostart'
+rescue LoadError
+  # no-op
+end
 
 module Wisper
   class ObjectRegistration < Registration
