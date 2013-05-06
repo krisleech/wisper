@@ -210,6 +210,8 @@ Wisper::GlobalListeners.add_listener(MyListener.new)
 
 In a Rails app you might want to add your global listeners in an initalizer.
 
+Global listeners are threadsafe.
+
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it can respond to. You
