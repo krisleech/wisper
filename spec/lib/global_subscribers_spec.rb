@@ -5,6 +5,8 @@ describe Wisper::GlobalListeners do
   let(:local_listener)   { double('listener') }
   let(:publisher)        { Object.new.extend(Wisper) }
 
+  after(:each) { Wisper::GlobalListeners.clear }
+
   describe '.add_listener' do
     it 'adds given listener to every publisher' do
       Wisper::GlobalListeners.add_listener(global_listener)
@@ -24,5 +26,23 @@ describe Wisper::GlobalListeners do
 
       publisher.send(:broadcast, :it_happened)
     end
+
+    it 'is threadsafe' do
+      num_threads = 100
+      (1..num_threads).to_a.map do
+        Thread.new do
+          Wisper::GlobalListeners.add_listener(Object.new)
+          sleep(rand) # a little chaos
+        end
+      end.each(&:join)
+
+      Wisper::GlobalListeners.listeners.size.should == num_threads
+    end
+  end
+
+  it '.clear clears all global listeners' do
+    Wisper::GlobalListeners.add_listener(global_listener)
+    Wisper::GlobalListeners.clear
+    Wisper::GlobalListeners.listeners.should be_empty
   end
 end
