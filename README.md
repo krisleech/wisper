@@ -71,22 +71,9 @@ my_publisher.on(:done_something) do |publisher|
 end
 ```
 
-### Asynchronous Publishing (Experimental)
+### Asynchronous Publishing
 
-There is support for publishing events asynchronously by passing the `async`
-option.
-
-```ruby
-my_publisher.add_subscriber(MySubscriber.new, :async => true)
-```
-
-This leans on Celluloid, which must be included in your Gemfile.
-
-The listener is transparently turned in to a Celluloid Actor.
-
-Please refer to [Celluloid](https://github.com/celluloid/celluloid/wiki)
-for more information, particually the
-[Gotchas](https://github.com/celluloid/celluloid/wiki/Gotchas).
+Please refer to the [wisper-async](https://github.com/krisleech/wisper-async) gem.
 
 ### ActiveRecord
 
