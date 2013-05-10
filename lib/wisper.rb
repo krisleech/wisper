@@ -1,7 +1,6 @@
 require "wisper/version"
 require "wisper/registration/registration"
 require "wisper/registration/object"
-require "wisper/registration/object/async_listener"
 require "wisper/registration/block"
 require 'wisper/global_listeners'
 

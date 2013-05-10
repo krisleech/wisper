@@ -1,34 +1,10 @@
 require 'spec_helper'
 
-class MyService
-  include Wisper
+describe 'async option' do
+  let(:listener)  { double('listener') }
+  let(:publisher) { Object.new.extend(Wisper) }
 
-  def execute
-    broadcast('success', self)
+  it 'it raises a deprecation exception' do
+      expect { publisher.add_listener(listener, :async => true) }.to raise_error
   end
 end
-
-# help me...
-$global = 'no'
-
-class MyListener
-  def success(command)
-    $global = 'yes'
-  end
-end
-
-describe Wisper do
-
-  it 'subscribes object to all published events' do
-    listener = MyListener.new
-
-    command = MyService.new
-
-    command.add_listener(listener, :async => true)
-
-    command.execute
-    sleep(1) # seriously...
-    $global.should == 'yes'
-  end
-end
-
