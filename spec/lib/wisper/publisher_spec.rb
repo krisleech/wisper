@@ -59,6 +59,10 @@ describe Wisper::Publisher do
     it 'returns publisher so methods can be chained' do
       publisher.add_listener(listener, :on => 'so_did_this').should == publisher
     end
+
+    it 'is aliased to .subscribe' do
+      publisher.respond_to?(:subscribe).should be_true
+    end
   end
 
   describe '.add_block_listener' do
