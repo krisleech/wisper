@@ -60,6 +60,16 @@ my_publisher = MyPublisher.new
 my_publisher.subscribe(MyListener.new)
 ```
 
+You can add multiple subscribers at once by passing an array to `subscribe` or
+using a block.
+
+```ruby
+my_publisher.subscribers do
+  add ListenerOne.new
+  add ListenerTwo.new
+end
+```
+
 #### Blocks
 
 Blocks are subscribed to single events.
