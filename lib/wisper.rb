@@ -7,4 +7,7 @@ require 'wisper/registration/block'
 require 'wisper/global_listeners'
 
 module Wisper
+  def self.included(base)
+    raise 'Backwards incompatible change `include Wisper::Publisher` instead of `include  Wisper`'
+  end
 end
