@@ -137,4 +137,17 @@ describe Wisper do
       end
     end
   end
+
+  describe '.listeners' do
+    it 'returns immutable collection' do
+      publisher.listeners.frozen?.should be_true
+      expect { publisher.listeners << listener }.to raise_error(RuntimeError)
+    end
+
+    it 'includes local listeners' do
+       publisher.add_listener(listener)
+       publisher.listeners.first.listener.should == listener
+       publisher.listeners.size.should == 1
+    end
+  end
 end

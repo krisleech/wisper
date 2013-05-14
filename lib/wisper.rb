@@ -1,3 +1,4 @@
+require 'set'
 require "wisper/version"
 require "wisper/registration/registration"
 require "wisper/registration/object"
@@ -6,18 +7,18 @@ require 'wisper/global_listeners'
 
 module Wisper
   def listeners
-    @listeners ||= Set.new
+    all_listeners.dup.freeze
   end
 
   def add_listener(listener, options = {})
-    listeners << ObjectRegistration.new(listener, options)
+    local_listeners << ObjectRegistration.new(listener, options)
     self
   end
 
   alias :subscribe :add_listener
 
   def add_block_listener(options = {}, &block)
-    listeners << BlockRegistration.new(block, options)
+    local_listeners << BlockRegistration.new(block, options)
     self
   end
 
@@ -30,8 +31,16 @@ module Wisper
 
   private
 
+  def local_listeners
+    @local_listeners ||= Set.new
+  end
+
+  def global_listeners
+    GlobalListeners.listeners
+  end
+
   def all_listeners
-    listeners.merge(GlobalListeners.listeners)
+    local_listeners.merge(global_listeners)
   end
 
   def broadcast(event, *args)
