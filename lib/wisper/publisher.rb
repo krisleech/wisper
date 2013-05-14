@@ -1,18 +1,18 @@
 module Wisper
   module Publisher
     def listeners
-      all_listeners.dup.freeze
+      registrations.map(&:listener).freeze
     end
 
     def add_listener(listener, options = {})
-      local_listeners << ObjectRegistration.new(listener, options)
+      local_registrations << ObjectRegistration.new(listener, options)
       self
     end
 
     alias :subscribe :add_listener
 
     def add_block_listener(options = {}, &block)
-      local_listeners << BlockRegistration.new(block, options)
+      local_registrations << BlockRegistration.new(block, options)
       self
     end
 
@@ -25,21 +25,21 @@ module Wisper
 
     private
 
-    def local_listeners
-      @local_listeners ||= Set.new
+    def local_registrations
+      @local_registrations ||= Set.new
     end
 
-    def global_listeners
-      GlobalListeners.listeners
+    def global_registrations
+      GlobalListeners.registrations
     end
 
-    def all_listeners
-      local_listeners.merge(global_listeners)
+    def registrations
+      local_registrations.merge(global_registrations)
     end
 
     def broadcast(event, *args)
-      all_listeners.each do | listener |
-        listener.broadcast(clean_event(event), *args)
+      registrations.each do | registration |
+        registration.broadcast(clean_event(event), *args)
       end
     end
 

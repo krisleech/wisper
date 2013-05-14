@@ -40,6 +40,18 @@ describe Wisper::GlobalListeners do
     end
   end
 
+  describe '.listeners' do
+    it 'returns collection of global listeners' do
+      Wisper::GlobalListeners.add_listener(global_listener)
+      Wisper::GlobalListeners.listeners.should == [global_listener]
+    end
+
+    it 'returns an immutable collection' do
+      Wisper::GlobalListeners.listeners.frozen?.should be_true
+      expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError)
+    end
+  end
+
   it '.clear clears all global listeners' do
     Wisper::GlobalListeners.add_listener(global_listener)
     Wisper::GlobalListeners.clear
