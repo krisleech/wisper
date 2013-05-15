@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Wisper::Publisher::Listeners do
   let(:listeners)     { Wisper::Publisher::Listeners.new(publisher, registrations) }
-  let(:listener)      { double('listener') }
+  let(:listener)      { double('listener', :to_a => nil) } # [1]
   let(:publisher)     { Object.new.extend(Wisper::Publisher) }
   let(:registrations) { [] }
 
@@ -48,3 +48,7 @@ describe Wisper::Publisher::Listeners do
     end
   end
 end
+
+# [1] `to_a` is stubbed since on 1.9.2 the double raises an error:
+# RSpec::Mocks::MockExpectationError: Mock received unexpected message :to_a
+# with (no args)
