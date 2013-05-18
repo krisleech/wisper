@@ -300,7 +300,8 @@ See `spec/lib/rspec_extensions_spec.rb` for a runnable example.
 
 ## Compatibility
 
-Tested with 1.9.x on MRI, JRuby and Rubinius.
+Tested with MRI 1.9.x, MRI 2.0.0, JRuby (1.9 and 2.0 mode) and Rubinius (1.9
+mode).
 See the [build status](https://travis-ci.org/krisleech/wisper) for details.
 
 ## License
