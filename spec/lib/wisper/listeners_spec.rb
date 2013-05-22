@@ -21,7 +21,7 @@ describe Wisper::Publisher::Listeners do
       publisher.listeners.should == [listener]
     end
 
-    it 'adds listeners' do
+    it 'adds listeners to given publisher' do
       listener_2 = double('listener')
       listeners.add([listener, listener_2])
       publisher.listeners.should == [listener, listener_2]
