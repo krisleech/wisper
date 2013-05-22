@@ -1,13 +1,20 @@
 require 'delegate'
 
+# Provides read and write operations for a collection of listeners.
+#
+# Read operations are delegated to the collection of listeners
+# Write operations are delegated to the provided data store, a new mutated
+# object is returned. The store is either a publisher or an instance of
+# GlobalListeners.
+
 module Wisper
   module Publisher
     class Listeners < SimpleDelegator
-      attr_reader :publisher
-      private     :publisher
+      attr_reader :store
+      private     :store
 
-      def initialize(publisher, registrations, &block)
-        @publisher = publisher
+      def initialize(store, registrations, &block)
+        @store = store
         super(registrations.map(&:listener))
         freeze
         instance_eval &block if block_given?
@@ -15,9 +22,9 @@ module Wisper
 
       def add(listeners, options = {})
         Array(listeners).each do |listener|
-          publisher.add_listener(listener, options)
+          store.add_listener(listener, options)
         end
-        publisher.listeners # return the now mutated version, not self
+        store.listeners # return the now mutated version, not self
       end
     end
   end

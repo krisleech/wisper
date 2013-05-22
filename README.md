@@ -204,7 +204,16 @@ However it means that when looking at the code it will not be obvious that the
 global listeners are being executed in additional to the regular listeners.
 
 ```ruby
-Wisper::GlobalListeners.add_listener(MyListener.new)
+Wisper::GlobalListeners.add_listener(ActivityRecorder.new)
+```
+
+You can add multiple listeners using a block.
+
+```ruby
+Wisper::GlobalListeners.listeners do
+  add ActivityRecorder.new
+  add StatisticsRecorder.new
+end
 ```
 
 In a Rails app you might want to add your global listeners in an initalizer.

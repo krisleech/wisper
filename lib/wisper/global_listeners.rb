@@ -20,8 +20,8 @@ module Wisper
       with_mutex { @registrations }
     end
 
-    def listeners
-      registrations.map(&:listener).freeze
+    def listeners(&block)
+      Publisher::Listeners.new(self, registrations, &block)
     end
 
     def clear
@@ -36,8 +36,8 @@ module Wisper
       instance.registrations
     end
 
-    def self.listeners
-      instance.listeners
+    def self.listeners(&block)
+      instance.listeners(&block)
     end
 
     def self.clear

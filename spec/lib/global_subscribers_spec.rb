@@ -41,6 +41,10 @@ describe Wisper::GlobalListeners do
   end
 
   describe '.listeners' do
+    it 'returns a Listeners object' do
+      Wisper::GlobalListeners.listeners.is_a?(Wisper::Publisher::Listeners)
+    end
+
     it 'returns collection of global listeners' do
       Wisper::GlobalListeners.add_listener(global_listener)
       Wisper::GlobalListeners.listeners.should == [global_listener]
@@ -49,6 +53,17 @@ describe Wisper::GlobalListeners do
     it 'returns an immutable collection' do
       Wisper::GlobalListeners.listeners.frozen?.should be_true
       expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError, /can't modify/)
+    end
+
+    describe '.add' do
+      it 'allows adding of multiple listeners' do
+        Wisper::GlobalListeners.listeners do
+          add Object.new
+          add Object.new
+        end
+
+        Wisper::GlobalListeners.listeners.size.should == 2
+      end
     end
   end
 
