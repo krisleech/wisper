@@ -8,7 +8,7 @@ describe Wisper::Listeners do
 
   it 'is immutable' do
     listeners.frozen?.should be_true
-    expect { listeners << Object.new }.to raise_error(RuntimeError, /can't modify/)
+    expect { listeners << Object.new }.to raise_error(RuntimeError, /modify/)
   end
 
   it 'is an enumerator' do
