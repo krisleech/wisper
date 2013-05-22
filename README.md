@@ -32,7 +32,7 @@ listeners. Listeners are added, at runtime, to the publishing object.
 
 ```ruby
 class MyPublisher
-  include Wisper
+  include Wisper::Publisher
 
   def do_something
     # ...
@@ -79,7 +79,7 @@ Please refer to the [wisper-async](https://github.com/krisleech/wisper-async) ge
 
 ```ruby
 class Post < ActiveRecord::Base
-  include Wisper
+  include Wisper::Publisher
 
   def create
     if save
@@ -118,7 +118,7 @@ responsibility.
 
 ```ruby
 class PlayerJoiningTeam
-  include Wisper
+  include Wisper::Publisher
 
   def execute(player, team)
     membership = Membership.new(player, team)

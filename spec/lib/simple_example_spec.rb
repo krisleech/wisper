@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class MyPublisher
-  include Wisper
+  include Wisper::Publisher
 
   def do_something
     # ...

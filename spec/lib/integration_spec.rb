@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # Example
 class MyCommand
-  include Wisper
+  include Wisper::Publisher
 
   def execute(be_successful)
     if be_successful

@@ -7,25 +7,33 @@ module Wisper
     private :mutex
 
     def initialize
-      @listeners = Set.new
-      @mutex     = Mutex.new
+      @registrations = Set.new
+      @mutex         = Mutex.new
     end
 
     def add_listener(listener, options = {})
-      with_mutex { @listeners << ObjectRegistration.new(listener, options) }
+      with_mutex { @registrations << ObjectRegistration.new(listener, options) }
       self
     end
 
+    def registrations
+      with_mutex { @registrations }
+    end
+
     def listeners
-      with_mutex { @listeners }
+      registrations.map(&:listener).freeze
     end
 
     def clear
-      with_mutex { @listeners.clear }
+      with_mutex { @registrations.clear }
     end
 
     def self.add_listener(listener, options = {})
       instance.add_listener(listener, options)
+    end
+
+    def self.registrations
+      instance.registrations
     end
 
     def self.listeners

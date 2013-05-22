@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Wisper::GlobalListeners do
   let(:global_listener)  { double('listener') }
   let(:local_listener)   { double('listener') }
-  let(:publisher)        { Object.new.extend(Wisper) }
+  let(:publisher)        { Object.new.extend(Wisper::Publisher) }
 
   after(:each) { Wisper::GlobalListeners.clear }
 
@@ -37,6 +37,18 @@ describe Wisper::GlobalListeners do
       end.each(&:join)
 
       Wisper::GlobalListeners.listeners.size.should == num_threads
+    end
+  end
+
+  describe '.listeners' do
+    it 'returns collection of global listeners' do
+      Wisper::GlobalListeners.add_listener(global_listener)
+      Wisper::GlobalListeners.listeners.should == [global_listener]
+    end
+
+    it 'returns an immutable collection' do
+      Wisper::GlobalListeners.listeners.frozen?.should be_true
+      expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError)
     end
   end
 
