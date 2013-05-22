@@ -21,7 +21,7 @@ module Wisper
     end
 
     def listeners(&block)
-      Publisher::Listeners.new(self, registrations, &block)
+      Listeners.new(self, registrations, &block)
     end
 
     def clear

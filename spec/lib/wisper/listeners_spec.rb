@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Wisper::Publisher::Listeners do
-  let(:listeners)     { Wisper::Publisher::Listeners.new(publisher, registrations) }
+describe Wisper::Listeners do
+  let(:listeners)     { Wisper::Listeners.new(publisher, registrations) }
   let(:listener)      { double('listener', :to_a => nil) } # [1]
   let(:publisher)     { Object.new.extend(Wisper::Publisher) }
   let(:registrations) { [] }
@@ -36,7 +36,7 @@ describe Wisper::Publisher::Listeners do
 
   describe '.new' do
     it 'given block yields to self' do
-      Wisper::Publisher::Listeners.new(publisher, registrations) do
+      Wisper::Listeners.new(publisher, registrations) do
         add Object.new
         add Object.new
         add Object.new

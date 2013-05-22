@@ -42,7 +42,7 @@ describe Wisper::GlobalListeners do
 
   describe '.listeners' do
     it 'returns a Listeners object' do
-      Wisper::GlobalListeners.listeners.is_a?(Wisper::Publisher::Listeners)
+      Wisper::GlobalListeners.listeners.is_a?(Wisper::Listeners)
     end
 
     it 'returns collection of global listeners' do
