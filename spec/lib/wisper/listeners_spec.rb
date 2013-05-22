@@ -36,19 +36,13 @@ describe Wisper::Publisher::Listeners do
 
   describe '.new' do
     it 'given block yields to self' do
-      $listener = Object.new
-
-      # inside the block self is an instance of Listener since the block is
-      # instance_eval'd, so any var's created outside the block are out of
-      # scope, expect globals.
-      #
-      # If you know of a better way to do this please send a pull request :)
-
       Wisper::Publisher::Listeners.new(publisher, registrations) do
-        add($listener)
+        add Object.new
+        add Object.new
+        add Object.new
       end
 
-      publisher.listeners.should == [$listener]
+      publisher.listeners.size.should == 3
     end
   end
 end
