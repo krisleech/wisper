@@ -108,9 +108,11 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(params[:post])
 
-    @post.subscribe(PusherListener.new)
-    @post.subscribe(ActivityListener.new)
-    @post.subscribe(StatisticsListener.new)
+    @post.subscribers do
+      add PusherListener.new
+      add ActivityListener.new
+      add StatisticsListener.new
+    end
 
     @post.on(:create_post_successful) { |post| redirect_to post }
     @post.on(:create_post_failed)     { |post| render :action => :new }
