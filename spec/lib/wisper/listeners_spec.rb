@@ -8,10 +8,12 @@ describe Wisper::Publisher::Listeners do
 
   it 'is immutable' do
     listeners.frozen?.should be_true
-    expect { listeners << Object.new }.to raise_error(RuntimeError)
+    expect { listeners << Object.new }.to raise_error(RuntimeError, /can't modify/)
   end
 
-  pending '.each delegates to listeners'
+  it 'is an enumerator' do
+    publisher.listeners.is_a?(Enumerator)
+  end
 
   describe '.add' do
     it 'adds a listener to given publisher' do
@@ -39,6 +41,8 @@ describe Wisper::Publisher::Listeners do
       # inside the block self is an instance of Listener since the block is
       # instance_eval'd, so any var's created outside the block are out of
       # scope, expect globals.
+      #
+      # If you know of a better way to do this please send a pull request :)
 
       Wisper::Publisher::Listeners.new(publisher, registrations) do
         add($listener)
@@ -49,6 +53,6 @@ describe Wisper::Publisher::Listeners do
   end
 end
 
-# [1] `to_a` is stubbed since on 1.9.2 the double raises an error:
+# [1] `to_a` is stubbed since on 1.9.2 only the double raises an error:
 # RSpec::Mocks::MockExpectationError: Mock received unexpected message :to_a
 # with (no args)
