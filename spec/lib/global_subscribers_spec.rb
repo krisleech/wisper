@@ -48,7 +48,7 @@ describe Wisper::GlobalListeners do
 
     it 'returns an immutable collection' do
       Wisper::GlobalListeners.listeners.frozen?.should be_true
-      expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError)
+      expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError, /can't modify/)
     end
   end
 
