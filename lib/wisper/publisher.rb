@@ -33,8 +33,12 @@ module Wisper
       GlobalListeners.registrations
     end
 
+    def temporary_registrations
+      TemporaryListeners.registrations
+    end
+
     def registrations
-      local_registrations.merge(global_registrations)
+      local_registrations + global_registrations + temporary_registrations
     end
 
     def broadcast(event, *args)
