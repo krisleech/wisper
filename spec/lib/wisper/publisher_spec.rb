@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Wisper::Publisher do
   let(:listener)  { double('listener') }
-  let(:publisher) { Object.new.extend(Wisper::Publisher) }
+  let(:publisher) { publisher_class.new }
 
   describe '.add_listener' do
     it 'subscribes given listener to all published events' do

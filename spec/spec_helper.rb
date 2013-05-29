@@ -9,3 +9,8 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
 end
+
+# returns an anonymous wispered class
+def publisher_class
+  Class.new { include Wisper::Publisher }
+end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Wisper do
   it 'includes Wisper::Publisher for backwards compatibility' do
     silence_warnings do
-      publisher_class = Object.class_eval { include Wisper }
+      publisher_class = Class.new { include Wisper }
       publisher_class.ancestors.should include Wisper::Publisher
     end
   end
