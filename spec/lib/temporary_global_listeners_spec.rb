@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wisper::GlobalListeners do
+describe Wisper::TemporaryListeners do
   let(:listener_1) { double('listener', :to_a => nil) } # [1]
   let(:listener_2) { double('listener', :to_a => nil) }
   let(:publisher)  { Object.class_eval { include Wisper::Publisher } }
@@ -26,7 +26,7 @@ describe Wisper::GlobalListeners do
       listener_2.should_receive(:success)
       listener_2.should_not_receive(:failure)
 
-      Wisper::TemporaryListeners.with([listener_1, listener_2]) do
+      Wisper::TemporaryListeners.with(listener_1, listener_2) do
         publisher.instance_eval { broadcast(:success) }
       end
 

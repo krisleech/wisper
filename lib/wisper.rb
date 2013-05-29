@@ -12,4 +12,8 @@ module Wisper
     warn "[DEPRECATION] `include Wisper::Publisher` instead of `include Wisper`"
     base.class_eval { include Wisper::Publisher  }
   end
+
+  def self.with_listeners(*args, &block)
+    TemporaryListeners.with(*args, &block)
+  end
 end

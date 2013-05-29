@@ -2,22 +2,23 @@ module Wisper
   class TemporaryListeners
     include Singleton
 
-    def with(listener_or_listeners, options = {}, &block)
-      add_listeners(Array(listener_or_listeners), options)
+    def self.with(*listeners, &block)
+      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+      instance.with(listeners, options, &block)
+    end
+
+    def self.registrations
+      instance.registrations
+    end
+
+    def with(listeners, options, &block)
+      add_listeners(listeners, options)
       yield
       clear
     end
 
     def registrations
       Thread.current[key] ||= Set.new
-    end
-
-    def self.with(listener_or_listeners, options = {}, &block)
-      instance.with(listener_or_listeners, options, &block)
-    end
-
-    def self.registrations
-      instance.registrations
     end
 
     private
