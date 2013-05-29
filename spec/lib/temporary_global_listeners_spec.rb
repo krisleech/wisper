@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Wisper::GlobalListeners do
-  let(:listener_1) { double('listener') }
-  let(:listener_2) { double('listener') }
+  let(:listener_1) { double('listener', :to_a => nil) } # [1]
+  let(:listener_2) { double('listener', :to_a => nil) }
   let(:publisher)  { Object.class_eval { include Wisper::Publisher } }
 
   describe '.with' do
@@ -35,3 +35,5 @@ describe Wisper::GlobalListeners do
   end
 end
 
+# [1] stubbing `to_a` prevents `Double "listener" received unexpected message
+# :to_a with (no args)` on MRI 1.9.2 when a double is passed to `Array()`.
