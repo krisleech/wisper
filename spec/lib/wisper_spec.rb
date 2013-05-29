@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Wisper do
 
-  def publisher_class
-    Class.new { include Wisper::Publisher }
-  end
-
   it 'includes Wisper::Publisher for backwards compatibility' do
     silence_warnings do
       publisher_class = Class.new { include Wisper }
