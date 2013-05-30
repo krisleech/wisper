@@ -1,8 +1,10 @@
 module Wisper
   module Publisher
-    def listeners
-      registrations.map(&:listener).freeze
+    def listeners(&block)
+      Listeners.new(self, registrations, &block)
     end
+
+    alias :subscribers :listeners
 
     def add_listener(listener, options = {})
       local_registrations << ObjectRegistration.new(listener, options)

@@ -7,4 +7,5 @@ group :development do
   gem 'guard-rspec'
   gem 'rb-fsevent', '~>0.9.1' if RUBY_PLATFORM =~ /darwin/
   gem 'flay'
+  gem 'ruby2ruby' # for flay diff's
 end

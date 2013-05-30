@@ -60,6 +60,16 @@ my_publisher = MyPublisher.new
 my_publisher.subscribe(MyListener.new)
 ```
 
+You can add multiple subscribers at once by passing an array to `subscribe` or
+using a block.
+
+```ruby
+my_publisher.subscribers do
+  add ListenerOne.new
+  add ListenerTwo.new
+end
+```
+
 #### Blocks
 
 Blocks are subscribed to single events.
@@ -98,9 +108,11 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(params[:post])
 
-    @post.subscribe(PusherListener.new)
-    @post.subscribe(ActivityListener.new)
-    @post.subscribe(StatisticsListener.new)
+    @post.subscribers do
+      add PusherListener.new
+      add ActivityListener.new
+      add StatisticsListener.new
+    end
 
     @post.on(:create_post_successful) { |post| redirect_to post }
     @post.on(:create_post_failed)     { |post| render :action => :new }
@@ -192,7 +204,16 @@ However it means that when looking at the code it will not be obvious that the
 global listeners are being executed in additional to the regular listeners.
 
 ```ruby
-Wisper::GlobalListeners.add_listener(MyListener.new)
+Wisper::GlobalListeners.add_listener(ActivityRecorder.new)
+```
+
+You can add multiple listeners using a block.
+
+```ruby
+Wisper::GlobalListeners.listeners do
+  add ActivityRecorder.new
+  add StatisticsRecorder.new
+end
 ```
 
 In a Rails app you might want to add your global listeners in an initalizer.
