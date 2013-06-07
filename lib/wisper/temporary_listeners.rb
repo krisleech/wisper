@@ -1,14 +1,13 @@
 module Wisper
   class TemporaryListeners
-    include Singleton
 
     def self.with(*listeners, &block)
       options = listeners.last.is_a?(Hash) ? listeners.pop : {}
-      instance.with(listeners, options, &block)
+      new.with(listeners, options, &block)
     end
 
     def self.registrations
-      instance.registrations
+      new.registrations
     end
 
     def with(listeners, options, &block)
@@ -34,7 +33,6 @@ module Wisper
     def add_listener(listener, options)
       registrations << ObjectRegistration.new(listener, options)
     end
-
 
     def key
       '__wisper_temporary_listeners'

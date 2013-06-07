@@ -32,6 +32,18 @@ describe Wisper::TemporaryListeners do
 
       publisher.instance_eval { broadcast(:failure) }
     end
+
+    it 'ensures registrations are thread local' do
+      num_threads = 20
+      (1..num_threads).to_a.map do
+        Thread.new do
+          Wisper::TemporaryListeners.registrations << Object.new
+          Wisper::TemporaryListeners.registrations.size.should == 1
+        end
+      end.each(&:join)
+
+      Wisper::TemporaryListeners.registrations.size.should == 0
+    end
   end
 end
 
