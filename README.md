@@ -220,7 +220,8 @@ end
 ```
 
 Any events broadcast within the block by any publisher will be sent to the
-listeners.
+listeners. This is useful if you have a child object which publishes an event
+which is not bubbled down to a parent publisher.
 
 ## Subscribing to selected events
 
