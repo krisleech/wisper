@@ -209,6 +209,22 @@ In a Rails app you might want to add your global listeners in an initalizer.
 
 Global listeners are threadsafe.
 
+## Temporary Global Listeners
+
+You can also globally subscribe listeners for the duration of a block.
+
+```ruby
+Wisper.with_listeners(MyListener.new, OtherListener.new) do
+  # do stuff
+end
+```
+
+Any events broadcast within the block by any publisher will be sent to the
+listeners. This is useful if you have a child object which publishes an event
+which is not bubbled down to a parent publisher.
+
+Temporary Global Listeners are threadsafe.
+
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it can respond to. You
