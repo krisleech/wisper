@@ -78,14 +78,18 @@ Please refer to the [wisper-async](https://github.com/krisleech/wisper-async) ge
 ### ActiveRecord
 
 ```ruby
-class Post < ActiveRecord::Base
+class Bid < ActiveRecord::Base
   include Wisper::Publisher
 
-  def create
-    if save
-      publish(:create_post_successful, self)
+  validates :amount, :presence => true
+
+  def commit(_attrs = nil)
+    assign_attributes(_attrs) if _attrs.present?
+    if valid?
+      save!
+      publish(:create_bid_successful, self)
     else
-      publish(:create_post_failed, self)
+      publish(:create_bid_failed, self)
     end
   end
 end
@@ -94,21 +98,27 @@ end
 ### ActionController
 
 ```ruby
-class PostsController < ApplicationController
+class BidsController < ApplicationController
+  def new
+    @bid = Bid.new
+  end
+
   def create
-    @post = Post.new(params[:post])
+    @bid = Bid.new(params[:bid])
 
-    @post.subscribe(PusherListener.new)
-    @post.subscribe(ActivityListener.new)
-    @post.subscribe(StatisticsListener.new)
+    @bid.subscribe(PusherListener.new)
+    @bid.subscribe(ActivityListener.new)
+    @bid.subscribe(StatisticsListener.new)
 
-    @post.on(:create_post_successful) { |post| redirect_to post }
-    @post.on(:create_post_failed)     { |post| render :action => :new }
+    @bid.on(:create_bid_successful) { |bid| redirect_to bid }
+    @bid.on(:create_bid_failed)     { |bid| render :action => :new }
 
-    @post.create
+    @bid.commit
   end
 end
 ```
+
+A full CRUD example is shown in the [Wiki](https://github.com/krisleech/wisper/wiki).
 
 ### Service/Use Case/Command objects
 
