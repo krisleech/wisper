@@ -223,6 +223,8 @@ Any events broadcast within the block by any publisher will be sent to the
 listeners. This is useful if you have a child object which publishes an event
 which is not bubbled down to a parent publisher.
 
+Temporary Global Listeners are threadsafe.
+
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it can respond to. You
