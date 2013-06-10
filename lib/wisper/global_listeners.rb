@@ -11,7 +11,7 @@ module Wisper
       @mutex         = Mutex.new
     end
 
-    def add_listener(listener, options = {})
+    def add(listener, options = {})
       with_mutex { @registrations << ObjectRegistration.new(listener, options) }
       self
     end
@@ -28,8 +28,8 @@ module Wisper
       with_mutex { @registrations.clear }
     end
 
-    def self.add_listener(listener, options = {})
-      instance.add_listener(listener, options)
+    def self.add(listener, options = {})
+      instance.add(listener, options)
     end
 
     def self.registrations
@@ -42,6 +42,12 @@ module Wisper
 
     def self.clear
       instance.clear
+    end
+
+    # remain backwards compatible
+    def self.add_listener(listener, options = {})
+      warn "[DEPRECATION] use `add` instead of `add_listener`"
+      add(listener, options)
     end
 
     private

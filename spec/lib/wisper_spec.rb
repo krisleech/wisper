@@ -30,11 +30,3 @@ describe Wisper do
     Wisper::GlobalListeners.listeners.should == [listener]
   end
 end
-
-# prevents deprecation warning showing up in spec output
-def silence_warnings
-  original_verbosity = $VERBOSE
-  $VERBOSE = nil
-  yield
-  $VERBOSE = original_verbosity
-end

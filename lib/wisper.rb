@@ -18,6 +18,6 @@ module Wisper
   end
 
   def self.add_listener(listener)
-    GlobalListeners.add_listener(listener)
+    GlobalListeners.add(listener)
   end
 end
