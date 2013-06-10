@@ -22,6 +22,13 @@ describe Wisper do
 
     publisher.send(:broadcast, 'not_here')
   end
+
+  it '.add_listener adds a global listener' do
+    Wisper::GlobalListeners.clear
+    listener = double('listener')
+    Wisper.add_listener(listener)
+    Wisper::GlobalListeners.listeners.should == [listener]
+  end
 end
 
 # prevents deprecation warning showing up in spec output

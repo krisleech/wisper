@@ -202,7 +202,7 @@ However it means that when looking at the code it will not be obvious that the
 global listeners are being executed in additional to the regular listeners.
 
 ```ruby
-Wisper::GlobalListeners.add_listener(MyListener.new)
+Wisper.add_listener(MyListener.new)
 ```
 
 In a Rails app you might want to add your global listeners in an initalizer.

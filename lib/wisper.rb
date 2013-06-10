@@ -16,4 +16,8 @@ module Wisper
   def self.with_listeners(*args, &block)
     TemporaryListeners.with(*args, &block)
   end
+
+  def self.add_listener(listener)
+    GlobalListeners.add_listener(listener)
+  end
 end
