@@ -5,8 +5,6 @@ describe Wisper::GlobalListeners do
   let(:local_listener)   { double('listener') }
   let(:publisher)        { publisher_class.new }
 
-  after(:each) { Wisper::GlobalListeners.clear }
-
   describe '.add' do
     it 'adds given listener to every publisher' do
       Wisper::GlobalListeners.add(global_listener)

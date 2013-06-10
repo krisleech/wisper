@@ -24,7 +24,6 @@ describe Wisper do
   end
 
   it '.add_listener adds a global listener' do
-    Wisper::GlobalListeners.clear
     listener = double('listener')
     Wisper.add_listener(listener)
     Wisper::GlobalListeners.listeners.should == [listener]
