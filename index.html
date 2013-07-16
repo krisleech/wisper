@@ -1,0 +1,397 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Wisper by krisleech</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Wisper</h1>
+        <p class="header">Wisper is a Ruby library for decoupling and managing the dependencies of your domain models.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/krisleech/wisper/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/krisleech/wisper/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/krisleech/wisper">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/krisleech">krisleech</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="wisper" class="anchor" href="#wisper"><span class="octicon octicon-link"></span></a>Wisper</h1>
+
+<p>Simple pub/sub for Ruby objects</p>
+
+<p><a href="https://codeclimate.com/github/krisleech/wisper"><img src="https://codeclimate.com/github/krisleech/wisper.png" alt="Code Climate"></a>
+<a href="https://travis-ci.org/krisleech/wisper"><img src="https://travis-ci.org/krisleech/wisper.png?branch=master" alt="Build Status"></a></p>
+
+<p>While this is not dependent on Rails in any way it was extracted from a Rails
+project and can used as an alternative to ActiveRecord callbacks and Observers.</p>
+
+<p>The problem with callbacks and Observers is that they always happen. How many
+times have you wanted to do <code>User.create</code> without firing off a welcome email?</p>
+
+<p>It is also super useful for integrating web socket notifications, statistics
+and activity streams in to your controller layer without coupling them to your 
+models.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add this line to your application's Gemfile:</p>
+
+<div class="highlight"><pre><span class="n">gem</span> <span class="s1">'wisper'</span><span class="p">,</span> <span class="s1">'~&gt;1.0.0'</span>
+</pre></div>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Any class with the Wisper module included can broadcast events to subscribed
+listeners. Listeners are added, at runtime, to the publishing object.</p>
+
+<h3>
+<a name="publishing" class="anchor" href="#publishing"><span class="octicon octicon-link"></span></a>Publishing</h3>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyPublisher</span>
+  <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+
+  <span class="k">def</span> <span class="nf">do_something</span>
+    <span class="c1"># ...</span>
+    <span class="n">publish</span><span class="p">(</span><span class="ss">:done_something</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>When the publisher publishes an event it can pass any number of arguments which 
+are passed on to the listeners.</p>
+
+<div class="highlight"><pre><span class="n">publish</span><span class="p">(</span><span class="ss">:done_something</span><span class="p">,</span> <span class="nb">self</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'world'</span><span class="p">)</span>
+</pre></div>
+
+<h3>
+<a name="subscribing" class="anchor" href="#subscribing"><span class="octicon octicon-link"></span></a>Subscribing</h3>
+
+<h4>
+<a name="listeners" class="anchor" href="#listeners"><span class="octicon octicon-link"></span></a>Listeners</h4>
+
+<p>Any object can be a listener and by default they are only subscribed to events
+they can respond to.</p>
+
+<div class="highlight"><pre><span class="n">my_publisher</span> <span class="o">=</span> <span class="no">MyPublisher</span><span class="o">.</span><span class="n">new</span>
+<span class="n">my_publisher</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">MyListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</pre></div>
+
+<h4>
+<a name="blocks" class="anchor" href="#blocks"><span class="octicon octicon-link"></span></a>Blocks</h4>
+
+<p>Blocks are subscribed to single events.</p>
+
+<div class="highlight"><pre><span class="n">my_publisher</span> <span class="o">=</span> <span class="no">MyPublisher</span><span class="o">.</span><span class="n">new</span>
+<span class="n">my_publisher</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:done_something</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">publisher</span><span class="o">|</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>
+<a name="asynchronous-publishing" class="anchor" href="#asynchronous-publishing"><span class="octicon octicon-link"></span></a>Asynchronous Publishing</h3>
+
+<p>Please refer to the <a href="https://github.com/krisleech/wisper-async">wisper-async</a> gem.</p>
+
+<h3>
+<a name="activerecord" class="anchor" href="#activerecord"><span class="octicon octicon-link"></span></a>ActiveRecord</h3>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Bid</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+
+  <span class="n">validates</span> <span class="ss">:amount</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+
+  <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="n">_attrs</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+    <span class="n">assign_attributes</span><span class="p">(</span><span class="n">_attrs</span><span class="p">)</span> <span class="k">if</span> <span class="n">_attrs</span><span class="o">.</span><span class="n">present?</span>
+    <span class="k">if</span> <span class="n">valid?</span>
+      <span class="n">save!</span>
+      <span class="n">publish</span><span class="p">(</span><span class="ss">:create_bid_successful</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="n">publish</span><span class="p">(</span><span class="ss">:create_bid_failed</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>
+<a name="actioncontroller" class="anchor" href="#actioncontroller"><span class="octicon octicon-link"></span></a>ActionController</h3>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">BidsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="vi">@bid</span> <span class="o">=</span> <span class="no">Bid</span><span class="o">.</span><span class="n">new</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@bid</span> <span class="o">=</span> <span class="no">Bid</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:bid</span><span class="o">]</span><span class="p">)</span>
+
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">PusherListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">ActivityListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">StatisticsListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:create_bid_successful</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">bid</span><span class="o">|</span> <span class="n">redirect_to</span> <span class="n">bid</span> <span class="p">}</span>
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:create_bid_failed</span><span class="p">)</span>     <span class="p">{</span> <span class="o">|</span><span class="n">bid</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="ss">:new</span> <span class="p">}</span>
+
+    <span class="vi">@bid</span><span class="o">.</span><span class="n">commit</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>A full CRUD example is shown in the <a href="https://github.com/krisleech/wisper/wiki">Wiki</a>.</p>
+
+<h3>
+<a name="serviceuse-casecommand-objects" class="anchor" href="#serviceuse-casecommand-objects"><span class="octicon octicon-link"></span></a>Service/Use Case/Command objects</h3>
+
+<p>A Service object is useful when an operation is complex, interacts with more
+than one model, accesses an external API or would burden a model with too much
+responsibility.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">PlayerJoiningTeam</span>
+  <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+    <span class="n">membership</span> <span class="o">=</span> <span class="no">Membership</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">membership</span><span class="o">.</span><span class="n">valid?</span>
+      <span class="n">membership</span><span class="o">.</span><span class="n">save!</span>
+      <span class="n">email_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+      <span class="n">assign_first_mission</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+      <span class="n">publish</span><span class="p">(</span><span class="ss">:player_joining_team_successful</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="n">publish</span><span class="p">(</span><span class="ss">:player_joining_team_failed</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">email_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">assign_first_mission</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">team</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>
+<a name="example-listeners" class="anchor" href="#example-listeners"><span class="octicon octicon-link"></span></a>Example listeners</h3>
+
+<p>These are typical app wide listeners which have a method for pretty much every
+event which is broadcast.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">PusherListener</span>
+  <span class="k">def</span> <span class="nf">create_thing_successful</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">ActivityListener</span>
+  <span class="k">def</span> <span class="nf">create_thing_successful</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">StatisticsListener</span>
+  <span class="k">def</span> <span class="nf">create_thing_successful</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">CacheListener</span>
+  <span class="k">def</span> <span class="nf">create_thing_successful</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">IndexingListener</span>
+  <span class="k">def</span> <span class="nf">create_thing_successful</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<h2>
+<a name="global-listeners" class="anchor" href="#global-listeners"><span class="octicon octicon-link"></span></a>Global listeners</h2>
+
+<p>If you become tired of adding the same listeners to <em>every</em> publisher you can
+add global listeners. They receive all published events which they can respond
+to.</p>
+
+<p>However it means that when looking at the code it will not be obvious that the
+global listeners are being executed in additional to the regular listeners.</p>
+
+<div class="highlight"><pre><span class="no">Wisper</span><span class="o">.</span><span class="n">add_listener</span><span class="p">(</span><span class="no">MyListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</pre></div>
+
+<p>In a Rails app you might want to add your global listeners in an initalizer.</p>
+
+<p>Global listeners are threadsafe.</p>
+
+<h2>
+<a name="temporary-global-listeners" class="anchor" href="#temporary-global-listeners"><span class="octicon octicon-link"></span></a>Temporary Global Listeners</h2>
+
+<p>You can also globally subscribe listeners for the duration of a block.</p>
+
+<div class="highlight"><pre><span class="no">Wisper</span><span class="o">.</span><span class="n">with_listeners</span><span class="p">(</span><span class="no">MyListener</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="no">OtherListener</span><span class="o">.</span><span class="n">new</span><span class="p">)</span> <span class="k">do</span>
+  <span class="c1"># do stuff</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Any events broadcast within the block by any publisher will be sent to the
+listeners. This is useful if you have a child object which publishes an event
+which is not bubbled down to a parent publisher.</p>
+
+<p>Temporary Global Listeners are threadsafe.</p>
+
+<h2>
+<a name="subscribing-to-selected-events" class="anchor" href="#subscribing-to-selected-events"><span class="octicon octicon-link"></span></a>Subscribing to selected events</h2>
+
+<p>By default a listener will get notified of all events it can respond to. You
+can limit which events a listener is notified of by passing an event or array
+of events to <code>:on</code>.</p>
+
+<div class="highlight"><pre><span class="n">post_creater</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">PusherListener</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="ss">:create_post_successful</span><span class="p">)</span>
+</pre></div>
+
+<h2>
+<a name="mapping-event-to-a-different-method" class="anchor" href="#mapping-event-to-a-different-method"><span class="octicon octicon-link"></span></a>Mapping event to a different method</h2>
+
+<p>By default the method called on the subscriber is the same as the event
+broadcast. However it can be mapped to a different method using <code>:with</code>.</p>
+
+<div class="highlight"><pre><span class="n">report_creator</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">MailResponder</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:successful</span><span class="p">)</span>
+</pre></div>
+
+<p>In the above case it is pretty useless unless used in conjuction with <code>:on</code>
+since all events will get mapped to <code>:successful</code>. Instead you might do
+something like this:</p>
+
+<div class="highlight"><pre><span class="n">report_creator</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">MailResponder</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:on</span>   <span class="o">=&gt;</span> <span class="ss">:create_report_successful</span><span class="p">,</span>
+                                            <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:successful</span><span class="p">)</span>
+</pre></div>
+
+<p>If you pass an array of events to <code>:on</code> each event will be mapped to the same
+method when <code>:with</code> is specified. If you need to listen for select events
+<em>and</em> map each one to a different method subscribe the listener once for
+each mapping:</p>
+
+<div class="highlight"><pre><span class="n">report_creator</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">MailResponder</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:on</span>   <span class="o">=&gt;</span> <span class="ss">:create_report_successful</span><span class="p">,</span>
+                                            <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:successful</span><span class="p">)</span>
+
+<span class="n">report_creator</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">MailResponder</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:on</span>   <span class="o">=&gt;</span> <span class="ss">:create_report_failed</span><span class="p">,</span>
+                                            <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:failed</span><span class="p">)</span>
+</pre></div>
+
+<h2>
+<a name="chaining-subscriptions" class="anchor" href="#chaining-subscriptions"><span class="octicon octicon-link"></span></a>Chaining subscriptions</h2>
+
+<div class="highlight"><pre><span class="n">post</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:success</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span> <span class="n">redirect_to</span> <span class="n">post</span> <span class="p">}</span>
+    <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:failure</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="ss">:edit</span><span class="p">,</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="ss">:post</span> <span class="o">=&gt;</span> <span class="n">post</span> <span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="rspec" class="anchor" href="#rspec"><span class="octicon octicon-link"></span></a>RSpec</h2>
+
+<p>Wisper comes with a method for stubbing event publishers so that you can create isolation tests
+that only care about reacting to events.</p>
+
+<p>Given this piece of code:</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">CodeThatReactsToEvents</span>
+  <span class="k">def</span> <span class="nf">do_something</span>
+    <span class="n">publisher</span> <span class="o">=</span> <span class="no">MyPublisher</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="ss">:some_event</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">variable</span><span class="o">|</span>
+      <span class="k">return</span> <span class="s2">"Hello with </span><span class="si">#{</span><span class="n">variable</span><span class="si">}</span><span class="s2">!"</span>
+    <span class="k">end</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">execute</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>You can test it like this:</p>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'wisper/rspec/stub_wisper_publisher'</span>
+
+<span class="n">describe</span> <span class="no">CodeThatReactsToEvents</span> <span class="k">do</span>
+  <span class="n">context</span> <span class="s2">"on some_event"</span> <span class="k">do</span>
+    <span class="n">before</span> <span class="k">do</span>
+      <span class="n">stub_wisper_publisher</span><span class="p">(</span><span class="s2">"MyPublisher"</span><span class="p">,</span> <span class="ss">:execute</span><span class="p">,</span> <span class="ss">:some_event</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="n">it</span> <span class="s2">"renders"</span> <span class="k">do</span>
+      <span class="n">response</span> <span class="o">=</span> <span class="no">CodeThatReactsToEvents</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">do_something</span>
+      <span class="n">response</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">"Hello with foo!"</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>This becomes important when testing, for example, Rails controllers in
+isolation from the business logic.  This technique is used at the controller
+layer to isolate testing the controller from testing the encapsulated business
+logic.</p>
+
+<p>You can use any number of args to pass to the event:</p>
+
+<div class="highlight"><pre><span class="n">stub_wisper_publisher</span><span class="p">(</span><span class="s2">"MyPublisher"</span><span class="p">,</span> <span class="ss">:execute</span><span class="p">,</span> <span class="ss">:some_event</span><span class="p">,</span> <span class="s2">"foo1"</span><span class="p">,</span> <span class="s2">"foo2"</span><span class="p">,</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">)</span>
+</pre></div>
+
+<p>See <code>spec/lib/rspec_extensions_spec.rb</code> for a runnable example.</p>
+
+<h2>
+<a name="compatibility" class="anchor" href="#compatibility"><span class="octicon octicon-link"></span></a>Compatibility</h2>
+
+<p>Tested with MRI 1.9.x, MRI 2.0.0, JRuby (1.9 and 2.0 mode) and Rubinius (1.9
+mode).
+See the <a href="https://travis-ci.org/krisleech/wisper">build status</a> for details.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2013 Kris Leech</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the 'Software'), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
