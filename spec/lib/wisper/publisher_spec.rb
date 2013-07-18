@@ -90,6 +90,19 @@ describe Wisper::Publisher do
         publisher.send(:broadcast, 'something_happened')
         publisher.send(:broadcast, 'and_so_did_this')
       end
+
+      it '.add_block_listener subscribes block to all listed events' do
+        insider.should_receive(:it_happened).twice
+
+        publisher.add_block_listener(
+          :on => ['something_happened', 'and_so_did_this']) do
+          insider.it_happened
+        end
+
+        publisher.send(:broadcast, 'something_happened')
+        publisher.send(:broadcast, 'and_so_did_this')
+        publisher.send(:broadcast, 'but_not_this')
+      end
     end
 
     it 'returns publisher so methods can be chained' do
@@ -99,8 +112,9 @@ describe Wisper::Publisher do
   end
 
   describe '.on (alternative block syntax)' do
+    let(:insider) { double('insider') }
+
     it 'subscribes given block to an event' do
-      insider = double('insider')
       insider.should_receive(:it_happened)
 
       publisher.on(:something_happened) do
@@ -108,6 +122,18 @@ describe Wisper::Publisher do
       end
 
       publisher.send(:broadcast, 'something_happened')
+    end
+
+    it 'subscribes given block to multiple events' do
+      insider.should_receive(:it_happened).twice
+
+      publisher.on(:something_happened, :and_so_did_this) do
+        insider.it_happened
+      end
+
+      publisher.send(:broadcast, 'something_happened')
+      publisher.send(:broadcast, 'and_so_did_this')
+      publisher.send(:broadcast, 'but_not_this')
     end
   end
 
