@@ -17,8 +17,9 @@ module Wisper
     end
 
     # sugar
-    def respond_to(event, &block)
-      add_block_listener({:on => event}, &block)
+    def respond_to(*events, &block)
+      add_block_listener({:on => events}, &block)
+      self
     end
 
     alias :on :respond_to
