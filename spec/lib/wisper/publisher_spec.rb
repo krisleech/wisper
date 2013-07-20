@@ -114,7 +114,7 @@ describe Wisper::Publisher do
   describe '.broadcast' do
     it 'does not publish events which cannot be responded to' do
       listener.should_not_receive(:so_did_this)
-      listener.stub(:respond_to?, false)
+      listener.stub(:respond_to? => false)
 
       publisher.add_listener(listener, :on => 'so_did_this')
 
