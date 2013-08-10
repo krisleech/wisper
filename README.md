@@ -20,7 +20,7 @@ models.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wisper', '~>1.0.0'
+gem 'wisper', '~>1.2.0'
 ```
 
 ## Usage
