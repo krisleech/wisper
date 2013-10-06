@@ -1,4 +1,6 @@
 language: ruby
+bundler_args: --without=metrics
+script: rspec spec
 rvm:
   - '1.9.2'
   - '1.9.3'

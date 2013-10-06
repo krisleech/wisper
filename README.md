@@ -333,6 +333,15 @@ mode).
 
 See the [build status](https://travis-ci.org/krisleech/wisper) for details.
 
+## Running Specs
+
+```
+rspec spec
+```
+
+There is both a `Rakefile` and `Guardfile`, if you like you prefer to run the
+specs using `guard-rspec` or `rake`.
+
 ## License
 
 (The MIT License)
