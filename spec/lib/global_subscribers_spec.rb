@@ -12,6 +12,15 @@ describe Wisper::GlobalListeners do
       publisher.send(:broadcast, :it_happened)
     end
 
+    it 'works with options' do
+      Wisper::GlobalListeners.add(global_listener, :on => :it_happened,
+                                                   :with => :woot)
+      global_listener.should_receive(:woot).once
+      global_listener.should_not_receive(:it_happened_again)
+      publisher.send(:broadcast, :it_happened)
+      publisher.send(:broadcast, :it_happened_again)
+    end
+
     it 'works along side local listeners' do
       # global listener
       Wisper::GlobalListeners.add(global_listener)
