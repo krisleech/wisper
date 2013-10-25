@@ -147,6 +147,17 @@ describe Wisper::Publisher do
       publisher.send(:broadcast, 'so_did_this')
     end
 
+    it 'moves on to the next subscribed listener if a listener raises an exception' do
+      second_listener = double('second_listener')
+      listener.should_receive(:so_did_this).and_raise('Exception')
+      second_listener.should_receive(:so_did_this)
+
+      publisher.add_listener(listener)
+      publisher.add_listener(second_listener)
+
+      publisher.send(:broadcast, 'so_did_this')
+    end
+
     describe ':event argument' do
       it 'is indifferent to string and symbol' do
         listener.should_receive(:this_happened).twice
