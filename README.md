@@ -238,6 +238,19 @@ of events to `:on`.
 post_creater.subscribe(PusherListener.new, :on => :create_post_successful)
 ```
 
+## Prefixing broadcast events
+
+If you would prefer listeners to receive events with a prefix, for example
+`on`, you can do so by passing a string or symbol to `:prefix`.
+
+```ruby
+post_creater.subscribe(PusherListener.new, :prefix => :on)
+```
+
+If `post_creater` where to broadcast the event `post_created` the subscribed
+listeners would receive `on_post_created`. You can also pass `true` which will
+use the default prefix, "on".
+
 ## Mapping an event to a different method
 
 By default the method called on the subscriber is the same as the event
