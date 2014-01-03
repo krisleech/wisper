@@ -212,6 +212,24 @@ In a Rails app you might want to add your global listeners in an initalizer.
 
 Global listeners are threadsafe.
 
+### Scoping to publisher class
+
+You might want to globally subscribe a listener to publishers with a certain
+class.
+
+```ruby
+Wisper.add_listener(MyListener.new, :scope => :MyPublisher)
+```
+
+This will subscribe the listener to all instances of `MyPublisher` and its
+subclasses.
+
+Alternatively you can also do exactly the same with a publisher class:
+
+```ruby
+MyPublisher.add_listener(MyListener.new)
+```
+
 ## Temporary Global Listeners
 
 You can also globally subscribe listeners for the duration of a block.

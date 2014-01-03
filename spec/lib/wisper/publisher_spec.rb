@@ -76,6 +76,45 @@ describe Wisper::Publisher do
       end
     end
 
+    # NOTE: these are not realistic use cases, since you would only ever use
+    # `scope` when globally subscribing.
+    describe ':scope argument' do
+      let(:listener_1) {double('Listener')  }
+      let(:listener_2) {double('Listener')  }
+
+      before do
+      end
+
+      it 'scopes listener to given class' do
+        listener_1.should_receive(:it_happended)
+        listener_2.should_not_receive(:it_happended)
+        publisher.add_listener(listener_1, :scope => publisher.class)
+        publisher.add_listener(listener_2, :scope => Class.new)
+        publisher.send(:broadcast, 'it_happended')
+      end
+
+      it 'scopes listener to given class string' do
+        listener_1.should_receive(:it_happended)
+        listener_2.should_not_receive(:it_happended)
+        publisher.add_listener(listener_1, :scope => publisher.class.to_s)
+        publisher.add_listener(listener_2, :scope => Class.new.to_s)
+        publisher.send(:broadcast, 'it_happended')
+      end
+
+      it 'includes all subclasses of given class' do
+        publisher_super_klass = publisher_class
+        publisher_sub_klass = Class.new(publisher_super_klass)
+
+        listener = double('Listener')
+        listener.should_receive(:it_happended).once
+
+        publisher = publisher_sub_klass.new
+
+        publisher.add_listener(listener, :scope => publisher_super_klass)
+        publisher.send(:broadcast, 'it_happended')
+      end
+    end
+
     it 'returns publisher so methods can be chained' do
       publisher.add_listener(listener, :on => 'so_did_this').should == publisher
     end
@@ -198,6 +237,22 @@ describe Wisper::Publisher do
        publisher.add_listener(listener)
        publisher.listeners.should == [listener]
        publisher.listeners.size.should == 1
+    end
+  end
+
+  describe '#add_listener' do
+    let(:publisher_klass_1) { publisher_class }
+    let(:publisher_klass_2) { publisher_class }
+
+    it 'subscribes listeners to all instances of publisher' do
+      publisher_klass_1.add_listener(listener)
+      listener.should_receive(:it_happened).once
+      publisher_klass_1.new.send(:broadcast, 'it_happened')
+      publisher_klass_2.new.send(:broadcast, 'it_happened')
+    end
+
+    it 'is aliased to #subscribe' do
+      publisher_klass_1.should respond_to(:subscribe)
     end
   end
 end
