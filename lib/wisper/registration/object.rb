@@ -1,10 +1,11 @@
 module Wisper
   class ObjectRegistration < Registration
-    attr_reader :with
+    attr_reader :with, :prefix
 
     def initialize(listener, options)
       super(listener, options)
-      @with  = options[:with]
+      @with   = options[:with]
+      @prefix = stringify_prefix(options[:prefix])
       fail_on_async if options.has_key?(:async)
     end
 
@@ -18,7 +19,22 @@ module Wisper
     private
 
     def map_event_to_method(event)
-      with || event
+      prefix + (with || event).to_s
+    end
+
+    def stringify_prefix(_prefix)
+      case _prefix
+      when nil
+        ''
+      when true
+        default_prefix + '_'
+      else
+        _prefix.to_s + '_'
+      end
+    end
+
+    def default_prefix
+      'on'
     end
 
     def fail_on_async

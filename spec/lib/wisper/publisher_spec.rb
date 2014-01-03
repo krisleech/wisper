@@ -56,6 +56,26 @@ describe Wisper::Publisher do
       end
     end
 
+    describe ':prefix argument' do
+      it 'prefixes broadcast events with given symbol' do
+        listener.should_receive(:after_it_happened)
+        listener.should_not_receive(:it_happened)
+
+        publisher.add_listener(listener, :prefix => :after)
+
+        publisher.send(:broadcast, 'it_happened')
+      end
+
+      it 'prefixes broadcast events with "on" when given true' do
+        listener.should_receive(:on_it_happened)
+        listener.should_not_receive(:it_happened)
+
+        publisher.add_listener(listener, :prefix => true)
+
+        publisher.send(:broadcast, 'it_happened')
+      end
+    end
+
     it 'returns publisher so methods can be chained' do
       publisher.add_listener(listener, :on => 'so_did_this').should == publisher
     end
