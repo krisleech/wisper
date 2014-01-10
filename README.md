@@ -21,7 +21,7 @@ gem 'wisper', '~>1.2.0'
 
 ## Usage
 
-Any class with the `Wisper::Publisher` module included can broadcast events 
+Any class with the `Wisper::Publisher` module included can broadcast events
 to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 
 ### Publishing
@@ -37,11 +37,37 @@ class MyPublisher
 end
 ```
 
-When a publisher broadcasts an event it can pass any number of arguments which 
+When a publisher broadcasts an event it can pass any number of arguments which
 are to be passed on to the listeners.
 
 ```ruby
 publish(:done_something, 'hello', 'world')
+```
+
+A publisher can replay a list of events. This can be usefull for event sourcing:
+
+```ruby
+class MyPublisher
+  include Wisper::Publisher
+
+  def do_something
+    # ...
+    publish(:done_something, 'hello', 'world')
+    publish(:done_somethingelse, 1)
+  end
+end
+```
+
+```ruby
+pub = MyPublisher.new
+pub.subscribe(EventStorage.new)
+
+pub.do_something
+
+events = EventStorage.find_all_events_played_by(publisher_id)
+#=> [[:done_something, 'hello', 'world'], [:done_somethingelse, 1]]
+pub = MyPublisher.new
+pub.replay(events)
 ```
 
 ### Subscribing
@@ -260,7 +286,7 @@ broadcast. However it can be mapped to a different method using `:with`.
 report_creator.subscribe(MailResponder.new, :with => :successful)
 ```
 
-This is pretty useless unless used in conjuction with `:on`, since all events 
+This is pretty useless unless used in conjuction with `:on`, since all events
 will get mapped to `:successful`. Instead you might do something like this:
 
 ```ruby
@@ -290,7 +316,7 @@ post.on(:success) { |post| redirect_to post }
 
 ## RSpec
 
-Wisper comes with a method for stubbing event publishers so that you can create 
+Wisper comes with a method for stubbing event publishers so that you can create
 isolation tests that only care about reacting to events.
 
 Given this piece of code:
