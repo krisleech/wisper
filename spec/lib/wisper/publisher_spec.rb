@@ -131,6 +131,30 @@ describe Wisper::Publisher do
     end
   end
 
+  describe '.replay(events)' do
+    it 'replays all the events' do
+      listener.should_receive(:foo).once
+      listener.should_receive(:bar).once
+
+      publisher.add_listener(listener)
+
+      publisher.replay([[:foo], [:bar]])
+    end
+
+    context 'when there is arguments' do
+      let(:args) {[1, "foo"]}
+
+      it 'replays a list of events with arguments' do
+        listener.should_receive(:foo).once
+        listener.should_receive(:bar).once.with(args)
+
+        publisher.add_listener(listener)
+
+        publisher.replay([[:foo], args.unshift(:bar)])
+      end
+    end
+  end
+
   describe '.on (alternative block syntax)' do
     let(:insider) { double('insider') }
 
