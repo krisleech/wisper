@@ -16,6 +16,12 @@ module Wisper
       self
     end
 
+    def replay_events(events)
+      events.each{ |event| broadcast(event.shift, event) }
+    end
+
+    alias :replay :replay_events
+
     # sugar
     def respond_to(*events, &block)
       add_block_listener({:on => events}, &block)
