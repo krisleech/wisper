@@ -1,11 +1,7 @@
 require 'minitest/autorun'
-begin
-  require 'simplecov'
-  SimpleCov.start
-rescue LoadError
-end
 
 require 'wisper'
+require_relative  '../lib/wisper/minitest/stub_wisper_publisher'
 
 # returns an anonymous wispered class
 def publisher_class
