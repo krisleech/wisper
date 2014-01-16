@@ -43,7 +43,7 @@ module Wisper
 
     def broadcast(event, *args)
       registrations.each do | registration |
-        registration.broadcast(clean_event(event), *args)
+        registration.broadcast(clean_event(event), *args.map(&:clone))
       end
     end
 
