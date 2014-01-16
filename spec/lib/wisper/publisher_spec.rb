@@ -167,6 +167,25 @@ describe Wisper::Publisher do
       publisher.send(:broadcast, 'so_did_this')
     end
 
+    describe 'when the args are shared between listeners' do
+      let(:other_listener){ double(:other_listener) }
+      let(:args){ {foo: 'bar' } }
+
+      before do
+        def other_listener.this_happened(args)
+          args[:foo] = 'foo bar'
+        end
+
+        publisher.subscribe(other_listener)
+        publisher.subscribe(listener)
+      end
+
+      it 'dont share the same argument' do
+        listener.should_receive(:this_happened).with({foo: 'bar'})
+        publisher.send(:broadcast, :this_happened, args)
+      end
+    end
+
     describe ':event argument' do
       it 'is indifferent to string and symbol' do
         listener.should_receive(:this_happened).twice
