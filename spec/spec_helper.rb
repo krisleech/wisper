@@ -7,11 +7,19 @@ end
 require 'wisper'
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.order = 'random'
   config.after(:each) { Wisper::GlobalListeners.clear }
+
+  # Support both Rspec2 should and Rspec3 expect syntax
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
+  config.mock_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
 end
 
 # returns an anonymous wispered class

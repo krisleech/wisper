@@ -21,7 +21,7 @@ describe Wisper::Publisher do
         listener.stub(:so_did_this)
         listener.should_not_receive(:so_did_this)
 
-        listener.respond_to?(:so_did_this).should be_true
+        listener.should respond_to(:so_did_this)
 
         publisher.add_listener(listener, :on => 'this_happened')
 
@@ -35,7 +35,7 @@ describe Wisper::Publisher do
         listener.stub(:so_did_this)
         listener.should_not_receive(:so_did_this)
 
-        listener.respond_to?(:so_did_this).should be_true
+        listener.should respond_to(:so_did_this)
 
         publisher.add_listener(listener, :on => ['this_happened', 'and_this'])
 
@@ -81,7 +81,7 @@ describe Wisper::Publisher do
     end
 
     it 'is aliased to .subscribe' do
-      publisher.respond_to?(:subscribe).should be_true
+      publisher.should respond_to(:subscribe)
     end
   end
 
@@ -190,7 +190,7 @@ describe Wisper::Publisher do
 
   describe '.listeners' do
     it 'returns an immutable collection' do
-      publisher.listeners.frozen?.should be_true
+      publisher.listeners.should be_frozen
       expect { publisher.listeners << listener }.to raise_error(RuntimeError)
     end
 
