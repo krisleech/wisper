@@ -9,7 +9,3 @@ group :metrics do
   gem 'flay'
 end
 
-group :test do
-  gem 'guard'
-  gem 'guard-rspec'
-end
