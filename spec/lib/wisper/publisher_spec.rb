@@ -194,6 +194,26 @@ describe Wisper::Publisher do
       publisher.send(:broadcast, 'and_so_did_this')
       publisher.send(:broadcast, 'but_not_this')
     end
+
+    describe 'when the publisher self subscribe his listeners' do
+      let(:insider) { double('insider') }
+      let(:other_listener){ double(:other_listener) }
+      let(:publisher) {publisher_class_with_default_listeners([listener]).new}
+
+      it 'reiceive events' do
+        publisher.subscribe(other_listener)
+
+        listener.should_receive(:this_happened)
+        other_listener.should_receive(:this_happened)
+        insider.should_receive(:it_happened)
+
+        publisher.on(:this_happened) do
+          insider.it_happened
+        end
+
+        publisher.send(:broadcast, :this_happened)
+      end
+    end
   end
 
   describe '.broadcast' do
@@ -223,6 +243,16 @@ describe Wisper::Publisher do
 
         publisher.send(:broadcast, 'this_happened')
         publisher.send(:broadcast, 'this-happened')
+      end
+    end
+
+    describe 'when the publisher self subscribe his listeners' do
+      let(:publisher) {publisher_class_with_default_listeners([listener]).new}
+      it 'reiceive events' do
+        listener.should_receive(:this_happened).twice
+
+        publisher.send(:broadcast, 'this_happened')
+        publisher.send(:broadcast, :this_happened)
       end
     end
   end
