@@ -17,7 +17,7 @@ to reduce coupling between data and domain layers.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wisper', '~>1.2.0'
+gem 'wisper'
 ```
 
 ## Usage
