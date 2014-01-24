@@ -1,8 +1,5 @@
-begin
-  require 'simplecov'
-  SimpleCov.start
-rescue LoadError
-end
+require 'coveralls'
+Coveralls.wear!
 
 require 'wisper'
 
