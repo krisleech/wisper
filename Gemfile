@@ -8,3 +8,8 @@ group :metrics do
   gem 'simplecov'
   gem 'flay'
 end
+
+group :test do
+  gem 'guard'
+  gem 'guard-rspec'
+end

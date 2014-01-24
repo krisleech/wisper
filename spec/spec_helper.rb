@@ -1,3 +1,4 @@
+require 'rspec'
 begin
   require 'simplecov'
   SimpleCov.start
@@ -25,6 +26,16 @@ end
 # returns an anonymous wispered class
 def publisher_class
   Class.new { include Wisper::Publisher }
+end
+
+def publisher_class_with_default_listeners(listeners)
+  Class.new do
+    include Wisper::Publisher
+
+    define_method :initialize do
+      listeners.each{ |l| self.subscribe(l) }
+    end
+  end
 end
 
 # prevents deprecation warning showing up in spec output
