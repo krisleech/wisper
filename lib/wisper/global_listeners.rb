@@ -11,6 +11,10 @@ module Wisper
       @mutex         = Mutex.new
     end
 
+    def add_class (listener, options = {})
+      @registrations << ClassRegistration.new(listener, options)
+    end
+
     def add(listener, options = {})
       with_mutex { @registrations << ObjectRegistration.new(listener, options) }
       self
@@ -30,6 +34,10 @@ module Wisper
 
     def self.add(listener, options = {})
       instance.add(listener, options)
+    end
+
+    def self.add_class(listener, options = {})
+      instance.add_class(listener, options)
     end
 
     def self.registrations

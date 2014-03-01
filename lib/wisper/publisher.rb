@@ -67,4 +67,3 @@ module Wisper
     end
   end
 end
-
