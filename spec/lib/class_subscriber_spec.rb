@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'Class subscriber' do
+describe 'class subscriber' do
   let(:publisher)        { publisher_class.new }
 
   describe '.add_class' do
-    it 'adds given listener to every publisher 1' do
+    it 'adds a class listener to every publisher' do
       Wisper::GlobalListeners.add_class(FakeListener)
       publisher.send(:broadcast, :it_happened)
       expect(FakeListener.is_called).to be(true)
