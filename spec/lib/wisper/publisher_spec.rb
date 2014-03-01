@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+
+
 describe Wisper::Publisher do
   let(:listener)  { double('listener') }
   let(:publisher) { publisher_class.new }
@@ -74,6 +76,35 @@ describe Wisper::Publisher do
 
         publisher.send(:broadcast, 'it_happened')
       end
+    end
+
+    class PrivateListener
+      def happened?
+        @happened ||= false
+      end
+
+      private
+
+      def it_happened
+        @happened = true
+      end
+    end
+
+    describe ':allow_private argument' do
+      let(:listener) { PrivateListener.new }
+
+      it 'allows private listener methods to be called when true' do
+        publisher.add_listener(listener, private: true)
+        publisher.send(:broadcast, 'it_happened')
+        listener.happened?.should be_true
+      end
+
+      it 'ignores private listener methods when false' do
+        publisher.add_listener(listener)
+        publisher.send(:broadcast, 'it_happened')
+        listener.happened?.should be_false
+      end
+
     end
 
     # NOTE: these are not realistic use cases, since you would only ever use

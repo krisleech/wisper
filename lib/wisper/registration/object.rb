@@ -1,19 +1,24 @@
 module Wisper
   class ObjectRegistration < Registration
-    attr_reader :with, :prefix, :allowed_classes
+    attr_reader :with, :prefix, :allowed_classes, :allow_private
 
     def initialize(listener, options)
       super(listener, options)
       @with   = options[:with]
       @prefix = stringify_prefix(options[:prefix])
       @allowed_classes = Array(options[:scope]).map(&:to_s).to_set
+      @allow_private = options[:allow_private] || options[:private]
       fail_on_async if options.has_key?(:async)
     end
 
     def broadcast(event, publisher, *args)
       method_to_call = map_event_to_method(event)
-      if should_broadcast?(event) && listener.respond_to?(method_to_call) && publisher_in_scope?(publisher)
-        listener.public_send(method_to_call, *args)
+      if should_broadcast?(event) && listener.respond_to?(method_to_call, allow_private) && publisher_in_scope?(publisher)
+        if allow_private
+          listener.send(method_to_call, *args)
+        else
+          listener.public_send(method_to_call, *args)
+        end
       end
     end
 
