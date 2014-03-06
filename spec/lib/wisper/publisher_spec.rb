@@ -96,13 +96,13 @@ describe Wisper::Publisher do
       it 'allows private listener methods to be called when true' do
         publisher.add_listener(listener, private: true)
         publisher.send(:broadcast, 'it_happened')
-        listener.happened?.should be_true
+        listener.happened?.should == true
       end
 
       it 'ignores private listener methods when false' do
         publisher.add_listener(listener)
         publisher.send(:broadcast, 'it_happened')
-        listener.happened?.should be_false
+        listener.happened?.should == false
       end
 
     end
