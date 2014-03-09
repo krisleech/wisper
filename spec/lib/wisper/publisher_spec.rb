@@ -78,18 +78,6 @@ describe Wisper::Publisher do
       end
     end
 
-    class PrivateListener
-      def happened?
-        @happened ||= false
-      end
-
-      private
-
-      def it_happened
-        @happened = true
-      end
-    end
-
     describe ':allow_private argument' do
       let(:listener) { PrivateListener.new }
 
