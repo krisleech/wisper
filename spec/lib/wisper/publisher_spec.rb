@@ -81,27 +81,17 @@ describe Wisper::Publisher do
     describe ':class_prefix argument' do
       it 'prefixes broadcast evens with publisher class name' do
         publisher = Wisper::ExamplePublisher.new
-        listener.should_receive(:wisper_example_publisher_it_happened)
+        expect(listener).to receive(:wisper_example_publisher_it_happened)
         publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
       end
-    end
 
-    describe ':allow_private argument' do
-      let(:listener) { PrivateListener.new }
-
-      it 'allows private listener methods to be called when true' do
-        publisher.add_listener(listener, private: true)
+      it 'supports custom class prefixes' do
+        publisher = Wisper::CustomClassPrefixPublisher.new
+        expect(listener).to receive(:i_am_custom_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
-        listener.happened?.should == true
       end
-
-      it 'ignores private listener methods when false' do
-        publisher.add_listener(listener)
-        publisher.send(:broadcast, 'it_happened')
-        listener.happened?.should == false
-      end
-
     end
 
     # NOTE: these are not realistic use cases, since you would only ever use

@@ -28,15 +28,11 @@ class Wisper::ExamplePublisher
   include Wisper::Publisher
 end
 
-class PrivateListener
-  def happened?
-    @happened ||= false
-  end
+class Wisper::CustomClassPrefixPublisher
+  include Wisper::Publisher
 
-  private
-
-  def it_happened
-    @happened = true
+  def publisher_class_prefix
+    :i_am_custom
   end
 end
 

@@ -1,6 +1,6 @@
 module Wisper
   class ObjectRegistration < Registration
-    attr_reader :with, :prefix, :class_prefix, :allowed_classes, :allow_private
+    attr_reader :with, :prefix, :class_prefix, :allowed_classes
 
     def initialize(listener, options)
       super(listener, options)
@@ -14,12 +14,8 @@ module Wisper
 
     def broadcast(event, publisher, *args)
       method_to_call = map_event_to_method(event, publisher)
-      if should_broadcast?(event) && listener.respond_to?(method_to_call, allow_private) && publisher_in_scope?(publisher)
-        if allow_private
-          listener.send(method_to_call, *args)
-        else
-          listener.public_send(method_to_call, *args)
-        end
+      if should_broadcast?(event) && listener.respond_to?(method_to_call) && publisher_in_scope?(publisher)
+        listener.public_send(method_to_call, *args)
       end
     end
 
@@ -45,10 +41,23 @@ module Wisper
     end
 
     def publisher_class_prefix(publisher)
-      if class_prefix
-        underscore(publisher.class.name) + '_'
+      if class_prefix and (name = publisher_class_prefix_name(publisher))
+        name = underscore(name) if name.is_a?(String)
+        name.to_s + '_'
       else
         ''
+      end
+    end
+
+    def publisher_class_prefix_name(publisher)
+      # publisher class prefix can be overridden by the publisher instance. This can be useful if you
+      # have many classes that extend from a base class, and you wish to use that base class as the root prefix.
+      if publisher.respond_to?(:publisher_class_prefix)
+        publisher.publisher_class_prefix
+
+      # otherwise we just use the class name
+      elsif publisher.class.name
+        publisher.class.name
       end
     end
 
@@ -61,6 +70,7 @@ module Wisper
     end
     
     def underscore(str)
+
       underscored = str.dup
       underscored.gsub!(/::/, '_')
       underscored.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
