@@ -24,6 +24,10 @@ def publisher_class
   Class.new { include Wisper::Publisher }
 end
 
+class Wisper::ExamplePublisher
+  include Wisper::Publisher
+end
+
 class PrivateListener
   def happened?
     @happened ||= false
