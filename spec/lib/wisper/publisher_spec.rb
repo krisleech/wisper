@@ -76,6 +76,15 @@ describe Wisper::Publisher do
       end
     end
 
+    describe ':class_prefix argument' do
+      it 'prefixes broadcast evens with publisher class name' do
+        publisher = Wisper::ExamplePublisher.new
+        listener.should_receive(:wisper_example_publisher_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
+    end
+
     # NOTE: these are not realistic use cases, since you would only ever use
     # `scope` when globally subscribing.
     describe ':scope argument' do
