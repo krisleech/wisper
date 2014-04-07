@@ -83,6 +83,13 @@ describe Wisper::Publisher do
         publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
       end
+
+      it 'supports custom class prefixes' do
+        publisher = Wisper::CustomClassPrefixPublisher.new
+        listener.should_receive(:i_am_custom_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
     end
 
     # NOTE: these are not realistic use cases, since you would only ever use
