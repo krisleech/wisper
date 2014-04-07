@@ -45,10 +45,23 @@ module Wisper
     end
 
     def publisher_class_prefix(publisher)
-      if class_prefix and publisher.class.name
-        underscore(publisher.class.name) + '_'
+      if class_prefix and (name = publisher_class_prefix_name(publisher))
+        name = underscore(name) if name.is_a?(String)
+        name.to_s + '_'
       else
         ''
+      end
+    end
+
+    def publisher_class_prefix_name(publisher)
+      # publisher class prefix can be overridden by the publisher instance. This can be useful if you
+      # have many classes that extend from a base class, and you wish to use that base class as the root prefix.
+      if publisher.respond_to?(:publisher_class_prefix)
+        publisher.publisher_class_prefix
+
+      # otherwise we just use the class name
+      elsif publisher.class.name
+        publisher.class.name
       end
     end
 
