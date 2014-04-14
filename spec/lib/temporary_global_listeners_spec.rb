@@ -44,6 +44,17 @@ describe Wisper::TemporaryListeners do
 
       Wisper::TemporaryListeners.registrations.size.should == 0
     end
+
+    it 'ensures registrations are cleared after exception raised in block' do
+      begin
+        Wisper::TemporaryListeners.with(listener_1) do
+          raise StandardError
+        end
+      rescue StandardError
+      end
+
+      Wisper::TemporaryListeners.registrations.size.should == 0
+    end
   end
 end
 
