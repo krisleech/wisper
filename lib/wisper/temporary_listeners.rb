@@ -11,9 +11,12 @@ module Wisper
     end
 
     def with(listeners, options, &block)
-      add_listeners(listeners, options)
-      yield
-      clear
+      begin
+        add_listeners(listeners, options)
+        yield
+      ensure
+        clear
+      end
     end
 
     def registrations
