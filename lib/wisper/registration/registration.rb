@@ -6,6 +6,10 @@ module Wisper
       @listener   = listener
       @on         = Array(options.fetch(:on) { 'all' }).map(&:to_s)
     end
+    
+    def listener
+      @listener.new if @listener.class == Class
+    end
 
     private
 
