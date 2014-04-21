@@ -8,7 +8,16 @@ module Wisper
     end
     
     def listener
-      @listener.new if @listener.class == Class
+      case @listener
+        when Class
+          clazz = Kernel.const_get(@listener.to_s)
+          clazz.new
+        when String
+          clazz = Kernel.const_get(@listener)
+          clazz.new
+        else
+          @listener
+      end
     end
 
     private
