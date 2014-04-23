@@ -64,7 +64,7 @@ describe Wisper::TemporaryListeners do
       rescue StandardError
       end
 
-      Wisper::TemporaryListeners.registrations.size.should == 0
+      expect(Wisper::TemporaryListeners.registrations.size).to eql 0
     end
   end
 end

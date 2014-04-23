@@ -44,6 +44,7 @@ module Wisper
       if class_prefix and (name = publisher_class_prefix_name(publisher))
         name = underscore(name) if name.is_a?(String)
         name.to_s + '_'
+        underscore(publisher.class.name) + '_'
       else
         ''
       end
@@ -70,7 +71,6 @@ module Wisper
     end
     
     def underscore(str)
-
       underscored = str.dup
       underscored.gsub!(/::/, '_')
       underscored.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
