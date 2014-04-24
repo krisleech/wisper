@@ -8,8 +8,8 @@ describe Wisper::TemporaryListeners do
   describe '.with' do
     it 'globally subscribes listener for duration of given block' do
 
-      listener_1.should_receive(:success)
-      listener_1.should_not_receive(:failure)
+      expect(listener_1).to receive(:success)
+      expect(listener_1).to_not receive(:failure)
 
       Wisper::TemporaryListeners.with(listener_1) do
         publisher.instance_eval { broadcast(:success) }
@@ -20,11 +20,11 @@ describe Wisper::TemporaryListeners do
 
     it 'globally subscribes listeners for duration of given block' do
 
-      listener_1.should_receive(:success)
-      listener_1.should_not_receive(:failure)
+      expect(listener_1).to receive(:success)
+      expect(listener_1).to_not receive(:failure)
 
-      listener_2.should_receive(:success)
-      listener_2.should_not_receive(:failure)
+      expect(listener_2).to receive(:success)
+      expect(listener_2).to_not receive(:failure)
 
       Wisper::TemporaryListeners.with(listener_1, listener_2) do
         publisher.instance_eval { broadcast(:success) }
@@ -38,11 +38,22 @@ describe Wisper::TemporaryListeners do
       (1..num_threads).to_a.map do
         Thread.new do
           Wisper::TemporaryListeners.registrations << Object.new
-          Wisper::TemporaryListeners.registrations.size.should == 1
+          expect(Wisper::TemporaryListeners.registrations.size).to eql 1
         end
       end.each(&:join)
 
-      Wisper::TemporaryListeners.registrations.size.should == 0
+      expect(Wisper::TemporaryListeners.registrations.size).to eql 0
+    end
+
+    it 'ensures registrations are cleared after exception raised in block' do
+      begin
+        Wisper::TemporaryListeners.with(listener_1) do
+          raise StandardError
+        end
+      rescue StandardError
+      end
+
+      expect(Wisper::TemporaryListeners.registrations.size).to eql 0
     end
   end
 end
