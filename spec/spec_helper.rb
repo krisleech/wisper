@@ -24,6 +24,22 @@ def publisher_class
   Class.new { include Wisper::Publisher }
 end
 
+class Wisper::ExamplePublisher
+  include Wisper::Publisher
+end
+
+class PrivateListener
+  def happened?
+    @happened ||= false
+  end
+
+  private
+
+  def it_happened
+    @happened = true
+  end
+end
+
 # prevents deprecation warning showing up in spec output
 def silence_warnings
   original_verbosity = $VERBOSE
