@@ -4,8 +4,11 @@ module Wisper
       registrations.map(&:listener).freeze
     end
 
-    def add_listener(listener, options = {})
-      local_registrations << ObjectRegistration.new(listener, options)
+    def add_listener(*listeners)
+      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+      listeners.each do |listener|
+        local_registrations << ObjectRegistration.new(listener, options)
+      end
       self
     end
 
