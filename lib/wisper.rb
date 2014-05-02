@@ -8,6 +8,7 @@ require 'wisper/global_listeners'
 require 'wisper/temporary_listeners'
 
 module Wisper
+
   def self.included(base)
     warn "[DEPRECATION] `include Wisper::Publisher` instead of `include Wisper`"
     base.class_eval { include Wisper::Publisher  }
@@ -19,5 +20,12 @@ module Wisper
 
   def self.add_listener(listener, options = {})
     GlobalListeners.add(listener, options)
+  end
+
+  def self.add_listeners(*listeners)
+    options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+    listeners.each do |listener|
+      add_listener(listener, options)
+    end
   end
 end
