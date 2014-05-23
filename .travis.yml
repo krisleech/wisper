@@ -7,7 +7,7 @@ rvm:
   - '2.0.0'
   - '2.1.1'
   - jruby
-  - rbx
+  - rbx-2
   ### ALLOWED FAILURES ###
   # see how compatible we are with dev versions, but do not fail the build
   - ruby-head
