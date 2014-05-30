@@ -8,15 +8,15 @@ describe Wisper::GlobalListeners do
   describe '.add' do
     it 'adds given listener to every publisher' do
       Wisper::GlobalListeners.add(global_listener)
-      global_listener.should_receive(:it_happened)
+      expect(global_listener).to receive(:it_happened)
       publisher.send(:broadcast, :it_happened)
     end
 
     it 'works with options' do
       Wisper::GlobalListeners.add(global_listener, :on => :it_happened,
                                                    :with => :woot)
-      global_listener.should_receive(:woot).once
-      global_listener.should_not_receive(:it_happened_again)
+      expect(global_listener).to receive(:woot).once
+      expect(global_listener).not_to receive(:it_happened_again)
       publisher.send(:broadcast, :it_happened)
       publisher.send(:broadcast, :it_happened_again)
     end
@@ -28,8 +28,8 @@ describe Wisper::GlobalListeners do
       # local listener
       publisher.add_listener(local_listener)
 
-      global_listener.should_receive(:it_happened)
-      local_listener.should_receive(:it_happened)
+      expect(global_listener).to receive(:it_happened)
+      expect(local_listener).to receive(:it_happened)
 
       publisher.send(:broadcast, :it_happened)
     end
@@ -42,9 +42,9 @@ describe Wisper::GlobalListeners do
       Wisper::GlobalListeners.add(global_listener, :scope => [publisher_1.class,
                                                               publisher_2.class])
 
-      global_listener.should_receive(:it_happened_1).once
-      global_listener.should_receive(:it_happened_2).once
-      global_listener.should_not_receive(:it_happened_3)
+      expect(global_listener).to receive(:it_happened_1).once
+      expect(global_listener).to receive(:it_happened_2).once
+      expect(global_listener).not_to receive(:it_happened_3)
 
       publisher_1.send(:broadcast, :it_happened_1)
       publisher_2.send(:broadcast, :it_happened_2)
@@ -60,18 +60,18 @@ describe Wisper::GlobalListeners do
         end
       end.each(&:join)
 
-      Wisper::GlobalListeners.listeners.size.should == num_threads
+      expect(Wisper::GlobalListeners.listeners.size).to eq num_threads
     end
   end
 
   describe '.listeners' do
     it 'returns collection of global listeners' do
       Wisper::GlobalListeners.add(global_listener)
-      Wisper::GlobalListeners.listeners.should == [global_listener]
+      expect(Wisper::GlobalListeners.listeners).to eq [global_listener]
     end
 
     it 'returns an immutable collection' do
-      Wisper::GlobalListeners.listeners.should be_frozen
+      expect(Wisper::GlobalListeners.listeners).to be_frozen
       expect { Wisper::GlobalListeners.listeners << global_listener }.to raise_error(RuntimeError)
     end
   end
@@ -79,14 +79,14 @@ describe Wisper::GlobalListeners do
   it '.clear clears all global listeners' do
     Wisper::GlobalListeners.add(global_listener)
     Wisper::GlobalListeners.clear
-    Wisper::GlobalListeners.listeners.should be_empty
+    expect(Wisper::GlobalListeners.listeners).to be_empty
   end
 
   describe 'backwards compatibility' do
     it '.add_listener adds a listener' do
       silence_warnings do
         Wisper::GlobalListeners.add_listener(global_listener)
-        global_listener.should_receive(:it_happened)
+        expect(global_listener).to receive(:it_happened)
         publisher.send(:broadcast, :it_happened)
       end
     end

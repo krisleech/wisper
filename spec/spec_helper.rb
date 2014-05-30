@@ -11,11 +11,11 @@ RSpec.configure do |config|
 
   # Support both Rspec2 should and Rspec3 expect syntax
   config.expect_with :rspec do |c|
-    c.syntax = [:should, :expect]
+    c.syntax = :expect
   end
 
   config.mock_with :rspec do |c|
-    c.syntax = [:should, :expect]
+    c.syntax = :expect
   end
 end
 
