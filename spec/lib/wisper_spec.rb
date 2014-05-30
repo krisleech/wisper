@@ -5,7 +5,7 @@ describe Wisper do
   it 'includes Wisper::Publisher for backwards compatibility' do
     silence_warnings do
       publisher_class = Class.new { include Wisper }
-      publisher_class.ancestors.should include Wisper::Publisher
+      expect(publisher_class.ancestors).to include Wisper::Publisher
     end
   end
 
@@ -13,8 +13,8 @@ describe Wisper do
     publisher = publisher_class.new
     listener = double('listener')
 
-    listener.should_receive(:im_here)
-    listener.should_not_receive(:not_here)
+    expect(listener).to receive(:im_here)
+    expect(listener).not_to receive(:not_here)
 
     Wisper.with_listeners(listener) do
       publisher.send(:broadcast, 'im_here')
@@ -26,6 +26,6 @@ describe Wisper do
   it '.add_listener adds a global listener' do
     listener = double('listener')
     Wisper.add_listener(listener)
-    Wisper::GlobalListeners.listeners.should == [listener]
+    expect(Wisper::GlobalListeners.listeners).to eq [listener]
   end
 end
