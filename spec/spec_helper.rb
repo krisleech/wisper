@@ -9,7 +9,6 @@ RSpec.configure do |config|
   config.order = 'random'
   config.after(:each) { Wisper::GlobalListeners.clear }
 
-  # Support both Rspec2 should and Rspec3 expect syntax
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
