@@ -5,6 +5,13 @@ rvm:
   - '1.9.2'
   - '1.9.3'
   - '2.0.0'
-  - jruby-19mode
-  - jruby-20mode
-  - rbx
+  - '2.1.2'
+  - jruby
+  - rbx-2
+  ### ALLOWED FAILURES ###
+  # see how compatible we are with dev versions, but do not fail the build
+  - ruby-head
+  - jruby-head
+allow_failures:
+  - rvm: ruby-head
+  - rvm: jruby-head
