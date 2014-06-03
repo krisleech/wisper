@@ -20,7 +20,7 @@ describe Wisper do
 
       it "emits the event" do
         response = CodeThatReactsToEvents.new.do_something
-        response.should == "Hello with foo1 foo2!"
+        expect(response).to eq "Hello with foo1 foo2!"
       end
     end
   end
