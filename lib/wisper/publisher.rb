@@ -11,6 +11,15 @@ module Wisper
 
     alias :subscribe :add_listener
 
+    def add_listeners(*listeners)
+      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+      listeners.each do |listener|
+        add_listener(listener, options)
+      end
+    end
+
+    alias :subscribe_many :add_listeners
+
     def add_block_listener(options = {}, &block)
       local_registrations << BlockRegistration.new(block, options)
       self

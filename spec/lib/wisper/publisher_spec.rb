@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+
+
 describe Wisper::Publisher do
   let(:listener)  { double('listener') }
   let(:publisher) { publisher_class.new }
@@ -72,6 +74,30 @@ describe Wisper::Publisher do
 
         publisher.add_listener(listener, :prefix => true)
 
+        publisher.send(:broadcast, 'it_happened')
+      end
+    end
+
+    describe ':class_prefix argument' do
+      it 'prefixes broadcast evens with publisher class name' do
+        publisher = Wisper::ExamplePublisher.new
+        expect(listener).to receive(:wisper_example_publisher_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
+
+      it 'supports custom class prefixes' do
+        publisher = Wisper::CustomClassPrefixPublisher.new
+        expect(listener).to receive(:i_am_custom_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
+
+      it 'supports custom class prefixes' do
+        publisher = Wisper::CustomClassPrefixPublisher.new
+        listener.should_receive(:i_am_custom_it_happened)
+        listener.should_receive(:wisper_example_publisher_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
       end
     end
@@ -254,6 +280,23 @@ describe Wisper::Publisher do
 
     it 'is aliased to #subscribe' do
       expect(publisher_klass_1).to respond_to(:subscribe)
+    end
+  end
+
+  describe '#add_listeners' do
+    let(:listener2)  { double('listener') }
+
+    it 'subscribes multiple listeners with same options' do
+      publisher.add_listeners(listener, listener2, prefix: true)
+
+      listener.should_receive(:on_happened).once
+      listener2.should_receive(:on_happened).once
+
+      publisher.send(:broadcast, 'happened')
+    end
+
+    it 'is aliased to #subscribe' do
+      publisher.should respond_to(:subscribe_many)
     end
   end
 end
