@@ -23,6 +23,18 @@ def publisher_class
   Class.new { include Wisper::Publisher }
 end
 
+class Wisper::ExamplePublisher
+  include Wisper::Publisher
+end
+
+class Wisper::CustomClassPrefixPublisher
+  include Wisper::Publisher
+
+  def publisher_class_prefix
+    :i_am_custom
+  end
+end
+
 # prevents deprecation warning showing up in spec output
 def silence_warnings
   original_verbosity = $VERBOSE
