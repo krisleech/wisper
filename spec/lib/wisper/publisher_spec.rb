@@ -79,14 +79,14 @@ describe Wisper::Publisher do
     describe ':class_prefix argument' do
       it 'prefixes broadcast evens with publisher class name' do
         publisher = Wisper::ExamplePublisher.new
-        listener.should_receive(:wisper_example_publisher_it_happened)
+        expect(listener).to receive(:wisper_example_publisher_it_happened)
         publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
       end
 
       it 'supports custom class prefixes' do
         publisher = Wisper::CustomClassPrefixPublisher.new
-        listener.should_receive(:i_am_custom_it_happened)
+        expect(listener).to receive(:i_am_custom_it_happened)
         publisher.add_listener(listener, :class_prefix => true)
         publisher.send(:broadcast, 'it_happened')
       end
