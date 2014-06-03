@@ -13,8 +13,8 @@ end
 describe 'simple publishing' do
   it 'subscribes listener to events' do
     listener = double('listener')
-    listener.should_receive(:foo).with instance_of MyPublisher
-    listener.should_receive(:bar).with instance_of MyPublisher
+    expect(listener).to receive(:foo).with instance_of MyPublisher
+    expect(listener).to receive(:bar).with instance_of MyPublisher
 
     my_publisher = MyPublisher.new
     my_publisher.add_listener(listener)

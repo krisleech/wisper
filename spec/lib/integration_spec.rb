@@ -17,7 +17,7 @@ describe Wisper do
 
   it 'subscribes object to all published events' do
     listener = double('listener')
-    listener.should_receive(:success).with('hello')
+    expect(listener).to receive(:success).with('hello')
 
     command = MyCommand.new
 
@@ -28,7 +28,7 @@ describe Wisper do
 
   it 'subscribes block to all published events' do
     insider = double('Insider')
-    insider.should_receive(:render).with('hello')
+    expect(insider).to receive(:render).with('hello')
 
     command = MyCommand.new
 
@@ -42,8 +42,8 @@ describe Wisper do
   it 'maps events to different methods' do
     listener_1 = double('listener')
     listener_2 = double('listener')
-    listener_1.should_receive(:happy_days).with('hello')
-    listener_2.should_receive(:sad_days).with('world')
+    expect(listener_1).to receive(:happy_days).with('hello')
+    expect(listener_2).to receive(:sad_days).with('world')
 
     command = MyCommand.new
 
@@ -57,8 +57,8 @@ describe Wisper do
   it 'subscribes block can be chained' do
     insider = double('Insider')
 
-    insider.should_receive(:render).with('success')
-    insider.should_receive(:render).with('failure')
+    expect(insider).to receive(:render).with('success')
+    expect(insider).to receive(:render).with('failure')
 
     command = MyCommand.new
 

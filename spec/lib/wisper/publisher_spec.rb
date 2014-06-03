@@ -6,8 +6,8 @@ describe Wisper::Publisher do
 
   describe '.add_listener' do
     it 'subscribes given listener to all published events' do
-      listener.should_receive(:this_happened)
-      listener.should_receive(:so_did_this)
+      expect(listener).to receive(:this_happened)
+      expect(listener).to receive(:so_did_this)
 
       publisher.add_listener(listener)
 
@@ -17,11 +17,11 @@ describe Wisper::Publisher do
 
     describe ':on argument' do
       it 'subscribes given listener to a single event' do
-        listener.should_receive(:this_happened)
-        listener.stub(:so_did_this)
-        listener.should_not_receive(:so_did_this)
+        expect(listener).to receive(:this_happened)
+        allow(listener).to receive(:so_did_this)
+        expect(listener).not_to receive(:so_did_this)
 
-        listener.should respond_to(:so_did_this)
+        expect(listener).to respond_to(:so_did_this)
 
         publisher.add_listener(listener, :on => 'this_happened')
 
@@ -30,12 +30,12 @@ describe Wisper::Publisher do
       end
 
       it 'subscribes given listener to many events' do
-        listener.should_receive(:this_happened)
-        listener.should_receive(:and_this)
-        listener.stub(:so_did_this)
-        listener.should_not_receive(:so_did_this)
+        expect(listener).to receive(:this_happened)
+        expect(listener).to receive(:and_this)
+        allow(listener).to receive(:so_did_this)
+        expect(listener).not_to receive(:so_did_this)
 
-        listener.should respond_to(:so_did_this)
+        expect(listener).to respond_to(:so_did_this)
 
         publisher.add_listener(listener, :on => ['this_happened', 'and_this'])
 
@@ -47,7 +47,7 @@ describe Wisper::Publisher do
 
     describe ':with argument' do
       it 'sets method to call listener with on event' do
-        listener.should_receive(:different_method).twice
+        expect(listener).to receive(:different_method).twice
 
         publisher.add_listener(listener, :with => :different_method)
 
@@ -58,8 +58,8 @@ describe Wisper::Publisher do
 
     describe ':prefix argument' do
       it 'prefixes broadcast events with given symbol' do
-        listener.should_receive(:after_it_happened)
-        listener.should_not_receive(:it_happened)
+        expect(listener).to receive(:after_it_happened)
+        expect(listener).not_to receive(:it_happened)
 
         publisher.add_listener(listener, :prefix => :after)
 
@@ -67,8 +67,8 @@ describe Wisper::Publisher do
       end
 
       it 'prefixes broadcast events with "on" when given true' do
-        listener.should_receive(:on_it_happened)
-        listener.should_not_receive(:it_happened)
+        expect(listener).to receive(:on_it_happened)
+        expect(listener).not_to receive(:it_happened)
 
         publisher.add_listener(listener, :prefix => true)
 
@@ -95,23 +95,23 @@ describe Wisper::Publisher do
     # NOTE: these are not realistic use cases, since you would only ever use
     # `scope` when globally subscribing.
     describe ':scope argument' do
-      let(:listener_1) {double('Listener')  }
-      let(:listener_2) {double('Listener')  }
+      let(:listener_1) { double('Listener') }
+      let(:listener_2) { double('Listener') }
 
       before do
       end
 
       it 'scopes listener to given class' do
-        listener_1.should_receive(:it_happended)
-        listener_2.should_not_receive(:it_happended)
+        expect(listener_1).to receive(:it_happended)
+        expect(listener_2).not_to receive(:it_happended)
         publisher.add_listener(listener_1, :scope => publisher.class)
         publisher.add_listener(listener_2, :scope => Class.new)
         publisher.send(:broadcast, 'it_happended')
       end
 
       it 'scopes listener to given class string' do
-        listener_1.should_receive(:it_happended)
-        listener_2.should_not_receive(:it_happended)
+        expect(listener_1).to receive(:it_happended)
+        expect(listener_2).not_to receive(:it_happended)
         publisher.add_listener(listener_1, :scope => publisher.class.to_s)
         publisher.add_listener(listener_2, :scope => Class.new.to_s)
         publisher.send(:broadcast, 'it_happended')
@@ -122,7 +122,7 @@ describe Wisper::Publisher do
         publisher_sub_klass = Class.new(publisher_super_klass)
 
         listener = double('Listener')
-        listener.should_receive(:it_happended).once
+        expect(listener).to receive(:it_happended).once
 
         publisher = publisher_sub_klass.new
 
@@ -132,11 +132,12 @@ describe Wisper::Publisher do
     end
 
     it 'returns publisher so methods can be chained' do
-      publisher.add_listener(listener, :on => 'so_did_this').should == publisher
+      expect(publisher.add_listener(listener, :on => 'so_did_this')).to \
+        eq publisher
     end
 
     it 'is aliased to .subscribe' do
-      publisher.should respond_to(:subscribe)
+      expect(publisher).to respond_to(:subscribe)
     end
   end
 
@@ -144,7 +145,7 @@ describe Wisper::Publisher do
     let(:insider) { double('insider') }
 
     it 'subscribes given block to all events' do
-      insider.should_receive(:it_happened).twice
+      expect(insider).to receive(:it_happened).twice
 
       publisher.add_block_listener do
         insider.it_happened
@@ -156,7 +157,7 @@ describe Wisper::Publisher do
 
     describe ':on argument' do
       it '.add_block_listener subscribes block to an event' do
-        insider.should_not_receive(:it_happened).once
+        expect(insider).not_to receive(:it_happened).once
 
         publisher.add_block_listener(:on => 'something_happened') do
           insider.it_happened
@@ -167,7 +168,7 @@ describe Wisper::Publisher do
       end
 
       it '.add_block_listener subscribes block to all listed events' do
-        insider.should_receive(:it_happened).twice
+        expect(insider).to receive(:it_happened).twice
 
         publisher.add_block_listener(
           :on => ['something_happened', 'and_so_did_this']) do
@@ -181,8 +182,8 @@ describe Wisper::Publisher do
     end
 
     it 'returns publisher so methods can be chained' do
-      publisher.add_block_listener(:on => 'this_thing_happened') do
-      end.should == publisher
+      expect(publisher.add_block_listener(:on => 'this_thing_happened') do
+      end).to eq publisher
     end
   end
 
@@ -190,7 +191,7 @@ describe Wisper::Publisher do
     let(:insider) { double('insider') }
 
     it 'subscribes given block to an event' do
-      insider.should_receive(:it_happened)
+      expect(insider).to receive(:it_happened)
 
       publisher.on(:something_happened) do
         insider.it_happened
@@ -200,7 +201,7 @@ describe Wisper::Publisher do
     end
 
     it 'subscribes given block to multiple events' do
-      insider.should_receive(:it_happened).twice
+      expect(insider).to receive(:it_happened).twice
 
       publisher.on(:something_happened, :and_so_did_this) do
         insider.it_happened
@@ -214,8 +215,8 @@ describe Wisper::Publisher do
 
   describe '.broadcast' do
     it 'does not publish events which cannot be responded to' do
-      listener.should_not_receive(:so_did_this)
-      listener.stub(:respond_to? => false)
+      expect(listener).not_to receive(:so_did_this)
+      allow(listener).to receive(:respond_to?).and_return(false)
 
       publisher.add_listener(listener, :on => 'so_did_this')
 
@@ -224,7 +225,7 @@ describe Wisper::Publisher do
 
     describe ':event argument' do
       it 'is indifferent to string and symbol' do
-        listener.should_receive(:this_happened).twice
+        expect(listener).to receive(:this_happened).twice
 
         publisher.add_listener(listener)
 
@@ -233,7 +234,7 @@ describe Wisper::Publisher do
       end
 
       it 'is indifferent to dasherized and underscored strings' do
-        listener.should_receive(:this_happened).twice
+        expect(listener).to receive(:this_happened).twice
 
         publisher.add_listener(listener)
 
@@ -245,14 +246,14 @@ describe Wisper::Publisher do
 
   describe '.listeners' do
     it 'returns an immutable collection' do
-      publisher.listeners.should be_frozen
+      expect(publisher.listeners).to be_frozen
       expect { publisher.listeners << listener }.to raise_error(RuntimeError)
     end
 
     it 'returns local listeners' do
        publisher.add_listener(listener)
-       publisher.listeners.should == [listener]
-       publisher.listeners.size.should == 1
+       expect(publisher.listeners).to eq [listener]
+       expect(publisher.listeners.size).to eq 1
     end
   end
 
@@ -262,13 +263,13 @@ describe Wisper::Publisher do
 
     it 'subscribes listeners to all instances of publisher' do
       publisher_klass_1.add_listener(listener)
-      listener.should_receive(:it_happened).once
+      expect(listener).to receive(:it_happened).once
       publisher_klass_1.new.send(:broadcast, 'it_happened')
       publisher_klass_2.new.send(:broadcast, 'it_happened')
     end
 
     it 'is aliased to #subscribe' do
-      publisher_klass_1.should respond_to(:subscribe)
+      expect(publisher_klass_1).to respond_to(:subscribe)
     end
   end
 end
