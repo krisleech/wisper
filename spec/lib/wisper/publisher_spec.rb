@@ -82,9 +82,6 @@ describe Wisper::Publisher do
       let(:listener_1) { double('Listener') }
       let(:listener_2) { double('Listener') }
 
-      before do
-      end
-
       it 'scopes listener to given class' do
         expect(listener_1).to receive(:it_happended)
         expect(listener_2).not_to receive(:it_happended)
@@ -112,6 +109,66 @@ describe Wisper::Publisher do
 
         publisher.add_listener(listener, :scope => publisher_super_klass)
         publisher.send(:broadcast, 'it_happended')
+      end
+    end
+
+    describe ':broadcaster argument'do
+      let(:broadcaster) { double('broadcaster') }
+      let(:listener)    { double('listener') }
+      let(:event_name)  { 'it_happened' }
+
+      before do
+        Wisper.configuration.broadcasters.clear
+        allow(listener).to    receive(event_name)
+        allow(broadcaster).to receive(:broadcast)
+      end
+
+      after { Wisper.setup } # restore default configuration
+
+      it 'given an object which responds_to broadcast it uses object' do
+        publisher.subscribe(listener, broadcaster: broadcaster)
+        expect(broadcaster).to receive('broadcast')
+        publisher.send(:broadcast, event_name)
+      end
+
+      it 'given a key it uses a configured broadcaster' do
+        Wisper.configure { |c| c.broadcaster(:foobar, broadcaster) }
+        publisher.subscribe(listener, broadcaster: :foobar)
+        expect(broadcaster).to receive('broadcast')
+        publisher.send(:broadcast, event_name)
+      end
+
+      it 'given an unknown key it raises error' do
+        expect { publisher.subscribe(listener, broadcaster: :foobar) }.to raise_error(KeyError, /broadcaster not found/)
+      end
+
+      it 'given nothing it uses the default broadcaster' do
+        Wisper.configure { |c| c.broadcaster(:default, broadcaster) }
+        publisher.subscribe(listener)
+        expect(broadcaster).to receive('broadcast')
+        publisher.send(:broadcast, event_name)
+      end
+
+      describe 'async alias' do
+        it 'given an object which responds_to broadcast it uses object' do
+          publisher.subscribe(listener, async: broadcaster)
+          expect(broadcaster).to receive('broadcast')
+          publisher.send(:broadcast, event_name)
+        end
+
+        it 'given true it uses configured async broadcaster' do
+          Wisper.configure { |c| c.broadcaster(:async, broadcaster) }
+          publisher.subscribe(listener, async: true)
+          expect(broadcaster).to receive('broadcast')
+          publisher.send(:broadcast, event_name)
+        end
+
+        it 'given false it uses configured default broadcaster' do
+          Wisper.configure { |c| c.broadcaster(:default, broadcaster) }
+          publisher.subscribe(listener, async: false)
+          expect(broadcaster).to receive('broadcast')
+          publisher.send(:broadcast, event_name)
+        end
       end
     end
 

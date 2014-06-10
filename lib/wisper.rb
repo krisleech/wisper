@@ -1,11 +1,14 @@
 require 'set'
 require 'wisper/version'
+require 'wisper/configuration'
 require 'wisper/publisher'
 require 'wisper/registration/registration'
 require 'wisper/registration/object'
 require 'wisper/registration/block'
 require 'wisper/global_listeners'
 require 'wisper/temporary_listeners'
+require 'wisper/broadcasters/send_broadcaster'
+require 'wisper/broadcasters/logger_broadcaster'
 
 module Wisper
   def self.included(base)
@@ -33,4 +36,20 @@ module Wisper
       end
     end
   end
+
+  def self.configure
+    yield(configuration)
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.setup
+    configure do |config|
+      config.broadcaster(:default, Broadcasters::SendBroadcaster.new)
+    end
+  end
 end
+
+Wisper.setup
