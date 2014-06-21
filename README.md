@@ -340,7 +340,7 @@ describe CodeThatReactsToEvents do
 
     it "renders" do
       response = CodeThatReactsToEvents.new.do_something
-      response.should == "Hello with foo!"
+      expect(response).to eq "Hello with foo!"
     end
   end
 end
