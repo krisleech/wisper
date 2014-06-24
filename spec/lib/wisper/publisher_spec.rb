@@ -244,16 +244,27 @@ describe Wisper::Publisher do
   describe '#add_listener' do
     let(:publisher_klass_1) { publisher_class }
     let(:publisher_klass_2) { publisher_class }
+    let(:listener2)  { double('listener') }
 
-    it 'subscribes listeners to all instances of publisher' do
+    it 'subscribes listener to all instances of publisher' do
       publisher_klass_1.add_listener(listener)
       expect(listener).to receive(:it_happened).once
       publisher_klass_1.new.send(:broadcast, 'it_happened')
       publisher_klass_2.new.send(:broadcast, 'it_happened')
     end
 
+    it 'subscribes multiple listeners with same options' do
+      publisher.add_listener(listener, listener2, prefix: true)
+
+      listener.should_receive(:on_happened).once
+      listener2.should_receive(:on_happened).once
+
+      publisher.send(:broadcast, 'happened')
+    end
+
     it 'is aliased to #subscribe' do
       expect(publisher_klass_1).to respond_to(:subscribe)
     end
   end
+
 end
