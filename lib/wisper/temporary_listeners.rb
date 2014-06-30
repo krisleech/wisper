@@ -34,7 +34,7 @@ module Wisper
     end
 
     def add_listener(listener, options)
-      registrations << ObjectRegistration.new(listener, options)
+      registrations << Registration.new(listener, options)
     end
 
     def key
