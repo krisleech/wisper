@@ -5,14 +5,14 @@ module Wisper
     end
 
     def add_listener(listener, options = {})
-      local_registrations << ObjectRegistration.new(listener, options)
+      local_registrations << Registration.new(listener, options)
       self
     end
 
     alias :subscribe :add_listener
 
     def add_block_listener(options = {}, &block)
-      local_registrations << BlockRegistration.new(block, options)
+      local_registrations << Registration.new(block, options.merge(broadcaster: Broadcasters::Block))
       self
     end
 
