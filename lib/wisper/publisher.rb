@@ -35,7 +35,24 @@ module Wisper
         GlobalListeners.add(listener, options.merge(:scope => self))
       end
 
+      def skip_all_listeners
+        old_skip_all, self.skip_all_listeners = skip_all_listeners?, true
+        yield
+      ensure
+        self.skip_all_listeners = old_skip_all
+      end
+
+      def skip_all_listeners?
+        !!Thread.current["__#{self.object_id}_temporary_skip_all_listeners"]
+      end
+
       alias :subscribe :add_listener
+
+      private
+
+      def skip_all_listeners=(value)
+        Thread.current["__#{self.object_id}_temporary_skip_all_listeners"] = value
+      end
     end
 
     private
@@ -68,7 +85,10 @@ module Wisper
     alias :announce :broadcast
 
     def skip_all_listeners?
-      local_skip_all_listeners? || Wisper.config.skip_all? || Wisper.config.temporary_skip_all?
+      Wisper.config.skip_all? ||
+        Wisper.config.temporary_skip_all? ||
+        self.class.skip_all_listeners? ||
+        local_skip_all_listeners?
     end
 
     def local_skip_all_listeners=(value)
