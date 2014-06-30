@@ -21,9 +21,22 @@ Add this line to your application's Gemfile:
 gem 'wisper'
 ```
 
+## Configuration
+
+You can set up global options:
+
+```ruby
+Wisper.configure do |c|
+  c.prefix = 'custom_prefix'
+  c.broadcaster = Wisper::Broadcasters::Sidekiq
+  c.skip_all = Rails.env.test?
+end
+
+```
+
 ## Usage
 
-Any class with the `Wisper::Publisher` module included can broadcast events 
+Any class with the `Wisper::Publisher` module included can broadcast events
 to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 
 ### Publishing
@@ -39,7 +52,7 @@ class MyPublisher
 end
 ```
 
-When a publisher broadcasts an event it can pass any number of arguments which 
+When a publisher broadcasts an event it can pass any number of arguments which
 are to be passed on to the listeners.
 
 ```ruby
@@ -66,6 +79,15 @@ my_publisher = MyPublisher.new
 my_publisher.on(:done_something) do |publisher|
   # ...
 end
+```
+
+### Broadcasters
+
+You can define a custom broadcaster. It should respond on two methods: `broadcast_event` and `should_broadcast?`
+
+```ruby
+my_publisher = MyPublisher.new
+my_publisher.subscribe(MyListener.new, broadcaster: CustomBroadcaster)
 ```
 
 ### Asynchronous Publishing
@@ -280,7 +302,7 @@ broadcast. However it can be mapped to a different method using `:with`.
 report_creator.subscribe(MailResponder.new, :with => :successful)
 ```
 
-This is pretty useless unless used in conjuction with `:on`, since all events 
+This is pretty useless unless used in conjuction with `:on`, since all events
 will get mapped to `:successful`. Instead you might do something like this:
 
 ```ruby
@@ -308,9 +330,30 @@ post.on(:success) { |post| redirect_to post }
     .on(:failure) { |post| render :action => :edit, :locals => :post => post }
 ```
 
+## Skipping listeners
+
+You can skip the messaging in global or local scope. It is thread safe.
+
+```ruby
+publisher = MyPublisher.new
+
+Wisper.skip_all do
+  publisher.publish(:event)
+end
+
+publisher.skip_all_listeners do
+  publisher.publish(:event)
+end
+
+MyPublisher.skip_all_listeners do
+  publisher.publish(:event)
+end
+
+```
+
 ## RSpec
 
-Wisper comes with a method for stubbing event publishers so that you can create 
+Wisper comes with a method for stubbing event publishers so that you can create
 isolation tests that only care about reacting to events.
 
 Given this piece of code:

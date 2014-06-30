@@ -1,16 +1,33 @@
 require 'set'
 require 'wisper/version'
-require 'wisper/publisher'
-require 'wisper/registration/registration'
-require 'wisper/registration/object'
-require 'wisper/registration/block'
+require 'wisper/config'
 require 'wisper/global_listeners'
 require 'wisper/temporary_listeners'
+require 'wisper/publisher'
+require 'wisper/registration'
+require 'wisper/broadcasters/base'
+require 'wisper/broadcasters/block'
+require 'wisper/broadcasters/direct_invocation'
 
 module Wisper
   def self.included(base)
     warn "[DEPRECATION] `include Wisper::Publisher` instead of `include Wisper`"
     base.class_eval { include Wisper::Publisher  }
+  end
+
+  def self.config
+    @config ||= Config.new
+  end
+
+  def self.configure
+    yield config
+  end
+
+  def self.skip_all
+    old_skip_all, config.temporary_skip_all = config.temporary_skip_all?, true
+    yield
+  ensure
+    config.temporary_skip_all = old_skip_all
   end
 
   def self.with_listeners(*args, &block)

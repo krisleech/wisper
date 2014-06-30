@@ -207,7 +207,18 @@ describe Wisper::Publisher do
       publisher.send(:broadcast, 'so_did_this')
     end
 
-    describe ':event argument' do
+    it 'does not publish events when global options "skip_all" enabled' do
+      expect(listener).not_to receive(:so_did_this)
+
+      Wisper.config.skip_all = true
+
+      publisher.add_listener(listener, :on => 'so_did_this')
+      publisher.send(:broadcast, 'so_did_this')
+
+      Wisper.config.skip_all = nil
+    end
+
+    context ':event argument' do
       it 'is indifferent to string and symbol' do
         expect(listener).to receive(:this_happened).twice
 
@@ -254,6 +265,17 @@ describe Wisper::Publisher do
 
     it 'is aliased to #subscribe' do
       expect(publisher_klass_1).to respond_to(:subscribe)
+    end
+  end
+
+  describe '#skip_all_listeners' do
+    it 'skip all listeners for publisher' do
+      expect(listener).not_to receive(:so_did_this)
+      allow(listener).to receive(:respond_to?).and_return(false)
+
+      publisher.add_listener(listener, :on => 'so_did_this')
+
+      publisher.skip_all_listeners{ publisher.send(:broadcast, 'so_did_this') }
     end
   end
 end

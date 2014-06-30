@@ -12,7 +12,7 @@ module Wisper
     end
 
     def add(listener, options = {})
-      with_mutex { @registrations << ObjectRegistration.new(listener, options) }
+      with_mutex { @registrations << Registration.new(listener, options) }
       self
     end
 
