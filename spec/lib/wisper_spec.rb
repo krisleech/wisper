@@ -42,4 +42,15 @@ describe Wisper do
   it '.configure yields config instance' do
     expect{|b| Wisper.configure(&b) }.to yield_with_args(Wisper.config)
   end
+
+  it '.skip_all skip all listeners' do
+    publisher = publisher_class.new
+    listener = double('listener')
+
+    expect(listener).not_to receive(:im_here)
+
+    Wisper.with_listeners(listener) do
+      Wisper.skip_all{ publisher.send(:broadcast, 'im_here') }
+    end
+  end
 end

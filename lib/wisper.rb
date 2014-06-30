@@ -23,6 +23,13 @@ module Wisper
     yield config
   end
 
+  def self.skip_all
+    old_skip_all, config.temporary_skip_all = config.temporary_skip_all?, true
+    yield
+  ensure
+    config.temporary_skip_all = old_skip_all
+  end
+
   def self.with_listeners(*args, &block)
     TemporaryListeners.with(*args, &block)
   end

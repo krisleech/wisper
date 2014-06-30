@@ -8,7 +8,12 @@ describe Wisper::Config do
       :broadcaster,
       :broadcaster=,
       :prefix,
-      :prefix=
+      :prefix=,
+      :skip_all,
+      :skip_all=,
+      :skip_all?,
+      :temporary_skip_all=,
+      :temporary_skip_all?
     ].each do |method|
       expect(config).to respond_to(method)
     end

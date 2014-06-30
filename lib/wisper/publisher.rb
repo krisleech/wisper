@@ -23,6 +23,13 @@ module Wisper
 
     alias :on :respond_to
 
+    def skip_all_listeners
+      old_skip_all, self.local_skip_all_listeners = local_skip_all_listeners?, true
+      yield
+    ensure
+      self.local_skip_all_listeners = old_skip_all
+    end
+
     module ClassMethods
       def add_listener(listener, options = {})
         GlobalListeners.add(listener, options.merge(:scope => self))
@@ -50,6 +57,8 @@ module Wisper
     end
 
     def broadcast(event, *args)
+      return if skip_all_listeners?
+
       registrations.each do | registration |
         registration.broadcast(clean_event(event), self, *args)
       end
@@ -57,6 +66,18 @@ module Wisper
 
     alias :publish  :broadcast
     alias :announce :broadcast
+
+    def skip_all_listeners?
+      local_skip_all_listeners? || Wisper.config.skip_all? || Wisper.config.temporary_skip_all?
+    end
+
+    def local_skip_all_listeners=(value)
+      Thread.current["__#{self.object_id}_temporary_skip_all_listeners"] = value
+    end
+
+    def local_skip_all_listeners?
+      !!Thread.current["__#{self.object_id}_temporary_skip_all_listeners"]
+    end
 
     def clean_event(event)
       event.to_s.gsub('-', '_')
