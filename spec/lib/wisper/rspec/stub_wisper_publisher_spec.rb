@@ -1,7 +1,6 @@
-require 'spec_helper'
 require 'wisper/rspec/stub_wisper_publisher'
 
-describe Wisper do
+describe '#stub_wisper_publisher' do
   describe "given a piece of code invoking a publisher" do
     class CodeThatReactsToEvents
       def do_something

@@ -1,6 +1,3 @@
-### Wisper Stubbing
-# This is a proposal for integration as part of wisper core
-# for testing: https://github.com/krisleech/wisper/issues/1
 class TestWisperPublisher
   include Wisper::Publisher
   def initialize(*args); end
