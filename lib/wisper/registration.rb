@@ -21,9 +21,11 @@ module Wisper
     private
 
     def broadcaster
-      @broadcaster ||= (
-        options[:broadcaster] || Wisper.config.broadcaster || Broadcasters::DirectInvocation
-      ).new(self, options)
+      @broadcaster ||= if brodcaster_option.is_a?(Class)
+        instantiate_broadcaster
+      else
+        brodcaster_option
+      end
     end
 
     def prefix
@@ -44,6 +46,14 @@ module Wisper
 
     def fail_on_async
       raise 'The async feature has been moved to the wisper-async gem'
+    end
+
+    def instantiate_broadcaster
+      brodcaster_option.new(self, options)
+    end
+
+    def brodcaster_option
+      @brodcaster_option ||= options[:broadcaster] || Wisper.config.broadcaster || Broadcasters::DirectInvocation
     end
   end
 end

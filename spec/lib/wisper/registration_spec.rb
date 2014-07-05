@@ -54,5 +54,21 @@ describe Wisper::Registration do
       let(:options){ { broadcaster: Wisper::Broadcasters::Block } }
       specify{ expect(registration.broadcaster).to be_instance_of(Wisper::Broadcasters::Block) }
     end
+
+    context 'when broadcaster is defined by config as instance' do
+      let(:broadcaster_instance){  Wisper::Broadcasters::Block.new(nil, nil) }
+
+      before{ Wisper.config.broadcaster = broadcaster_instance }
+      after{ Wisper.config.broadcaster = nil }
+
+      specify{ expect(registration.broadcaster).to eq(broadcaster_instance) }
+    end
+
+    context 'when broadcaster is defined by options as instance' do
+      let(:broadcaster_instance){  Wisper::Broadcasters::Block.new(nil, nil) }
+      let(:options){ { broadcaster: broadcaster_instance } }
+
+      specify{ expect(registration.broadcaster).to eq(broadcaster_instance) }
+    end
   end
 end
