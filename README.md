@@ -310,6 +310,36 @@ post.on(:success) { |post| redirect_to post }
 
 ## RSpec
 
+### Broadcast Matcher
+
+```ruby
+require 'wisper/rspec/matchers'
+
+RSpec::configure do |config|
+  config.include(Wisper::Rspec::BroadcastMatcher)
+end
+
+expect { publisher.execute }.to broadcast(:an_event)
+```
+
+### Using message expections
+
+If you need to assert on the arguments broadcast you can subscribe a double 
+with a [message expection](https://github.com/rspec/rspec-mocks#message-expectations)
+and then use any of the [argument matchers](https://github.com/rspec/rspec-mocks#argument-matchers).
+
+```ruby
+listener = double('Listener')
+
+expect(listener).to receive(:an_event).with(some_args)
+
+publisher.subscribe(listener)
+
+publisher.execute
+```
+
+### Stubbing publishers
+
 Wisper comes with a method for stubbing event publishers so that you can create 
 isolation tests that only care about reacting to events.
 

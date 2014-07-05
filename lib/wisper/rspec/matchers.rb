@@ -1,37 +1,57 @@
 require 'rspec/expectations'
 
-module WisperMatchers
-  class ShouldPublish
-    def initialize(publisher, event)
-      @publisher = publisher
-      @event = event
+module Wisper
+  module Rspec
+    class EventRecorder
+      def initialize
+        @broadcast_events = []
+      end
+
+      def respond_to?(method_name)
+        true
+      end
+
+      def method_missing(method_name, *args, &block)
+        @broadcast_events << method_name.to_s
+      end
+
+      def broadcast?(event_name)
+        @broadcast_events.include?(event_name.to_s)
+      end
     end
 
-    def matches?(block)
-      published = false
-      @publisher.on(@event) { published = true }
+    module BroadcastMatcher
+      class Matcher
+        def initialize(event)
+          @event = event
+        end
 
-      block.call
+        def supports_block_expectations?
+          true
+        end
 
-      published
-    end
+        def matches?(block)
+          event_recorder = EventRecorder.new
 
-    def failure_message_for_should
-      "expected #{@publisher.class.name} to broadcast #{@event} event"
-    end
+          Wisper.with_listeners(event_recorder) do
+            block.call
+          end
 
-    def failure_message_for_should_not
-      "expected #{@publisher.class.name} not to broadcast #{@event} event"
+          event_recorder.broadcast?(@event)
+        end
+
+        def failure_message
+          "expected publisher to broadcast #{@event} event"
+        end
+
+        def failure_message_when_negated
+          "expected publisher not to broadcast #{@event} event"
+        end
+      end
+
+      def broadcast(event)
+        Matcher.new(event)
+      end
     end
   end
-
-  def publish_event(publisher, event)
-    ShouldPublish.new(publisher, event)
-  end
-
-  alias broadcast publish_event
-end
-
-RSpec::configure do |config|
-  config.include(WisperMatchers)
 end
