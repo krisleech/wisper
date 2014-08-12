@@ -28,4 +28,18 @@ describe Wisper do
     Wisper.add_listener(listener)
     expect(Wisper::GlobalListeners.listeners).to eq [listener]
   end
+
+  describe '.config' do
+    it 'returns instance of Wisper::Config' do
+      expect(Wisper.config).to be_instance_of(Wisper::Config)
+    end
+
+    it 'always returns the same instance of Wisper::Config' do
+      expect(Wisper.config).to eq(Wisper.config)
+    end
+  end
+
+  it '.configure yields config instance' do
+    expect{|b| Wisper.configure(&b) }.to yield_with_args(Wisper.config)
+  end
 end
