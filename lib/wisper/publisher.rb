@@ -18,6 +18,7 @@ module Wisper
 
     # sugar
     def respond_to(*events, &block)
+      super unless events.any? && block_given?
       add_block_listener({:on => events}, &block)
     end
 
