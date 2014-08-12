@@ -271,6 +271,66 @@ If `post_creater` where to broadcast the event `post_created` the subscribed
 listeners would receive `on_post_created`. You can also pass `true` which will
 use the default prefix, "on".
 
+## Prefixing with class names
+
+If you would prefer listeners to recent events that are prefixed with the name of the class
+broadcasting the event, you can use `prefix: true`. This works in addition to the `prefix` option.
+
+For example
+
+```ruby
+class Project
+  include Wisper::Publisher
+
+  def create!
+     broadcast(:created, self)
+  end
+
+  def complete!
+     broadcast(:completed, self)
+  end
+end
+
+class NotificationsListener
+  def project_created(project)
+  end
+
+  def project_completed(project)
+  end
+end
+```
+
+Some advantages of dynamically prefixing the event names instead of just defining the fully qualified events manually are:
+
+- You can define common functionality in a base class. For example a commit method. Since the name of the model is not hardcoded into the event, you can now subscribe on a per model level.
+- You can optionally choose to handle the event as a class specific event or not. For example maybe you just want to listen to any :created event and fire off a generic log message, now you don't need to define a handlers for each object that can be created. However you may also want to target a specific created event (like project_completed), you have the flexibility to do both.
+
+Additionally, there is the ability to customize what the class prefix should be, on a class level. For example:
+
+```ruby
+class Project
+  include Wisper::Publisher
+
+  def create!
+     broadcast(:created, self)
+  end
+
+  def complete!
+     broadcast(:completed, self)
+  end
+
+  def publisher_class_prefix
+    :project
+  end
+end
+
+# events broadcasted out of this class will be prefixed with project_, not user_project_.
+# If we had not defined the publisher_class_prefix class then this wouldn't be the case.
+class UserProject < Project
+  attr_accessor :user
+end
+```
+
 ## Mapping an event to a different method
 
 By default the method called on the subscriber is the same as the event

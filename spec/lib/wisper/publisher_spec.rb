@@ -76,6 +76,22 @@ describe Wisper::Publisher do
       end
     end
 
+    describe ':class_prefix argument' do
+      it 'prefixes broadcast evens with publisher class name' do
+        publisher = Wisper::ExamplePublisher.new
+        expect(listener).to receive(:wisper_example_publisher_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
+
+      it 'supports custom class prefixes' do
+        publisher = Wisper::CustomClassPrefixPublisher.new
+        expect(listener).to receive(:i_am_custom_it_happened)
+        publisher.add_listener(listener, :class_prefix => true)
+        publisher.send(:broadcast, 'it_happened')
+      end
+    end
+
     # NOTE: these are not realistic use cases, since you would only ever use
     # `scope` when globally subscribing.
     describe ':scope argument' do
@@ -244,16 +260,27 @@ describe Wisper::Publisher do
   describe '#add_listener' do
     let(:publisher_klass_1) { publisher_class }
     let(:publisher_klass_2) { publisher_class }
+    let(:listener2)  { double('listener') }
 
-    it 'subscribes listeners to all instances of publisher' do
+    it 'subscribes listener to all instances of publisher' do
       publisher_klass_1.add_listener(listener)
       expect(listener).to receive(:it_happened).once
       publisher_klass_1.new.send(:broadcast, 'it_happened')
       publisher_klass_2.new.send(:broadcast, 'it_happened')
     end
 
+    it 'subscribes multiple listeners with same options' do
+      publisher.add_listener(listener, listener2, prefix: true)
+
+      expect(listener).to receive(:on_happened).once
+      expect(listener2).to receive(:on_happened).once
+
+      publisher.send(:broadcast, 'happened')
+    end
+
     it 'is aliased to #subscribe' do
       expect(publisher_klass_1).to respond_to(:subscribe)
     end
   end
+
 end
