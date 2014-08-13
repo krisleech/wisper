@@ -6,6 +6,8 @@ Authors: Kris Leech, Marc Ignacio, Ahmed Abdel Razzak, kmehkeri, Jake Hoffner
 * fix: temporary global listeners are cleared if an exception is raised
 * refactor: update all specs to rspec 3 expect syntax
 * docs: update README to rspec 3 expect syntax
+* enhancement: alias global and temporary listener methods to `.subscribe`
+* enhancement: add deprecation warning for old aliased methods
 
 ## 1.3.0 (18th Jan 2014)
 

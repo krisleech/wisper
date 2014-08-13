@@ -14,10 +14,23 @@ module Wisper
   end
 
   def self.with_listeners(*args, &block)
-    TemporaryListeners.with(*args, &block)
+    warn "[DEPRECATION] `use Wisper.subscribe` instead of `Wisper.with_listeners`"
+    self.subscribe(*args, &block)
   end
 
   def self.add_listener(listener, options = {})
-    GlobalListeners.add(listener, options)
+    warn "[DEPRECATION] `use Wisper.subscribe` instead of `Wisper.add_listener`"
+    self.subscribe(listener, options)
+  end
+
+  def self.subscribe(*args, &block)
+    if block_given?
+      TemporaryListeners.with(*args, &block)
+    else
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      args.each do |listener|
+        GlobalListeners.add(listener, options)
+      end
+    end
   end
 end
