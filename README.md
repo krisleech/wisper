@@ -207,7 +207,7 @@ obvious on reading the code and of course you are introducing global state and
 'always on' behaviour. This may not desirable.
 
 ```ruby
-Wisper.add_listener(MyListener.new)
+Wisper.subscribe(MyListener.new)
 ```
 
 In a Rails app you might want to add your global listeners in an initalizer.
@@ -220,7 +220,7 @@ You might want to globally subscribe a listener to publishers with a certain
 class.
 
 ```ruby
-Wisper.add_listener(MyListener.new, scope: :MyPublisher)
+Wisper.subscribe(MyListener.new, scope: :MyPublisher)
 ```
 
 This will subscribe the listener to all instances of `MyPublisher` and its
@@ -229,7 +229,7 @@ subclasses.
 Alternatively you can also do exactly the same with a publisher class:
 
 ```ruby
-MyPublisher.add_listener(MyListener.new)
+MyPublisher.subscribe(MyListener.new)
 ```
 
 ## Temporary Global Listeners
@@ -237,7 +237,7 @@ MyPublisher.add_listener(MyListener.new)
 You can also globally subscribe listeners for the duration of a block.
 
 ```ruby
-Wisper.with_listeners(MyListener.new, OtherListener.new) do
+Wisper.subscribe(MyListener.new, OtherListener.new) do
   # do stuff
 end
 ```
