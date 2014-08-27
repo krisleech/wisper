@@ -33,7 +33,7 @@ module Wisper
         def matches?(block)
           event_recorder = EventRecorder.new
 
-          Wisper.with_listeners(event_recorder) do
+          Wisper.subscribe(event_recorder) do
             block.call
           end
 
