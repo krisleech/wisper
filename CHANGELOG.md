@@ -1,13 +1,17 @@
 ## Unreleased (no breaking changes)
 
+None
+
+## 1.4.0 (8th Sept 2014)
+
 Authors: Kris Leech, Marc Ignacio, Ahmed Abdel Razzak, kmehkeri, Jake Hoffner
 
 * feature: matcher for rspec 3
 * fix: temporary global listeners are cleared if an exception is raised
 * refactor: update all specs to rspec 3 expect syntax
 * docs: update README to rspec 3 expect syntax
-* enhancement: alias global and temporary listener methods to `.subscribe`
-* enhancement: add deprecation warning for old aliased methods
+* feature: combine global and temporary listener methods as `Wisper.subscribe`
+* deprecate: `Wisper.add_listener` and `Wisper.with_listeners,` use `Wisper.subscribe` instead
 
 ## 1.3.0 (18th Jan 2014)
 
