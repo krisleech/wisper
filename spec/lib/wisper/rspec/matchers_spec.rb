@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'wisper/rspec/matchers'
 
 RSpec::configure do |config|
-  config.include(Wisper::Rspec::BroadcastMatcher)
+  config.include(Wisper::RSpec::BroadcastMatcher)
 end
 
 describe 'broadcast matcher' do

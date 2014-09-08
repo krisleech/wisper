@@ -316,7 +316,7 @@ post.on(:success) { |post| redirect_to post }
 require 'wisper/rspec/matchers'
 
 RSpec::configure do |config|
-  config.include(Wisper::Rspec::BroadcastMatcher)
+  config.include(Wisper::RSpec::BroadcastMatcher)
 end
 
 expect { publisher.execute }.to broadcast(:an_event)

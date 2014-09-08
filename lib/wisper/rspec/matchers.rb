@@ -1,7 +1,7 @@
 require 'rspec/expectations'
 
 module Wisper
-  module Rspec
+  module RSpec
     class EventRecorder
       def initialize
         @broadcast_events = []
