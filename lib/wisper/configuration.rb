@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Wisper
   class Configuration
     attr_reader :broadcasters
