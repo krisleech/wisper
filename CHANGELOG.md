@@ -1,10 +1,13 @@
 ## Unreleased (no breaking changes)
 
+## 1.5.0 (6th Oct 2014)
+
 Authors: Kris Leech
 
+* feature: allow events to be published asynchronously
 * feature: broadcasting of events is plugable and configurable
 * feature: broadcasters can be aliased via a symbol
-* feature: added logging broadcaster
+* feature: logging broadcaster
 
 ## 1.4.0 (8th Sept 2014)
 
