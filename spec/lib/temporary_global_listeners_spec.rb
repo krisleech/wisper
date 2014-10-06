@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Wisper::TemporaryListeners do
   let(:listener_1) { double('listener', :to_a => nil) } # [1]
   let(:listener_2) { double('listener', :to_a => nil) }

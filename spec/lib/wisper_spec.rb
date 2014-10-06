@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Wisper do
   before do
     # assign the stderr to a new StringIO to test errors

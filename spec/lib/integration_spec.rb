@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 # Example
 class MyCommand
   include Wisper::Publisher

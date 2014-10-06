@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Wisper::GlobalListeners do
   let(:global_listener)  { double('listener') }
   let(:local_listener)   { double('listener') }

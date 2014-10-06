@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'wisper/rspec/matchers'
 
 RSpec::configure do |config|

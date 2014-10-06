@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Wisper::Publisher do
   let(:listener)  { double('listener') }
   let(:publisher) { publisher_class.new }
