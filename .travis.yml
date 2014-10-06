@@ -1,5 +1,5 @@
 language: ruby
-bundler_args: --without=metrics
+bundler_args: --without=extras
 script: rspec spec
 rvm:
   - '1.9.2'

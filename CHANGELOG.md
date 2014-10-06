@@ -1,6 +1,10 @@
 ## Unreleased (no breaking changes)
 
-None
+Authors: Kris Leech
+
+* feature: broadcasting of events is plugable and configurable
+* feature: broadcasters can be aliased via a symbol
+* feature: added logging broadcaster
 
 ## 1.4.0 (8th Sept 2014)
 

@@ -79,4 +79,18 @@ describe Wisper do
       end
     end
   end
+
+  it '.configuration returns configuration' do
+    expect(Wisper.configuration).to be_an_instance_of(Wisper::Configuration)
+  end
+
+  it '.configure yields block to configuration' do
+    Wisper.configure do |config|
+      expect(config).to be_an_instance_of(Wisper::Configuration)
+    end
+  end
+
+  it 'has a default broadcaster' do
+    expect(Wisper.configuration.broadcasters[:default]).to be_instance_of(Wisper::Broadcasters::SendBroadcaster)
+  end
 end

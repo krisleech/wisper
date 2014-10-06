@@ -70,7 +70,13 @@ end
 
 ### Asynchronous Publishing
 
-Please refer to the [wisper-async](https://github.com/krisleech/wisper-async) gem.
+```ruby
+my_publisher.subscribe(MyListener.new, async: true)
+```
+
+Please refer to
+[wisper-celluloid](https://github.com/krisleech/wisper-celluloid) or
+[wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq).
 
 ### ActiveRecord
 
