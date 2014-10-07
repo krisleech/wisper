@@ -75,8 +75,9 @@ my_publisher.subscribe(MyListener.new, async: true)
 ```
 
 Please refer to
-[wisper-celluloid](https://github.com/krisleech/wisper-celluloid) or
-[wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq).
+[wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
+[wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq) or
+[wisper-activejob](https://github.com/krisleech/wisper-activejob).
 
 ### ActiveRecord
 
