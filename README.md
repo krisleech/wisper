@@ -1,17 +1,18 @@
 # Wisper
 
-Wisper is a Ruby library for decoupling and managing the dependencies of your
-Ruby objects using Pub/Sub.
+*A micro library providing Ruby objects with Publish-Subscribe capabilities*
 
 [![Gem Version](https://badge.fury.io/rb/wisper.png)](http://badge.fury.io/rb/wisper)
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.png)](https://codeclimate.com/github/krisleech/wisper)
 [![Build Status](https://travis-ci.org/krisleech/wisper.png?branch=master)](https://travis-ci.org/krisleech/wisper)
 [![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.png?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
 
-Wisper was extracted from a Rails codebase but is not dependant on Rails.
+* Decouple core business logic from external concerns in Hexagonal style architectures
+* Use as an alternative to ActiveRecord callbacks and Observers in Rails apps
+* Connect objects based on context without permanence
+* React to events synchronously or asynchronously
 
-It is commonly used as an alternative to ActiveRecord callbacks and Observers
-to reduce coupling between data and domain layers.
+Note: Wisper was originally extracted from a Rails codebase but is not dependant on Rails.
 
 ## Installation
 
