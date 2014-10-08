@@ -30,189 +30,129 @@ to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 ### Publishing
 
 ```ruby
-class MyPublisher
+class CancelOrder
   include Wisper::Publisher
+  
+  def call(order_id)
+    order = Order.find_by_id(order_id)
+    
+    # business logic...
 
-  def do_something
-    # ...
-    publish(:done_something)
+    if order.cancelled?
+      broadcast(:cancel_order_successful, order.id)
+    else
+      broadcast(:cancel_order_failed, order.id)
+    end
   end
 end
 ```
 
-When a publisher broadcasts an event it can pass any number of arguments which 
-are to be passed on to the listeners.
+When a publisher broadcasts an event it can include number of arguments. 
 
-```ruby
-publish(:done_something, 'hello', 'world')
-```
+The `broadcast` method is also aliased as `publish` and `emit`.
 
 ### Subscribing
 
-#### Listeners
+#### Objects
 
-Any object can be a listener and only receives events it can respond to.
+Any object can be subscribed as a listener.
 
 ```ruby
-my_publisher = MyPublisher.new
-my_publisher.subscribe(MyListener.new)
+cancel_order = CancelOrder.new
+
+cancel_order.subscribe(OrderNotifier.new)
+
+cancel_order.call(order_id)
+```
+
+The listener would need to implement a method for every event it wishes to receive.
+
+```ruby
+class OrderNotifier
+  def cancel_order_successful(order_id)
+    order = Order.find_by_id(order_id)
+       
+    # notify someone ...    
+  end
+end
 ```
 
 #### Blocks
 
-Blocks are subscribed to single events only.
+Blocks can be subscribed to single events and can be chained.
 
 ```ruby
-my_publisher = MyPublisher.new
-my_publisher.on(:done_something) do |publisher|
-  # ...
-end
+cancel_order = CancelOrder.new
+
+cancel_order.on(:cancel_order_successful) { |order_id| ... }
+            .on(:cancel_order_failed)     { |order_id| ... }
+            
+cancel_order.call(order_id)
 ```
 
-### Asynchronous Publishing
+### Handling Events Asynchronously
 
 ```ruby
-my_publisher.subscribe(MyListener.new, async: true)
+cancel_order.subscribe(OrderNotifier.new, async: true)
 ```
 
-Please refer to
+Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq) or
 [wisper-activejob](https://github.com/krisleech/wisper-activejob).
 
-### ActiveRecord
-
-```ruby
-class Bid < ActiveRecord::Base
-  include Wisper::Publisher
-
-  validates :amount, presence: true
-
-  def commit(_attrs = nil)
-    assign_attributes(_attrs) if _attrs.present?
-    if valid?
-      save!
-      publish(:create_bid_successful, self)
-    else
-      publish(:create_bid_failed, self)
-    end
-  end
-end
-```
+Depending on the adapter used the listener may need to be a class instead of an object.
 
 ### ActionController
 
 ```ruby
-class BidsController < ApplicationController
-  def new
-    @bid = Bid.new
-  end
-
+class CancelOrderController < ApplicationController
+ 
   def create
-    @bid = Bid.new(params[:bid])
+    cancel_order = CancelOrder.new
 
-    @bid.subscribe(PusherListener.new)
-    @bid.subscribe(ActivityListener.new)
-    @bid.subscribe(StatisticsListener.new)
+    cancel_order.subscribe(OrderMailer,        async: true)
+    cancel_order.subscribe(ActivityRecorder,   async: true)
+    cancel_order.subscribe(StatisticsRecorder, async: true)
 
-    @bid.on(:create_bid_successful) { |bid| redirect_to bid }
-    @bid.on(:create_bid_failed)     { |bid| render action: :new }
+    cancel_order.on(:cancel_order_successful) { |order_id| redirect_to order_path(order_id) }
+    cancel_order.on(:cancel_order_failed)     { |order_id| render action: :new }
 
-    @bid.commit
+    cancel_order.call(order_id)
   end
 end
 ```
 
-A full CRUD example is shown in the [Wiki](https://github.com/krisleech/wisper/wiki).
+### ActiveRecord
 
-### Service/Use Case/Command objects
-
-A Service object is useful when an operation is complex, interacts with more
-than one model, accesses an external API or would burden a model with too much
-responsibility.
+If you wish to publish directly from ActiveRecord models you can broadcast events from callbacks:
 
 ```ruby
-class PlayerJoiningTeam
+class Order < ActiveRecord::Base
   include Wisper::Publisher
-
-  attr_reader :player, :team
-
-  def initialize(player, team)
-    @player = player
-    @team   = team
-  end
-
-  def execute
-    membership = Membership.new(player, team)
-
-    if membership.valid?
-      membership.save!
-      email_player
-      assign_first_mission
-      publish(:player_joining_team_successful, player, team)
-    else
-      publish(:player_joining_team_failed, player, team)
-    end
-  end
+  
+  after_commit     :publish_creation_successful, on: :create
+  after_validation :publish_creation_failed,     on: :create
 
   private
 
-  def email_player
-    # ...
+  def publish_creation_successful
+    broadcast(:order_creation_successful, self)
   end
 
-  def assign_first_mission
-    # ...
-  end
-end
-```
-
-### Example listeners
-
-These are typical app wide listeners which have a method for pretty much every
-event which is broadcast.
-
-```ruby
-class PusherListener
-  def create_thing_successful(thing)
-    # ...
-  end
-end
-
-class ActivityListener
-  def create_thing_successful(thing)
-    # ...
-  end
-end
-
-class StatisticsListener
-  def create_thing_successful(thing)
-    # ...
-  end
-end
-
-class CacheListener
-  def create_thing_successful(thing)
-    # ...
-  end
-end
-
-class IndexingListener
-  def create_thing_successful(thing)
-    # ...
+  def publish_creation_failed
+    broadcast(:order_creation_failed, self) if errors.any?
   end
 end
 ```
 
-## Global listeners
+There are more examples in the [Wiki](https://github.com/krisleech/wisper/wiki).
 
-If you become tired of adding the same listeners to _every_ publisher you can
-add listeners globally. They receive all broadcast events which they can respond
-to.
+## Global Listeners
 
-Global listeners should be used with caution, the execution path becomes less
-obvious on reading the code and of course you are introducing global state and
-'always on' behaviour. This may not desirable.
+Global listeners receive all broadcast events which they can respond to.
+
+This is useful for cross cutting concerns such as recording statistics, indexing, caching and logging.
 
 ```ruby
 Wisper.subscribe(MyListener.new)
@@ -222,7 +162,7 @@ In a Rails app you might want to add your global listeners in an initalizer.
 
 Global listeners are threadsafe.
 
-### Scoping to publisher class
+### Scoping by publisher class
 
 You might want to globally subscribe a listener to publishers with a certain
 class.
@@ -234,7 +174,7 @@ Wisper.subscribe(MyListener.new, scope: :MyPublisher)
 This will subscribe the listener to all instances of `MyPublisher` and its
 subclasses.
 
-Alternatively you can also do exactly the same with a publisher class:
+Alternatively you can also do exactly the same with a publisher class itself:
 
 ```ruby
 MyPublisher.subscribe(MyListener.new)
@@ -251,8 +191,9 @@ end
 ```
 
 Any events broadcast within the block by any publisher will be sent to the
-listeners. This is useful if you have a child object which publishes an event
-which is not bubbled down to a parent publisher.
+listeners. 
+
+This is useful for capturing events published by objects to which you do not have access in a given context.
 
 Temporary Global Listeners are threadsafe.
 
@@ -309,13 +250,6 @@ report_creator.subscribe(MailResponder.new, on:   :create_report_failed,
                                             with: :failed)
 ```
 
-## Chaining subscriptions
-
-```ruby
-post.on(:success) { |post| redirect_to post }
-    .on(:failure) { |post| render action: :edit, locals: { post: post } }
-```
-
 ## RSpec
 
 ### Broadcast Matcher
@@ -348,18 +282,19 @@ publisher.execute
 
 ### Stubbing publishers
 
-Wisper comes with a method for stubbing event publishers so that you can create 
-isolation tests that only care about reacting to events.
+You can stub publishers and their events in unit (isolated) tests that only care about reacting to events.
 
 Given this piece of code:
 
 ```ruby
-class CodeThatReactsToEvents
-  def do_something
+class MyController
+  def create
     publisher = MyPublisher.new
+    
     publisher.on(:some_event) do |variable|
       return "Hello with #{variable}!"
     end
+    
     publisher.execute
   end
 end
@@ -370,24 +305,21 @@ You can test it like this:
 ```ruby
 require 'wisper/rspec/stub_wisper_publisher'
 
-describe CodeThatReactsToEvents do
+describe MyController do
   context "on some_event" do
     before do
       stub_wisper_publisher("MyPublisher", :execute, :some_event, "foo")
     end
 
     it "renders" do
-      response = CodeThatReactsToEvents.new.do_something
+      response = MyController.new.create
       expect(response).to eq "Hello with foo!"
     end
   end
 end
 ```
 
-This becomes important when testing, for example, Rails controllers in
-isolation from the business logic.  This technique is used at the controller
-layer to isolate testing the controller from testing the encapsulated business
-logic.
+This is useful when testing Rails controllers in isolation from the business logic.  
 
 You can use any number of args to pass to the event:
 
