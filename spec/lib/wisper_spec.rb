@@ -82,6 +82,12 @@ describe Wisper do
     expect(Wisper.publisher).to eq Wisper::Publisher
   end
 
+  it '.clear clears all global listeners' do
+    10.times { Wisper.subscribe(double) }
+    Wisper.clear
+    expect(Wisper::GlobalListeners.listeners).to be_empty
+  end
+
   it '.configuration returns configuration' do
     expect(Wisper.configuration).to be_an_instance_of(Wisper::Configuration)
   end

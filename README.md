@@ -331,6 +331,15 @@ stub_wisper_publisher("MyPublisher", :execute, :some_event, "foo1", "foo2", ...)
 
 See `spec/lib/rspec_extensions_spec.rb` for a runnable example.
 
+## Clearing Global Listeners
+
+If you use global listeners in non-feature tests you _might_ want to clear them
+in a hook to prevent global subscriptions persisting between tests.
+
+```ruby
+after { Wisper.clear }
+```
+
 ## Compatibility
 
 Tested with MRI 1.9.x, MRI 2.0.0, JRuby (1.9 and 2.0 mode) and Rubinius (1.9
