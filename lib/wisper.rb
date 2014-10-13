@@ -37,6 +37,10 @@ module Wisper
     end
   end
 
+  def self.publisher
+    Publisher
+  end
+
   def self.configure
     yield(configuration)
   end

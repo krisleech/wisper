@@ -78,6 +78,10 @@ describe Wisper do
     end
   end
 
+  it '.publisher returns the Publisher module' do
+    expect(Wisper.publisher).to eq Wisper::Publisher
+  end
+
   it '.configuration returns configuration' do
     expect(Wisper.configuration).to be_an_instance_of(Wisper::Configuration)
   end

@@ -49,7 +49,9 @@ end
 
 When a publisher broadcasts an event it can include number of arguments. 
 
-The `broadcast` method is also aliased as `publish` and `emit`.
+The `broadcast` method is also aliased as `publish` and `announce`.
+
+You can also include `Wisper.publisher` instead of `Wisper::Publisher`.
 
 ### Subscribing
 
