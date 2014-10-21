@@ -9,26 +9,31 @@ module Wisper
       self
     end
 
+    def on(*events, &block)
+      raise ArgumentError, 'must give at least one event' if events.empty?
+      local_registrations << BlockRegistration.new(block, on: events)
+      self
+    end
+
+    def add_block_listener(options = {}, &block)
+      warn "[DEPRECATED] use `on` instead of `add_block_listener`"
+      local_registrations << BlockRegistration.new(block, options)
+      self
+    end
+
     def add_listener(listener, options = {})
       warn "[DEPRECATED] use `subscribe` instead of `add_listener`"
       subscribe(listener, options)
     end
 
-    def add_block_listener(options = {}, &block)
-      local_registrations << BlockRegistration.new(block, options)
-      self
-    end
-
-    # sugar
     def respond_to(*events, &block)
-      add_block_listener({:on => events}, &block)
+      warn '[DEPRECATED] use `on` instead of `respond_to`'
+      on(*events, &block)
     end
-
-    alias :on :respond_to
 
     module ClassMethods
       def subscribe(listener, options = {})
-        GlobalListeners.add(listener, options.merge(:scope => self))
+        GlobalListeners.subscribe(listener, options.merge(:scope => self))
       end
 
       def add_listener(listener, options = {})

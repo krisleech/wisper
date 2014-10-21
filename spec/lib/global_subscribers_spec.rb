@@ -3,15 +3,15 @@ describe Wisper::GlobalListeners do
   let(:local_listener)   { double('listener') }
   let(:publisher)        { publisher_class.new }
 
-  describe '.add' do
+  describe '.subscribe' do
     it 'adds given listener to every publisher' do
-      Wisper::GlobalListeners.add(global_listener)
+      Wisper::GlobalListeners.subscribe(global_listener)
       expect(global_listener).to receive(:it_happened)
       publisher.send(:broadcast, :it_happened)
     end
 
     it 'works with options' do
-      Wisper::GlobalListeners.add(global_listener, :on => :it_happened,
+      Wisper::GlobalListeners.subscribe(global_listener, :on => :it_happened,
                                                    :with => :woot)
       expect(global_listener).to receive(:woot).once
       expect(global_listener).not_to receive(:it_happened_again)
@@ -21,7 +21,7 @@ describe Wisper::GlobalListeners do
 
     it 'works along side local listeners' do
       # global listener
-      Wisper::GlobalListeners.add(global_listener)
+      Wisper::GlobalListeners.subscribe(global_listener)
 
       # local listener
       publisher.subscribe(local_listener)
@@ -37,7 +37,7 @@ describe Wisper::GlobalListeners do
       publisher_2 = publisher_class.new
       publisher_3 = publisher_class.new
 
-      Wisper::GlobalListeners.add(global_listener, :scope => [publisher_1.class,
+      Wisper::GlobalListeners.subscribe(global_listener, :scope => [publisher_1.class,
                                                               publisher_2.class])
 
       expect(global_listener).to receive(:it_happened_1).once
@@ -53,7 +53,7 @@ describe Wisper::GlobalListeners do
       num_threads = 100
       (1..num_threads).to_a.map do
         Thread.new do
-          Wisper::GlobalListeners.add(Object.new)
+          Wisper::GlobalListeners.subscribe(Object.new)
           sleep(rand) # a little chaos
         end
       end.each(&:join)
@@ -64,7 +64,7 @@ describe Wisper::GlobalListeners do
 
   describe '.listeners' do
     it 'returns collection of global listeners' do
-      Wisper::GlobalListeners.add(global_listener)
+      Wisper::GlobalListeners.subscribe(global_listener)
       expect(Wisper::GlobalListeners.listeners).to eq [global_listener]
     end
 
@@ -75,7 +75,7 @@ describe Wisper::GlobalListeners do
   end
 
   it '.clear clears all global listeners' do
-    Wisper::GlobalListeners.add(global_listener)
+    Wisper::GlobalListeners.subscribe(global_listener)
     Wisper::GlobalListeners.clear
     expect(Wisper::GlobalListeners.listeners).to be_empty
   end
@@ -83,7 +83,7 @@ describe Wisper::GlobalListeners do
   describe 'backwards compatibility' do
     it '.add_listener is aliased to .add' do
       silence_warnings do
-        expect(Wisper::GlobalListeners).to receive(:add)
+        expect(Wisper::GlobalListeners).to receive(:subscribe)
         Wisper::GlobalListeners.add_listener(global_listener)
       end
     end

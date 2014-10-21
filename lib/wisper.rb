@@ -26,14 +26,25 @@ module Wisper
     self.subscribe(listener, options)
   end
 
+  # Examples:
+  #
+  #   Wisper.subscribe(AuditRecorder.new)
+  #
+  #   Wisper.subscribe(AuditRecorder.new, StatsRecorder.new)
+  #
+  #   Wisper.subscribe(AuditRecorder.new, on: 'order_created')
+  #
+  #   Wisper.subscribe(AuditRecorder.new, scope: 'MyPublisher')
+  #
+  #   Wisper.subscribe(AuditRecorder.new, StatsRecorder.new) do
+  #     # ..
+  #   end
+  #
   def self.subscribe(*args, &block)
     if block_given?
-      TemporaryListeners.with(*args, &block)
+      TemporaryListeners.subscribe(*args, &block)
     else
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      args.each do |listener|
-        GlobalListeners.add(listener, options)
-      end
+      GlobalListeners.subscribe(*args)
     end
   end
 

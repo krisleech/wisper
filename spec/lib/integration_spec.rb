@@ -24,19 +24,6 @@ describe Wisper do
     command.execute(true)
   end
 
-  it 'subscribes block to all published events' do
-    insider = double('Insider')
-    expect(insider).to receive(:render).with('hello')
-
-    command = MyCommand.new
-
-    command.add_block_listener do |message|
-      insider.render(message)
-    end
-
-    command.execute(true)
-  end
-
   it 'maps events to different methods' do
     listener_1 = double('listener')
     listener_2 = double('listener')
