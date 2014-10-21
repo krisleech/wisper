@@ -19,7 +19,7 @@ describe Wisper do
 
     command = MyCommand.new
 
-    command.add_listener(listener)
+    command.subscribe(listener)
 
     command.execute(true)
   end
@@ -45,8 +45,8 @@ describe Wisper do
 
     command = MyCommand.new
 
-    command.add_listener(listener_1, :on => :success, :with => :happy_days)
-    command.add_listener(listener_2, :on => :failure, :with => :sad_days)
+    command.subscribe(listener_1, :on => :success, :with => :happy_days)
+    command.subscribe(listener_2, :on => :failure, :with => :sad_days)
 
     command.execute(true)
     command.execute(false)

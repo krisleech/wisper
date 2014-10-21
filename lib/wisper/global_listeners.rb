@@ -42,8 +42,7 @@ module Wisper
       instance.clear
     end
 
-    # remain backwards compatible
-    def self.add_listener(listener, options = {})
+    def self.add_listener(listener, options = {}) # deprecated
       warn "[DEPRECATION] use `add` instead of `add_listener`"
       add(listener, options)
     end

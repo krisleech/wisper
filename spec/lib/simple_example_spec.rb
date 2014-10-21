@@ -15,7 +15,7 @@ describe 'simple publishing' do
     expect(listener).to receive(:bar).with instance_of MyPublisher
 
     my_publisher = MyPublisher.new
-    my_publisher.add_listener(listener)
+    my_publisher.subscribe(listener)
     my_publisher.do_something
   end
 end

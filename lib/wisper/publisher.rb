@@ -4,12 +4,15 @@ module Wisper
       registrations.map(&:listener).freeze
     end
 
-    def add_listener(listener, options = {})
+    def subscribe(listener, options = {})
       local_registrations << ObjectRegistration.new(listener, options)
       self
     end
 
-    alias :subscribe :add_listener
+    def add_listener(listener, options = {})
+      warn "[DEPRECATED] use `subscribe` instead of `add_listener`"
+      subscribe(listener, options)
+    end
 
     def add_block_listener(options = {}, &block)
       local_registrations << BlockRegistration.new(block, options)
@@ -24,11 +27,14 @@ module Wisper
     alias :on :respond_to
 
     module ClassMethods
-      def add_listener(listener, options = {})
+      def subscribe(listener, options = {})
         GlobalListeners.add(listener, options.merge(:scope => self))
       end
 
-      alias :subscribe :add_listener
+      def add_listener(listener, options = {})
+        warn "[DEPRECATED] use `subscribe` instead of `add_listener`"
+        subscribe(listener, options)
+      end
     end
 
     private

@@ -24,7 +24,7 @@ describe Wisper::GlobalListeners do
       Wisper::GlobalListeners.add(global_listener)
 
       # local listener
-      publisher.add_listener(local_listener)
+      publisher.subscribe(local_listener)
 
       expect(global_listener).to receive(:it_happened)
       expect(local_listener).to receive(:it_happened)
@@ -81,11 +81,10 @@ describe Wisper::GlobalListeners do
   end
 
   describe 'backwards compatibility' do
-    it '.add_listener adds a listener' do
+    it '.add_listener is aliased to .add' do
       silence_warnings do
+        expect(Wisper::GlobalListeners).to receive(:add)
         Wisper::GlobalListeners.add_listener(global_listener)
-        expect(global_listener).to receive(:it_happened)
-        publisher.send(:broadcast, :it_happened)
       end
     end
   end
