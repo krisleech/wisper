@@ -41,6 +41,10 @@ module Wisper
     Publisher
   end
 
+  def self.clear
+    GlobalListeners.clear
+  end
+
   def self.configure
     yield(configuration)
   end
