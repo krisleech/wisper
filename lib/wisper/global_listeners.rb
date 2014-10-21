@@ -3,8 +3,6 @@ require 'singleton'
 module Wisper
   class GlobalListeners
     include Singleton
-    attr_reader :mutex
-    private :mutex
 
     def initialize
       @registrations = Set.new
@@ -53,7 +51,7 @@ module Wisper
     private
 
     def with_mutex
-      mutex.synchronize { yield }
+      @mutex.synchronize { yield }
     end
   end
 end
