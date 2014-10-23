@@ -252,6 +252,9 @@ report_creator.subscribe(MailResponder.new, on:   :create_report_failed,
                                             with: :failed)
 ```
 
+You could also alias the method within your listener, as such
+`alias successful create_report_successful`.
+
 ## RSpec
 
 ### Broadcast Matcher
