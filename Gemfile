@@ -9,6 +9,8 @@ gem 'rspec', '~> 3.0.0'
 gem 'coveralls', require: false
 
 group :extras do
+  gem 'yard'
+  gem 'redcarpet'
   gem 'flay'
   gem 'pry'
 end

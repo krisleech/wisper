@@ -42,6 +42,7 @@ describe Wisper do
   end
 
   describe '.subscribe' do
+
     context 'given block' do
       it 'subscribes listeners to all events for duration of the block' do
         publisher = publisher_class.new
@@ -55,6 +56,10 @@ describe Wisper do
         end
 
         publisher.send(:broadcast, 'not_here')
+      end
+
+      it 'returns the Wisper module' do
+        expect(Wisper.subscribe(double) {}).to eq Wisper
       end
     end
 
@@ -75,6 +80,10 @@ describe Wisper do
         expect(Wisper::GlobalListeners.listeners).to include listener_1, listener_2
         expect(Wisper::GlobalListeners.listeners).not_to include listener_3
       end
+
+      it 'returns the Wisper module' do
+        expect(Wisper.subscribe(double)).to eq Wisper
+      end
     end
   end
 
@@ -82,10 +91,16 @@ describe Wisper do
     expect(Wisper.publisher).to eq Wisper::Publisher
   end
 
-  it '.clear clears all global listeners' do
-    10.times { Wisper.subscribe(double) }
-    Wisper.clear
-    expect(Wisper::GlobalListeners.listeners).to be_empty
+  describe '.clear' do
+    it 'clears all global listeners' do
+      10.times { Wisper.subscribe(double) }
+      Wisper.clear
+      expect(Wisper::GlobalListeners.listeners).to be_empty
+    end
+
+    it 'returns the Wisper module' do
+      expect(Wisper.clear).to eq Wisper
+    end
   end
 
   it '.configuration returns configuration' do
