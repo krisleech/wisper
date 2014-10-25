@@ -270,8 +270,7 @@ after { Wisper.clear }
 
 ## Compatibility
 
-Tested with MRI 1.9.x, MRI 2.0.0, JRuby (1.9 and 2.0 mode) and Rubinius (1.9
-mode).
+Tested with MRI 1.9.3, MRI 2.1, JRuby and Rubinius.
 
 See the [build status](https://travis-ci.org/krisleech/wisper) for details.
 

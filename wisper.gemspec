@@ -8,10 +8,12 @@ Gem::Specification.new do |gem|
   gem.version       = Wisper::VERSION
   gem.authors       = ["Kris Leech"]
   gem.email         = ["kris.leech@gmail.com"]
-  gem.description   = %q{pub/sub for Ruby objects}
-  gem.summary       = %q{pub/sub for Ruby objects}
+  gem.description   = 'A micro library providing Ruby objects with Publish-Subscribe capabilities'
+  gem.summary       = 'A micro library providing Ruby objects with Publish-Subscribe capabilities'
   gem.homepage      = "https://github.com/krisleech/wisper"
   gem.license       = "MIT"
+
+  gem.required_ruby_version = '>= 1.9.3'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

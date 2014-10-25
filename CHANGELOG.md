@@ -2,6 +2,7 @@
 
 * remove deprecated methods
 * remove rspec matcher and stubbing (moved to [wisper-rspec](https://github.com/krisleech/wisper-rspec))
+* drop support for Ruby 1.9.2
 
 ## 1.6.0 (25 Oct 2014)
 
