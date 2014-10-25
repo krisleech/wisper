@@ -11,21 +11,6 @@ require 'wisper/broadcasters/send_broadcaster'
 require 'wisper/broadcasters/logger_broadcaster'
 
 module Wisper
-  def self.included(base)
-    warn "[DEPRECATION] `include Wisper::Publisher` instead of `include Wisper`"
-    base.class_eval { include Wisper::Publisher  }
-  end
-
-  def self.with_listeners(*args, &block)
-    warn "[DEPRECATION] `use Wisper.subscribe` instead of `Wisper.with_listeners`"
-    self.subscribe(*args, &block)
-  end
-
-  def self.add_listener(listener, options = {})
-    warn "[DEPRECATION] `use Wisper.subscribe` instead of `Wisper.add_listener`"
-    self.subscribe(listener, options)
-  end
-
   # Examples:
   #
   #   Wisper.subscribe(AuditRecorder.new)

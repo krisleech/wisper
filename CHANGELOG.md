@@ -1,3 +1,7 @@
+## Unreleased (!!contains breaking changes!!)
+
+* remove deprecated methods
+
 ## 1.6.0 (25 Oct 2014)
 
 Authors: Kris Leech
