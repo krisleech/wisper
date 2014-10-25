@@ -1,4 +1,6 @@
-## Unreleased (no breaking changes)
+## 1.6.0 (25 Oct 2014)
+
+Authors: Kris Leech
 
 * deprecate: add_listener, add_block_listener and respond_to
 * internal: make method naming more consistent
