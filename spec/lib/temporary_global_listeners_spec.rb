@@ -3,13 +3,13 @@ describe Wisper::TemporaryListeners do
   let(:listener_2) { double('listener', :to_a => nil) }
   let(:publisher)  { Object.class_eval { include Wisper::Publisher } }
 
-  describe '.with' do
+  describe '.subscribe' do
     it 'globally subscribes listener for duration of given block' do
 
       expect(listener_1).to receive(:success)
       expect(listener_1).to_not receive(:failure)
 
-      Wisper::TemporaryListeners.with(listener_1) do
+      Wisper::TemporaryListeners.subscribe(listener_1) do
         publisher.instance_eval { broadcast(:success) }
       end
 
@@ -24,7 +24,7 @@ describe Wisper::TemporaryListeners do
       expect(listener_2).to receive(:success)
       expect(listener_2).to_not receive(:failure)
 
-      Wisper::TemporaryListeners.with(listener_1, listener_2) do
+      Wisper::TemporaryListeners.subscribe(listener_1, listener_2) do
         publisher.instance_eval { broadcast(:success) }
       end
 
@@ -45,7 +45,7 @@ describe Wisper::TemporaryListeners do
 
     it 'ensures registrations are cleared after exception raised in block' do
       begin
-        Wisper::TemporaryListeners.with(listener_1) do
+        Wisper::TemporaryListeners.subscribe(listener_1) do
           raise StandardError
         end
       rescue StandardError
@@ -53,6 +53,10 @@ describe Wisper::TemporaryListeners do
 
       expect(Wisper::TemporaryListeners.registrations.size).to eql 0
     end
+  end
+
+  it 'returns self so methods can be chained' do
+    expect(Wisper::TemporaryListeners.subscribe {}).to be_an_instance_of(Wisper::TemporaryListeners)
   end
 end
 

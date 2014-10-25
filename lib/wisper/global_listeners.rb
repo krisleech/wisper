@@ -1,5 +1,7 @@
 require 'singleton'
 
+# Handles global subscriptions
+
 module Wisper
   class GlobalListeners
     include Singleton
@@ -9,8 +11,14 @@ module Wisper
       @mutex         = Mutex.new
     end
 
-    def add(listener, options = {})
-      with_mutex { @registrations << ObjectRegistration.new(listener, options) }
+    def subscribe(*listeners)
+      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+
+      with_mutex do
+        listeners.each do |listener|
+          @registrations << ObjectRegistration.new(listener, options)
+        end
+      end
       self
     end
 
@@ -26,8 +34,8 @@ module Wisper
       with_mutex { @registrations.clear }
     end
 
-    def self.add(listener, options = {})
-      instance.add(listener, options)
+    def self.subscribe(*listeners)
+      instance.subscribe(*listeners)
     end
 
     def self.registrations
@@ -43,8 +51,8 @@ module Wisper
     end
 
     def self.add_listener(listener, options = {}) # deprecated
-      warn "[DEPRECATION] use `add` instead of `add_listener`"
-      add(listener, options)
+      warn "[DEPRECATION] use `subscribe` instead of `add_listener`"
+      subscribe(listener, options)
     end
 
     private

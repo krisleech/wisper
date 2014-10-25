@@ -180,7 +180,42 @@ describe Wisper::Publisher do
     end
   end
 
-  describe '.add_listener' do # deprecated
+  describe '.on' do
+    let(:insider) { double('insider') }
+
+    it 'subscribes block to given event' do
+      expect(insider).to receive(:yes).once
+
+      publisher.on(:something_happened) do
+        insider.yes
+      end
+
+      publisher.send(:broadcast, :something_happened)
+      publisher.send(:broadcast, :and_so_did_this)
+    end
+
+    it 'subscribes block to given events' do
+      expect(insider).to receive(:yes).twice
+
+      publisher.on(:something_happened, :and_so_did_this) do
+        insider.yes
+      end
+
+      publisher.send(:broadcast, :something_happened)
+      publisher.send(:broadcast, :and_so_did_this)
+    end
+
+    it 'raise an error if no events given' do
+      expect { publisher.on() {} }.to raise_error(ArgumentError)
+    end
+
+    it 'returns publisher so methods can be chained' do
+      expect(publisher.on(:foo) {}).to eq publisher
+    end
+  end
+
+  # @deprecated
+  describe '.add_listener' do
     it 'is aliased to .subscribe' do
       expect(publisher).to receive(:subscribe)
       silence_warnings do
@@ -189,14 +224,17 @@ describe Wisper::Publisher do
     end
   end
 
+  # @deprecated
   describe '.add_block_listener' do
     let(:insider) { double('insider') }
 
     it 'subscribes given block to all events' do
       expect(insider).to receive(:it_happened).twice
 
-      publisher.add_block_listener do
-        insider.it_happened
+      silence_warnings do
+        publisher.add_block_listener do
+          insider.it_happened
+        end
       end
 
       publisher.send(:broadcast, 'something_happened')
@@ -207,8 +245,10 @@ describe Wisper::Publisher do
       it '.add_block_listener subscribes block to an event' do
         expect(insider).not_to receive(:it_happened).once
 
-        publisher.add_block_listener(:on => 'something_happened') do
-          insider.it_happened
+        silence_warnings do
+          publisher.add_block_listener(:on => 'something_happened') do
+            insider.it_happened
+          end
         end
 
         publisher.send(:broadcast, 'something_happened')
@@ -218,9 +258,11 @@ describe Wisper::Publisher do
       it '.add_block_listener subscribes block to all listed events' do
         expect(insider).to receive(:it_happened).twice
 
-        publisher.add_block_listener(
-          :on => ['something_happened', 'and_so_did_this']) do
-          insider.it_happened
+        silence_warnings do
+          publisher.add_block_listener(
+            :on => ['something_happened', 'and_so_did_this']) do
+            insider.it_happened
+          end
         end
 
         publisher.send(:broadcast, 'something_happened')
@@ -230,34 +272,20 @@ describe Wisper::Publisher do
     end
 
     it 'returns publisher so methods can be chained' do
-      expect(publisher.add_block_listener(:on => 'this_thing_happened') do
-      end).to eq publisher
+      silence_warnings do
+        expect(publisher.add_block_listener(:on => 'this_thing_happened') do
+        end).to eq publisher
+      end
     end
   end
 
-  describe '.on (alternative block syntax)' do
-    let(:insider) { double('insider') }
-
-    it 'subscribes given block to an event' do
-      expect(insider).to receive(:it_happened)
-
-      publisher.on(:something_happened) do
-        insider.it_happened
+  # @deprecated
+  describe '.respond_to (alternative block syntax)' do
+    it 'delegates to .on' do
+      expect(publisher).to receive(:on).with(:foobar)
+      silence_warnings do
+        publisher.respond_to(:foobar) {  }
       end
-
-      publisher.send(:broadcast, 'something_happened')
-    end
-
-    it 'subscribes given block to multiple events' do
-      expect(insider).to receive(:it_happened).twice
-
-      publisher.on(:something_happened, :and_so_did_this) do
-        insider.it_happened
-      end
-
-      publisher.send(:broadcast, 'something_happened')
-      publisher.send(:broadcast, 'and_so_did_this')
-      publisher.send(:broadcast, 'but_not_this')
     end
   end
 
