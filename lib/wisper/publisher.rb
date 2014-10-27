@@ -15,30 +15,9 @@ module Wisper
       self
     end
 
-    def add_block_listener(options = {}, &block)
-      warn "[DEPRECATED] use `on` instead of `add_block_listener`"
-      local_registrations << BlockRegistration.new(block, options)
-      self
-    end
-
-    def add_listener(listener, options = {})
-      warn "[DEPRECATED] use `subscribe` instead of `add_listener`"
-      subscribe(listener, options)
-    end
-
-    def respond_to(*events, &block)
-      warn '[DEPRECATED] use `on` instead of `respond_to`'
-      on(*events, &block)
-    end
-
     module ClassMethods
       def subscribe(listener, options = {})
         GlobalListeners.subscribe(listener, options.merge(:scope => self))
-      end
-
-      def add_listener(listener, options = {})
-        warn "[DEPRECATED] use `subscribe` instead of `add_listener`"
-        subscribe(listener, options)
       end
     end
 

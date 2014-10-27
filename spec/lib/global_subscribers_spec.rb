@@ -79,13 +79,4 @@ describe Wisper::GlobalListeners do
     Wisper::GlobalListeners.clear
     expect(Wisper::GlobalListeners.listeners).to be_empty
   end
-
-  describe 'backwards compatibility' do
-    it '.add_listener is aliased to .add' do
-      silence_warnings do
-        expect(Wisper::GlobalListeners).to receive(:subscribe)
-        Wisper::GlobalListeners.add_listener(global_listener)
-      end
-    end
-  end
 end

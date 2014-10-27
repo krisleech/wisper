@@ -214,81 +214,6 @@ describe Wisper::Publisher do
     end
   end
 
-  # @deprecated
-  describe '.add_listener' do
-    it 'is aliased to .subscribe' do
-      expect(publisher).to receive(:subscribe)
-      silence_warnings do
-        publisher.add_listener(listener)
-      end
-    end
-  end
-
-  # @deprecated
-  describe '.add_block_listener' do
-    let(:insider) { double('insider') }
-
-    it 'subscribes given block to all events' do
-      expect(insider).to receive(:it_happened).twice
-
-      silence_warnings do
-        publisher.add_block_listener do
-          insider.it_happened
-        end
-      end
-
-      publisher.send(:broadcast, 'something_happened')
-      publisher.send(:broadcast, 'and_so_did_this')
-    end
-
-    describe ':on argument' do
-      it '.add_block_listener subscribes block to an event' do
-        expect(insider).not_to receive(:it_happened).once
-
-        silence_warnings do
-          publisher.add_block_listener(:on => 'something_happened') do
-            insider.it_happened
-          end
-        end
-
-        publisher.send(:broadcast, 'something_happened')
-        publisher.send(:broadcast, 'and_so_did_this')
-      end
-
-      it '.add_block_listener subscribes block to all listed events' do
-        expect(insider).to receive(:it_happened).twice
-
-        silence_warnings do
-          publisher.add_block_listener(
-            :on => ['something_happened', 'and_so_did_this']) do
-            insider.it_happened
-          end
-        end
-
-        publisher.send(:broadcast, 'something_happened')
-        publisher.send(:broadcast, 'and_so_did_this')
-        publisher.send(:broadcast, 'but_not_this')
-      end
-    end
-
-    it 'returns publisher so methods can be chained' do
-      silence_warnings do
-        expect(publisher.add_block_listener(:on => 'this_thing_happened') do
-        end).to eq publisher
-      end
-    end
-  end
-
-  # @deprecated
-  describe '.respond_to (alternative block syntax)' do
-    it 'delegates to .on' do
-      expect(publisher).to receive(:on).with(:foobar)
-      silence_warnings do
-        publisher.respond_to(:foobar) {  }
-      end
-    end
-  end
-
   describe '.broadcast' do
     it 'does not publish events which cannot be responded to' do
       expect(listener).not_to receive(:so_did_this)
@@ -342,15 +267,6 @@ describe Wisper::Publisher do
       expect(listener).to receive(:it_happened).once
       publisher_klass_1.new.send(:broadcast, 'it_happened')
       publisher_klass_2.new.send(:broadcast, 'it_happened')
-    end
-  end
-
-  describe '#add_listener' do # deprecated
-    it 'is aliased to #subscribe' do
-      expect(publisher).to receive(:subscribe)
-      silence_warnings do
-        publisher.add_listener(listener)
-      end
     end
   end
 end

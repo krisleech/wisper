@@ -50,11 +50,6 @@ module Wisper
       instance.clear
     end
 
-    def self.add_listener(listener, options = {}) # deprecated
-      warn "[DEPRECATION] use `subscribe` instead of `add_listener`"
-      subscribe(listener, options)
-    end
-
     private
 
     def with_mutex
