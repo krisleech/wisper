@@ -257,7 +257,7 @@ You could also alias the method within your listener, as such
 
 ## RSpec
 
-Please see (wisper-rspec)[https://github.com/krisleech/wisper-rspec].
+Please see [wisper-rspec](https://github.com/krisleech/wisper-rspec).
 
 ## Clearing Global Listeners
 
