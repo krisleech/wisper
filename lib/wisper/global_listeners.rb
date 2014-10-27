@@ -16,7 +16,12 @@ module Wisper
 
       with_mutex do
         listeners.each do |listener|
-          @registrations << ObjectRegistration.new(listener, options)
+          @registrations << ObjectRegistration.new(listener, on:          options[:on],
+                                                             with:        options[:with],
+                                                             prefix:      options[:prefix],
+                                                             scope:       options[:scope],
+                                                             broadcaster: options[:broadcaster],
+                                                             async:       options[:async])
         end
       end
       self

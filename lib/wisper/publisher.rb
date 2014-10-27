@@ -4,8 +4,13 @@ module Wisper
       registrations.map(&:listener).freeze
     end
 
-    def subscribe(listener, options = {})
-      local_registrations << ObjectRegistration.new(listener, options)
+    def subscribe(listener, on: nil, with: nil, prefix: nil, scope: nil, broadcaster: nil, async: nil)
+      local_registrations << ObjectRegistration.new(listener, on: on,
+                                                              with: with,
+                                                              prefix: prefix,
+                                                              scope: scope,
+                                                              broadcaster: broadcaster,
+                                                              async: async)
       self
     end
 
@@ -16,8 +21,13 @@ module Wisper
     end
 
     module ClassMethods
-      def subscribe(listener, options = {})
-        GlobalListeners.subscribe(listener, options.merge(:scope => self))
+      def subscribe(listener, on: nil, with: nil, prefix: nil, broadcaster: nil, async: nil)
+        GlobalListeners.subscribe(listener, on: on,
+                                            with: with,
+                                            prefix: prefix,
+                                            scope: self,
+                                            broadcaster: broadcaster,
+                                            async: async)
       end
     end
 
@@ -57,4 +67,3 @@ module Wisper
     end
   end
 end
-

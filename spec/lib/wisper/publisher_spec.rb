@@ -74,8 +74,6 @@ describe Wisper::Publisher do
       end
     end
 
-    # NOTE: these are not realistic use cases, since you would only ever use
-    # `scope` when globally subscribing.
     describe ':scope argument' do
       let(:listener_1) { double('Listener') }
       let(:listener_2) { double('Listener') }
@@ -83,16 +81,16 @@ describe Wisper::Publisher do
       it 'scopes listener to given class' do
         expect(listener_1).to receive(:it_happended)
         expect(listener_2).not_to receive(:it_happended)
-        publisher.subscribe(listener_1, :scope => publisher.class)
-        publisher.subscribe(listener_2, :scope => Class.new)
+        publisher.subscribe(listener_1, scope: publisher.class)
+        publisher.subscribe(listener_2, scope: Class.new)
         publisher.send(:broadcast, 'it_happended')
       end
 
       it 'scopes listener to given class string' do
         expect(listener_1).to receive(:it_happended)
         expect(listener_2).not_to receive(:it_happended)
-        publisher.subscribe(listener_1, :scope => publisher.class.to_s)
-        publisher.subscribe(listener_2, :scope => Class.new.to_s)
+        publisher.subscribe(listener_1, scope: publisher.class.to_s)
+        publisher.subscribe(listener_2, scope: Class.new.to_s)
         publisher.send(:broadcast, 'it_happended')
       end
 
@@ -105,7 +103,7 @@ describe Wisper::Publisher do
 
         publisher = publisher_sub_klass.new
 
-        publisher.subscribe(listener, :scope => publisher_super_klass)
+        publisher.subscribe(listener, scope: publisher_super_klass)
         publisher.send(:broadcast, 'it_happended')
       end
     end

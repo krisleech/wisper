@@ -11,8 +11,8 @@ describe Wisper::GlobalListeners do
     end
 
     it 'works with options' do
-      Wisper::GlobalListeners.subscribe(global_listener, :on => :it_happened,
-                                                   :with => :woot)
+      Wisper::GlobalListeners.subscribe(global_listener, on: :it_happened,
+                                                         with: :woot)
       expect(global_listener).to receive(:woot).once
       expect(global_listener).not_to receive(:it_happened_again)
       publisher.send(:broadcast, :it_happened)
@@ -37,8 +37,8 @@ describe Wisper::GlobalListeners do
       publisher_2 = publisher_class.new
       publisher_3 = publisher_class.new
 
-      Wisper::GlobalListeners.subscribe(global_listener, :scope => [publisher_1.class,
-                                                              publisher_2.class])
+      Wisper::GlobalListeners.subscribe(global_listener, scope: [publisher_1.class,
+                                                                 publisher_2.class])
 
       expect(global_listener).to receive(:it_happened_1).once
       expect(global_listener).to receive(:it_happened_2).once

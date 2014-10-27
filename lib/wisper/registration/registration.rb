@@ -2,9 +2,10 @@ module Wisper
   class Registration
     attr_reader :on, :listener
 
-    def initialize(listener, options)
+    def initialize(listener, on: nil)
       @listener   = listener
-      @on         = Array(options.fetch(:on) { 'all' }).map(&:to_s)
+      on ||= 'all'
+      @on = Array(on).map(&:to_s)
     end
 
     private

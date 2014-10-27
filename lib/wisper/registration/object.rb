@@ -2,12 +2,12 @@ module Wisper
   class ObjectRegistration < Registration
     attr_reader :with, :prefix, :allowed_classes, :broadcaster
 
-    def initialize(listener, options)
-      super(listener, options)
-      @with   = options[:with]
-      @prefix = stringify_prefix(options[:prefix])
-      @allowed_classes = Array(options[:scope]).map(&:to_s).to_set
-      @broadcaster = map_broadcaster(options[:async] || options[:broadcaster])
+    def initialize(listener, on: nil, with: nil, prefix: nil, scope: nil, async: nil, broadcaster: nil)
+      super(listener, on: on)
+      @with            = with
+      @prefix          = stringify_prefix(prefix)
+      @allowed_classes = Array(scope || []).map(&:to_s).to_set
+      @broadcaster     = map_broadcaster(async || broadcaster)
     end
 
     def broadcast(event, publisher, *args)
