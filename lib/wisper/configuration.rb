@@ -8,8 +8,13 @@ module Wisper
       @broadcasters = Broadcasters.new
     end
 
-    def broadcaster(name, broadcaster)
-      @broadcasters[name] = broadcaster
+    # registers a broadcaster, referenced by key
+    #
+    # @param key [String, #to_s] an arbitrary key
+    # @param broadcaster [#broadcast] a broadcaster
+    def broadcaster(key, broadcaster)
+      @broadcasters[key] = broadcaster
+      self
     end
 
     class Broadcasters

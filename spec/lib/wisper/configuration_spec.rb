@@ -8,10 +8,16 @@ module Wisper
         expect(subject.broadcasters).to be_empty
       end
 
-      it '#broadcaster adds given broadcaster' do
-        subject.broadcaster(key, broadcaster)
-        expect(subject.broadcasters).to include key
-        expect(subject.broadcasters[key]).to eql broadcaster
+      describe '#broadcaster' do
+        it 'adds given broadcaster' do
+          subject.broadcaster(key, broadcaster)
+          expect(subject.broadcasters).to include key
+          expect(subject.broadcasters[key]).to eql broadcaster
+        end
+
+        it 'returns the configuration' do
+          expect(subject.broadcaster(key, broadcaster)).to eq subject
+        end
       end
     end
   end
