@@ -1,5 +1,7 @@
 # Handles temporary global subscriptions
 
+# @api private
+
 module Wisper
   class TemporaryListeners
 

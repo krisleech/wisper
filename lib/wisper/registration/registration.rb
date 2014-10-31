@@ -1,3 +1,5 @@
+# @api private
+
 module Wisper
   class Registration
     attr_reader :on, :listener

@@ -9,4 +9,5 @@ gem 'coveralls', require: false
 group :extras do
   gem 'flay'
   gem 'pry'
+  gem 'yard'
 end

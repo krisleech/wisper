@@ -1,3 +1,5 @@
+# @api private
+
 module Wisper
   class ObjectRegistration < Registration
     attr_reader :with, :prefix, :allowed_classes, :broadcaster

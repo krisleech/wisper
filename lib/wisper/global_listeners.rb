@@ -1,6 +1,8 @@
-require 'singleton'
-
 # Handles global subscriptions
+
+# @api private
+
+require 'singleton'
 
 module Wisper
   class GlobalListeners
