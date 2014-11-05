@@ -13,6 +13,11 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/krisleech/wisper"
   gem.license       = "MIT"
 
+  if !ENV['CI']
+    gem.signing_key   = File.expand_path('~/.ssh/gem-private_key.pem')
+    gem.cert_chain    = ['gem-public_cert.pem']
+  end
+
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
