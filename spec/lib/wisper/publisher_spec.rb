@@ -228,6 +228,7 @@ describe Wisper::Publisher do
   end
 
   describe '.broadcast' do
+
     it 'does not publish events which cannot be responded to' do
       expect(listener).not_to receive(:so_did_this)
       allow(listener).to receive(:respond_to?).and_return(false)
@@ -255,6 +256,14 @@ describe Wisper::Publisher do
         publisher.send(:broadcast, 'this_happened')
         publisher.send(:broadcast, 'this-happened')
       end
+    end
+
+    it 'is not public' do
+      expect(publisher).not_to respond_to(:broadcast)
+    end
+
+    it 'is alised as .publish' do
+      expect(publisher.method(:broadcast)).to eq publisher.method(:publish)
     end
   end
 

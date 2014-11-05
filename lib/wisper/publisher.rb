@@ -25,6 +25,24 @@ module Wisper
       self
     end
 
+    # broadcasts an event
+    #
+    # @example
+    #   def call
+    #     # ...
+    #     broadcast(:finished, self)
+    #   end
+    #
+    def broadcast(event, *args)
+      registrations.each do | registration |
+        registration.broadcast(clean_event(event), self, *args)
+      end
+    end
+
+    alias :publish :broadcast
+
+    private :broadcast, :publish
+
     module ClassMethods
       # subscribe a listener
       #
@@ -54,15 +72,6 @@ module Wisper
       local_registrations + global_registrations + temporary_registrations
     end
 
-    def broadcast(event, *args)
-      registrations.each do | registration |
-        registration.broadcast(clean_event(event), self, *args)
-      end
-    end
-
-    alias :publish  :broadcast
-    alias :announce :broadcast
-
     def clean_event(event)
       event.to_s.gsub('-', '_')
     end
@@ -72,4 +81,3 @@ module Wisper
     end
   end
 end
-
