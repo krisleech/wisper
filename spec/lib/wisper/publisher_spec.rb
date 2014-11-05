@@ -258,6 +258,10 @@ describe Wisper::Publisher do
       end
     end
 
+    it 'returns publisher' do
+      expect(publisher.send(:broadcast, :foo)).to eq publisher
+    end
+
     it 'is not public' do
       expect(publisher).not_to respond_to(:broadcast)
     end
