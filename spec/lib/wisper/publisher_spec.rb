@@ -14,32 +14,67 @@ describe Wisper::Publisher do
     end
 
     describe ':on argument' do
-      it 'subscribes given listener to a single event' do
-        expect(listener).to receive(:this_happened)
+      before do
+        allow(listener).to receive(:something_a_happened)
+        allow(listener).to receive(:and_this)
         allow(listener).to receive(:so_did_this)
-        expect(listener).not_to receive(:so_did_this)
-
-        expect(listener).to respond_to(:so_did_this)
-
-        publisher.subscribe(listener, :on => 'this_happened')
-
-        publisher.send(:broadcast, 'this_happened')
-        publisher.send(:broadcast, 'so_did_this')
       end
 
-      it 'subscribes given listener to many events' do
-        expect(listener).to receive(:this_happened)
-        expect(listener).to receive(:and_this)
-        allow(listener).to receive(:so_did_this)
-        expect(listener).not_to receive(:so_did_this)
+      describe 'given a string' do
+        it 'subscribes listener to an event' do
+          expect(listener).to receive(:this_happened)
+          expect(listener).not_to receive(:so_did_this)
 
-        expect(listener).to respond_to(:so_did_this)
+          publisher.subscribe(listener, on: 'this_happened')
 
-        publisher.subscribe(listener, :on => ['this_happened', 'and_this'])
+          publisher.send(:broadcast, 'this_happened')
+          publisher.send(:broadcast, 'so_did_this')
+        end
+      end
 
-        publisher.send(:broadcast, 'this_happened')
-        publisher.send(:broadcast, 'so_did_this')
-        publisher.send(:broadcast, 'and_this')
+      describe 'given a symbol' do
+        it 'subscribes listener to an event' do
+          expect(listener).to receive(:this_happened)
+          expect(listener).not_to receive(:so_did_this)
+
+          publisher.subscribe(listener, on: :this_happened)
+
+          publisher.send(:broadcast, 'this_happened')
+          publisher.send(:broadcast, 'so_did_this')
+        end
+      end
+
+      describe 'given an array' do
+        it 'subscribes listener to events' do
+          expect(listener).to receive(:this_happened)
+          expect(listener).to receive(:and_this)
+          expect(listener).not_to receive(:so_did_this)
+
+          publisher.subscribe(listener, on: ['this_happened', 'and_this'])
+
+          publisher.send(:broadcast, 'this_happened')
+          publisher.send(:broadcast, 'so_did_this')
+          publisher.send(:broadcast, 'and_this')
+        end
+      end
+
+      describe 'given a regex' do
+        it 'subscribes listener to matching events' do
+          expect(listener).to receive(:something_a_happened)
+          expect(listener).not_to receive(:so_did_this)
+
+          publisher.subscribe(listener, on: /something_._happened/)
+
+          publisher.send(:broadcast, 'something_a_happened')
+          publisher.send(:broadcast, 'so_did_this')
+        end
+      end
+
+      describe 'given an unsupported argument' do
+        it 'raises an error' do
+          publisher.subscribe(listener, on: Object.new)
+          expect { publisher.send(:broadcast, 'something_a_happened') }.to raise_error(ArgumentError)
+        end
       end
     end
 
@@ -74,8 +109,6 @@ describe Wisper::Publisher do
       end
     end
 
-    # NOTE: these are not realistic use cases, since you would only ever use
-    # `scope` when globally subscribing.
     describe ':scope argument' do
       let(:listener_1) { double('Listener') }
       let(:listener_2) { double('Listener') }
@@ -181,28 +214,8 @@ describe Wisper::Publisher do
   end
 
   describe '.on' do
-    let(:insider) { double('insider') }
-
-    it 'subscribes block to given event' do
-      expect(insider).to receive(:yes).once
-
-      publisher.on(:something_happened) do
-        insider.yes
-      end
-
-      publisher.send(:broadcast, :something_happened)
-      publisher.send(:broadcast, :and_so_did_this)
-    end
-
-    it 'subscribes block to given events' do
-      expect(insider).to receive(:yes).twice
-
-      publisher.on(:something_happened, :and_so_did_this) do
-        insider.yes
-      end
-
-      publisher.send(:broadcast, :something_happened)
-      publisher.send(:broadcast, :and_so_did_this)
+    it 'returns publisher so methods can be chained' do
+      expect(publisher.on('this_thing_happened') {}).to eq publisher
     end
 
     it 'raise an error if no events given' do

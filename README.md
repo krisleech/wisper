@@ -202,8 +202,8 @@ Temporary Global Listeners are threadsafe.
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it can respond to. You
-can limit which events a listener is notified of by passing an event or array
-of events to `on:`.
+can limit which events a listener is notified of by passing an string, symbol,
+array or regular expression to `on`:
 
 ```ruby
 post_creater.subscribe(PusherListener.new, on: :create_post_successful)
