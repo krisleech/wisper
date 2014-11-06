@@ -53,10 +53,10 @@ describe Wisper::TemporaryListeners do
 
       expect(Wisper::TemporaryListeners.registrations.size).to eql 0
     end
-  end
 
-  it 'returns self so methods can be chained' do
-    expect(Wisper::TemporaryListeners.subscribe {}).to be_an_instance_of(Wisper::TemporaryListeners)
+    it 'returns self so methods can be chained' do
+      expect(Wisper::TemporaryListeners.subscribe {}).to be_an_instance_of(Wisper::TemporaryListeners)
+    end
   end
 end
 
