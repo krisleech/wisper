@@ -32,10 +32,10 @@ to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 ```ruby
 class CancelOrder
   include Wisper::Publisher
-  
+
   def call(order_id)
     order = Order.find_by_id(order_id)
-    
+
     # business logic...
 
     if order.cancelled?
@@ -49,7 +49,7 @@ end
 
 When a publisher broadcasts an event it can include number of arguments. 
 
-The `broadcast` method is also aliased as `publish` and `announce`.
+The `broadcast` method is also aliased as `publish`.
 
 You can also include `Wisper.publisher` instead of `Wisper::Publisher`.
 

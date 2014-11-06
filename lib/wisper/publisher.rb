@@ -9,6 +9,7 @@ module Wisper
     # @example
     #   my_publisher.subscribe(MyListener.new)
     #
+    # @return [self]
     def subscribe(listener, options = {})
       local_registrations << ObjectRegistration.new(listener, options)
       self
@@ -19,11 +20,32 @@ module Wisper
     # @example
     #   my_publisher.on(:order_created) { |args| ... }
     #
+    # @return [self]
     def on(*events, &block)
       raise ArgumentError, 'must give at least one event' if events.empty?
       local_registrations << BlockRegistration.new(block, on: events)
       self
     end
+
+    # broadcasts an event
+    #
+    # @example
+    #   def call
+    #     # ...
+    #     broadcast(:finished, self)
+    #   end
+    #
+    # @return [self]
+    def broadcast(event, *args)
+      registrations.each do | registration |
+        registration.broadcast(clean_event(event), self, *args)
+      end
+      self
+    end
+
+    alias :publish :broadcast
+
+    private :broadcast, :publish
 
     module ClassMethods
       # subscribe a listener
@@ -54,15 +76,6 @@ module Wisper
       local_registrations + global_registrations + temporary_registrations
     end
 
-    def broadcast(event, *args)
-      registrations.each do | registration |
-        registration.broadcast(clean_event(event), self, *args)
-      end
-    end
-
-    alias :publish  :broadcast
-    alias :announce :broadcast
-
     def clean_event(event)
       event.to_s.gsub('-', '_')
     end
@@ -72,4 +85,3 @@ module Wisper
     end
   end
 end
-
