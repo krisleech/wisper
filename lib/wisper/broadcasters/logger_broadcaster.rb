@@ -8,9 +8,9 @@ module Wisper
         @broadcaster = broadcaster
       end
 
-      def broadcast(subscriber, publisher, event, args)
-        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(subscriber)} with #{arg_names(args)}")
-        @broadcaster.broadcast(subscriber, publisher, event, args)
+      def broadcast(listener, publisher, event, args)
+        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(listener)} with #{arg_names(args)}")
+        @broadcaster.broadcast(listener, publisher, event, args)
       end
 
       private

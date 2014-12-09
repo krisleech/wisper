@@ -17,7 +17,7 @@ module Wisper
 
       describe 'unit tests:' do
         let(:publisher)   { classy_double('Publisher',  id: 1) }
-        let(:subscriber)  { classy_double('Subscriber', id: 2) }
+        let(:listener)  { classy_double('Listener', id: 2) }
         let(:logger)      { double('Logger').as_null_object }
         let(:broadcaster) { double('Broadcaster').as_null_object }
         let(:event)       { 'thing_created' }
@@ -29,13 +29,13 @@ module Wisper
             let(:args) { [] }
 
             it 'logs publised event' do
-              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Subscriber#2 with no arguments')
-              subject.broadcast(subscriber, publisher, event, args)
+              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments')
+              subject.broadcast(listener, publisher, event, args)
             end
 
             it 'delgates broadcast to given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(subscriber, publisher, event, args)
-              subject.broadcast(subscriber, publisher, event, args)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
+              subject.broadcast(listener, publisher, event, args)
             end
           end
 
@@ -43,13 +43,13 @@ module Wisper
             let(:args) { [arg_double(id: 3), arg_double(id: 4)] }
 
             it 'logs published event and arguments' do
-              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Subscriber#2 with Argument#3, Argument#4')
-              subject.broadcast(subscriber, publisher, event, args)
+              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4')
+              subject.broadcast(listener, publisher, event, args)
             end
 
             it 'delgates broadcast to given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(subscriber, publisher, event, args)
-              subject.broadcast(subscriber, publisher, event, args)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
+              subject.broadcast(listener, publisher, event, args)
             end
           end
 

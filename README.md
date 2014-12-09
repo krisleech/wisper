@@ -224,7 +224,7 @@ use the default prefix, "on".
 
 ## Mapping an event to a different method
 
-By default the method called on the subscriber is the same as the event
+By default the method called on the listener is the same as the event
 broadcast. However it can be mapped to a different method using `with:`.
 
 ```ruby
