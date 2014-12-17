@@ -1,4 +1,4 @@
-## Unreleased (!!contains breaking changes!!)
+## 2.0.0.rc1 (17 Dec 2014)
 
 Authors: Kris Leech
 
