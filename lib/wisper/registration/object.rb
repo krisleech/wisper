@@ -4,8 +4,8 @@ module Wisper
   class ObjectRegistration < Registration
     attr_reader :with, :prefix, :allowed_classes, :broadcaster
 
-    def initialize(listener, options)
-      super(listener, options)
+    def initialize(listener, options, &block)
+      super(listener, options, &block)
       @with   = options[:with]
       @prefix = stringify_prefix(options[:prefix])
       @allowed_classes = Array(options[:scope]).map(&:to_s).to_set
