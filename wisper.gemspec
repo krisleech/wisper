@@ -8,8 +8,12 @@ Gem::Specification.new do |gem|
   gem.version       = Wisper::VERSION
   gem.authors       = ["Kris Leech"]
   gem.email         = ["kris.leech@gmail.com"]
-  gem.description   = %q{pub/sub for Ruby objects}
-  gem.summary       = %q{pub/sub for Ruby objects}
+  gem.description   = <<-DESC
+    A micro library providing objects with Publish-Subscribe capabilities.
+    Both synchronous (in-process) and asynchronous (out-of-process) subscriptions are supported.
+    Check out the Wiki for articles, guides and examples: https://github.com/krisleech/wisper/wiki
+  DESC
+  gem.summary       = "A micro library providing objects with Publish-Subscribe capabilities"
   gem.homepage      = "https://github.com/krisleech/wisper"
   gem.license       = "MIT"
 
