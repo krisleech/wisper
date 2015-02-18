@@ -1,62 +1,76 @@
 describe Wisper do
   describe '.subscribe' do
-    context 'given block' do
+    context 'when given block' do
+
       it 'subscribes listeners to all events for duration of the block' do
         publisher = publisher_class.new
-        listener = double('listener')
+        listener  = double('listener')
 
-        expect(listener).to receive(:im_here)
-        expect(listener).not_to receive(:not_here)
+        expect(listener).to receive(:first_event)
+        expect(listener).not_to receive(:second_event)
 
         Wisper.subscribe(listener) do
-          publisher.send(:broadcast, 'im_here')
+          publisher.send(:broadcast, 'first_event')
         end
 
-        publisher.send(:broadcast, 'not_here')
+        publisher.send(:broadcast, 'second_event')
       end
     end
 
-    context 'no block given' do
-      it 'subscribes a listener to all events' do
+    context 'when no block given' do
+      it 'subscribes listener to all events' do
         listener = double('listener')
         Wisper.subscribe(listener)
         expect(Wisper::GlobalListeners.listeners).to eq [listener]
       end
 
-      it 'subscribes multiple listeners to all events' do
+      it 'subscribes listeners to all events' do
         listener_1 = double('listener')
         listener_2 = double('listener')
-        listener_3 = double('listener')
 
         Wisper.subscribe(listener_1, listener_2)
 
         expect(Wisper::GlobalListeners.listeners).to include listener_1, listener_2
-        expect(Wisper::GlobalListeners.listeners).not_to include listener_3
       end
     end
   end
 
-  it '.publisher returns the Publisher module' do
-    expect(Wisper.publisher).to eq Wisper::Publisher
-  end
-
-  it '.clear clears all global listeners' do
-    10.times { Wisper.subscribe(double) }
-    Wisper.clear
-    expect(Wisper::GlobalListeners.listeners).to be_empty
-  end
-
-  it '.configuration returns configuration' do
-    expect(Wisper.configuration).to be_an_instance_of(Wisper::Configuration)
-  end
-
-  it '.configure yields block to configuration' do
-    Wisper.configure do |config|
-      expect(config).to be_an_instance_of(Wisper::Configuration)
+  describe '.publisher' do
+    it 'returns the Publisher module' do
+      expect(Wisper.publisher).to eq Wisper::Publisher
     end
   end
 
-  it 'has a default broadcaster' do
-    expect(Wisper.configuration.broadcasters[:default]).to be_instance_of(Wisper::Broadcasters::SendBroadcaster)
+  describe '.clear' do
+    before { Wisper.subscribe(double) }
+
+    it 'clears all global listeners' do
+      Wisper.clear
+      expect(Wisper::GlobalListeners.listeners).to be_empty
+    end
+  end
+
+  describe '.configuration' do
+    it 'returns configuration object' do
+      expect(Wisper.configuration).to be_an_instance_of(Wisper::Configuration)
+    end
+
+    it 'is memorized' do
+      expect(Wisper.configuration).to eq Wisper.configuration
+    end
+  end
+
+  describe '.configure' do
+    it 'passes configuration to given block' do
+      Wisper.configure do |config|
+        expect(config).to be_an_instance_of(Wisper::Configuration)
+      end
+    end
+  end
+
+  describe '.setup' do
+    it 'sets a default broadcaster' do
+      expect(Wisper.configuration.broadcasters[:default]).to be_instance_of(Wisper::Broadcasters::SendBroadcaster)
+    end
   end
 end
