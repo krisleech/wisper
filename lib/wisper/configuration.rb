@@ -17,6 +17,15 @@ module Wisper
       self
     end
 
+    # sets the default value for prefixes
+    #
+    # @param [#to_s] value
+    #
+    # @return [String]
+    def default_prefix=(value)
+      ValueObjects::Prefix.default = value
+    end
+
     class Broadcasters
       extend Forwardable
 
