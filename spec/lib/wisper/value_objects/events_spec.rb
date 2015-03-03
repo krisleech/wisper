@@ -11,7 +11,8 @@ describe Wisper::ValueObjects::Events do
   end
 
   context '"foo"' do
-    subject { described_class.new 'foo' }
+    let(:foo) { Class.new(String).new 'foo' }
+    subject   { described_class.new foo }
 
     describe '#include?' do
       it 'returns true for "foo"' do
