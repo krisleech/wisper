@@ -218,7 +218,7 @@ If you would prefer listeners to receive events with a prefix, for example
 post_creater.subscribe(PusherListener.new, prefix: :on)
 ```
 
-If `post_creater` where to broadcast the event `post_created` the subscribed
+If `post_creater` were to broadcast the event `post_created` the subscribed
 listeners would receive `on_post_created`. You can also pass `true` which will
 use the default prefix, "on".
 
