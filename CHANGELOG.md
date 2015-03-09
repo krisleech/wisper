@@ -1,3 +1,9 @@
+## Next Realease
+
+Authors: Gregory Horion
+
+* feature: add ability for subscriber to handle error
+
 ## 2.0.0.rc1 (17 Dec 2014)
 
 Authors: Kris Leech

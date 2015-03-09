@@ -2,13 +2,14 @@
 
 module Wisper
   class Registration
-    attr_reader :on, :listener
+    attr_reader :on, :listener, :error_handler
 
     ALL = Object.new.freeze
 
-    def initialize(listener, options)
-      @listener = listener
-      @on       = stringify(options.fetch(:on, ALL))
+    def initialize(listener, options, &block)
+      @listener      = listener
+      @on            = stringify(options.fetch(:on, ALL))
+      @error_handler = block
     end
 
     private

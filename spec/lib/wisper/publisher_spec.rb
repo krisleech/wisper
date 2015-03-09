@@ -75,6 +75,13 @@ describe Wisper::Publisher do
           publisher.subscribe(listener, on: Object.new)
           expect { publisher.send(:broadcast, 'something_a_happened') }.to raise_error(ArgumentError)
         end
+
+        it 'handle the error' do
+          publisher.subscribe(listener, on: Object.new) do |listener, payload|
+            raise StandardError
+          end
+          expect { publisher.send(:broadcast, 'something_a_happened') }.to raise_error(StandardError)
+        end
       end
     end
 

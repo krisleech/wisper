@@ -10,8 +10,8 @@ module Wisper
     #   my_publisher.subscribe(MyListener.new)
     #
     # @return [self]
-    def subscribe(listener, options = {})
-      local_registrations << ObjectRegistration.new(listener, options)
+    def subscribe(listener, options = {}, &block)
+      local_registrations << ObjectRegistration.new(listener, options, &block)
       self
     end
 
@@ -38,7 +38,14 @@ module Wisper
     # @return [self]
     def broadcast(event, *args)
       registrations.each do | registration |
-        registration.broadcast(clean_event(event), self, *args)
+        begin
+          registration.broadcast(clean_event(event), self, *args)
+        rescue => e
+          raise e unless registration.error_handler
+
+          payload = { event: clean_event(event), args: args, error: e }
+          registration.error_handler.call(self, payload)
+        end
       end
       self
     end
@@ -53,8 +60,8 @@ module Wisper
       # @example
       #   MyPublisher.subscribe(MyListener.new)
       #
-      def subscribe(listener, options = {})
-        GlobalListeners.subscribe(listener, options.merge(:scope => self))
+      def subscribe(listener, options = {}, &block)
+        GlobalListeners.subscribe(listener, options.merge(:scope => self), &block)
       end
     end
 
