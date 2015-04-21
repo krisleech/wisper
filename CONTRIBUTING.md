@@ -19,10 +19,14 @@ Please open an issue with your proposed feature. We can discuss the feature and
 if it is acceptable we can also discuss implimentation details. You will in
 most cases have to submit a PR which adds the feature. 
 
-We also have a [Gitter channel](https://gitter.im/krisleech/wisper).
-
 Wisper is a micro library and will remain lean. Some features would be most
 appropriate as an extension to Wisper.
+
+We also have a [Gitter channel](https://gitter.im/krisleech/wisper) if you wish to discuss your ideas.
+
+## Backlog /  Roadmap
+
+The backlog for Wisper and related gems is on [Waffle](https://waffle.io/krisleech/wisper).
 
 ## Questions
 
@@ -32,8 +36,6 @@ and how to sections have lots of information.
 Please ask questions on StackOverflow, [tagged wisper](https://stackoverflow.com/questions/tagged/wisper).
 
 Feel free to ping me the URL on [Twitter](https://twitter.com/krisleech).
-
-We also have a [channel on Gitter](https://gitter.im/krisleech/wisper).
 
 ## Pull requests
 
