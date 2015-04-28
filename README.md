@@ -255,9 +255,43 @@ report_creator.subscribe(MailResponder.new, on:   :create_report_failed,
 You could also alias the method within your listener, as such
 `alias successful create_report_successful`.
 
-## RSpec
+## Testing
 
-### Broadcast Matcher
+### Test harness
+
+Wisper allows you to dynamically configure the testing harness with the following methods:
+
+``` ruby
+require 'wisper/testing'
+Wisper::Testing.enable! # this is the default
+Wisper::Testing.disable!
+```
+
+Each of the above methods also accepts a block. An example:
+
+``` ruby
+require 'wisper/testing'
+Wisper::Testing.disable!
+
+# Some tests
+
+Wisper::Testing.enable! do
+  # Some other tests that rely on Wisper
+end
+
+# Here we're back to "disabled" mode again.
+```
+
+To query the current state, use the following methods:
+
+``` ruby
+Wisper::Testing.enabled?
+Wisper::Testing.disabled?
+```
+
+### RSpec
+
+#### Broadcast Matcher
 
 ```ruby
 require 'wisper/rspec/matchers'
@@ -269,7 +303,7 @@ end
 expect { publisher.execute }.to broadcast(:an_event)
 ```
 
-### Using message expections
+#### Using message expections
 
 If you need to assert on the arguments broadcast you can subscribe a double 
 with a [message expection](https://github.com/rspec/rspec-mocks#message-expectations)
@@ -285,7 +319,7 @@ publisher.subscribe(listener)
 publisher.execute
 ```
 
-### Stubbing publishers
+#### Stubbing publishers
 
 You can stub publishers and their events in unit (isolated) tests that only care about reacting to events.
 
@@ -334,7 +368,7 @@ stub_wisper_publisher("MyPublisher", :execute, :some_event, "foo1", "foo2", ...)
 
 See `spec/lib/rspec_extensions_spec.rb` for a runnable example.
 
-## Clearing Global Listeners
+### Clearing Global Listeners
 
 If you use global listeners in non-feature tests you _might_ want to clear them
 in a hook to prevent global subscriptions persisting between tests.
