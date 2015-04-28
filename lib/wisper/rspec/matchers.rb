@@ -1,3 +1,4 @@
+require 'wisper/testing'
 require 'rspec/expectations'
 
 module Wisper
@@ -33,9 +34,7 @@ module Wisper
         def matches?(block)
           event_recorder = EventRecorder.new
 
-          Wisper.subscribe(event_recorder) do
-            block.call
-          end
+          Wisper::Publisher.with_testing_event_recorder(event_recorder, &block)
 
           event_recorder.broadcast?(@event)
         end
