@@ -255,11 +255,45 @@ report_creator.subscribe(MailResponder.new, on:   :create_report_failed,
 You could also alias the method within your listener, as such
 `alias successful create_report_successful`.
 
-## RSpec
+## Testing
+
+### Test harness
+
+Wisper allows you to dynamically configure the testing harness with the following methods:
+
+``` ruby
+require 'wisper/testing'
+Wisper::Testing.enable! # this is the default
+Wisper::Testing.disable!
+```
+
+Each of the above methods also accepts a block. An example:
+
+``` ruby
+require 'wisper/testing'
+Wisper::Testing.disable!
+
+# Some tests
+
+Wisper::Testing.enable! do
+  # Some other tests that rely on Wisper
+end
+
+# Here we're back to "disabled" mode again.
+```
+
+To query the current state, use the following methods:
+
+``` ruby
+Wisper::Testing.enabled?
+Wisper::Testing.disabled?
+```
+
+### RSpec
 
 Please see [wisper-rspec](https://github.com/krisleech/wisper-rspec).
 
-## Clearing Global Listeners
+### Clearing Global Listeners
 
 If you use global listeners in non-feature tests you _might_ want to clear them
 in a hook to prevent global subscriptions persisting between tests.
