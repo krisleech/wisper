@@ -27,20 +27,12 @@ module Wisper
         __set_test_mode(:disable, &block)
       end
 
-      def fake!(&block)
-        __set_test_mode(:fake, &block)
-      end
-
       def enabled?
         self.__test_mode != :disable
       end
 
       def disabled?
         self.__test_mode == :disable
-      end
-
-      def fake?
-        self.__test_mode == :fake
       end
     end
   end
@@ -50,10 +42,10 @@ module Wisper
 
     def broadcast(event, *args)
       Publisher.record_testing_event(event, *args)
-      if Wisper::Testing.fake?
-        true
-      else
+      if Wisper::Testing.enabled?
         broadcast_real(event, *args)
+      else
+        true
       end
     end
 
