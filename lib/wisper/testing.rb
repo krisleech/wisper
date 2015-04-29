@@ -49,6 +49,10 @@ module Wisper
       end
     end
 
+    def wisper_subscribed_locally?(listener)
+      local_registrations.any? { |registration| registration.listener == listener }
+    end
+
     class << self
       def record_testing_event(event, *args)
         @testing_event_recorder.send(event, *args) if @testing_event_recorder
@@ -62,6 +66,22 @@ module Wisper
           @testing_event_recorder = nil
         end
       end
+    end
+  end
+
+  class << self
+    def registrations
+      GlobalListeners.registrations + TemporaryListeners.registrations
+    end
+
+    def subscribed?(listener)
+      registrations.any? { |reg| reg.listener == listener }
+    end
+
+    def subscribed_to_publisher?(listener, publisher)
+      registrations.any? { |reg|
+        reg.listener == listener && reg.allowed_classes.include?(publisher.to_s)
+      }
     end
   end
 end
