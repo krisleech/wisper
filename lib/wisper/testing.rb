@@ -54,8 +54,10 @@ module Wisper
     end
 
     class << self
+      attr_reader :testing_event_recorder
+
       def record_testing_event(event, *args)
-        @testing_event_recorder.send(event, *args) if @testing_event_recorder
+        testing_event_recorder.send(event, *args) if testing_event_recorder
       end
 
       def with_testing_event_recorder(event_recorder)
