@@ -94,9 +94,9 @@ module Wisper
     end
 
     # Determines whether an object is registered as a listener for a specific publisher object.
-    def subscribed_to_publisher?(listener, publisher)
+    def subscribed_to_publisher?(listener, publisher_class)
       registrations.any? { |reg|
-        reg.listener == listener && reg.allowed_classes.include?(publisher.to_s)
+        reg.listener == listener && reg.allowed_classes.include?(publisher_class.to_s)
       }
     end
   end
