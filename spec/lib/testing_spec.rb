@@ -60,18 +60,18 @@ if ENV['INCLUDE_WISPER_TESTING']
         expect(event_recorder).to receive(:event_name).with(:arg1, :arg2)
         subject
       end
-      context 'with Wisper::Testing.enabled (the default)' do
+      context 'with Wisper::Testing.disabled! (the default)' do
         it 'publishes the event' do
           expect(listener).to receive(:event_name).with(:arg1, :arg2)
           subject
         end
       end
-      context 'with Wisper::Testing.disabled' do
+      context 'with Wisper::Testing.fake!' do
         before do
-          Wisper::Testing.disable!
+          Wisper::Testing.fake!
         end
         after do
-          Wisper::Testing.enable!
+          Wisper::Testing.disable!
         end
         it 'does not publish the event' do
           expect(listener).not_to receive(:event_name).with(:arg1, :arg2)

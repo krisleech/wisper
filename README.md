@@ -263,29 +263,29 @@ Wisper allows you to dynamically configure the testing harness with the followin
 
 ``` ruby
 require 'wisper/testing'
-Wisper::Testing.enable! # this is the default
-Wisper::Testing.disable!
+Wisper::Testing.disable! # this is the default, no change in Wisper functionality
+Wisper::Testing.fake! # in this mode, events broadcasted are not delivered to listeners
 ```
 
 Each of the above methods also accepts a block. An example:
 
 ``` ruby
 require 'wisper/testing'
-Wisper::Testing.disable!
+Wisper::Testing.fake!
 
-# Some tests
+# Some tests that do not require wisper events to be received
 
-Wisper::Testing.enable! do
+Wisper::Testing.disable! do
   # Some other tests that rely on Wisper
 end
 
-# Here we're back to "disabled" mode again.
+# Here we're back to "fake" mode again.
 ```
 
 To query the current state, use the following methods:
 
 ``` ruby
-Wisper::Testing.enabled?
+Wisper::Testing.fake?
 Wisper::Testing.disabled?
 ```
 

@@ -19,12 +19,12 @@ module Wisper
         end
       end
 
-      def enable!(&block)
-        __set_test_mode(:enabled, &block)
-      end
-
       def disable!(&block)
         __set_test_mode(:disable, &block)
+      end
+
+      def fake!(&block)
+        __set_test_mode(:fake, &block)
       end
 
       def enabled?
@@ -33,6 +33,10 @@ module Wisper
 
       def disabled?
         self.__test_mode == :disable
+      end
+
+      def fake?
+        self.__test_mode == :fake
       end
     end
   end
@@ -45,10 +49,10 @@ module Wisper
     # delivery of the event.
     def broadcast(event, *args)
       Publisher.record_testing_event(event, *args)
-      if Wisper::Testing.enabled?
-        broadcast_real(event, *args)
-      else
+      if Wisper::Testing.fake?
         true
+      else
+        broadcast_real(event, *args)
       end
     end
     alias_method :publish, :broadcast
