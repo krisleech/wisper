@@ -1,8 +1,34 @@
-if ENV['INCLUDE_WISPER_TESTING']
-  describe Wisper::Testing do
-    let(:our_publisher_class) { publisher_class }
-    let(:publisher) { our_publisher_class.new }
-    let(:listener) { double('listener', event_name: true) }
+ENV['SKIP_WISPER_TESTING_PATCH'] = 'true'
+require 'wisper/testing'
+
+describe 'Wisper::Testing' do
+  let(:our_publisher_class) { publisher_class }
+  let(:publisher) { our_publisher_class.new }
+  let(:listener) { double('listener', event_name: true) }
+
+  context 'after patching and unpatching' do
+    before do
+      Wisper::Testing.patch!
+      Wisper::Testing.unpatch!
+      Wisper::Testing.fake!
+    end
+    after do
+      Wisper::Testing.disable!
+    end
+    it 'uses the original broadcast method' do
+      publisher.subscribe(listener)
+      publisher.send(:broadcast, 'event_name', :arg1, :arg2)
+      expect(listener).to have_received(:event_name).with(:arg1, :arg2)
+    end
+  end
+
+  context 'while Wisper is patched' do
+    before do
+      Wisper::Testing.patch!
+    end
+    after do
+      Wisper::Testing.unpatch!
+    end
 
     describe 'Wisper::Publisher.wisper_subscribed_locally?' do
       subject { publisher.wisper_subscribed_locally?(listener) }

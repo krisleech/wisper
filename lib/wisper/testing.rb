@@ -38,16 +38,35 @@ module Wisper
       def fake?
         self.__test_mode == :fake
       end
+
+      attr_accessor :__patch_state
+
+      # Performs any patching necessary for Wisper::Testing to function.
+      def patch!
+        return if patched?
+        Wisper::Publisher.wisper_testing_patch!
+        self.__patch_state = :patched
+      end
+
+      # Restores Wisper and related objects to their original state before {#patch} was called.
+      def unpatch!
+        return unless patched?
+        Wisper::Publisher.wisper_testing_unpatch!
+        self.__patch_state = :unpatched
+      end
+
+      def patched?
+        self.__patch_state == :patched
+      end
     end
   end
 
   module Publisher
-    alias_method :broadcast_real, :broadcast
-
-    # Broadcasts an event if Testing.enabled? but always returns `true` as if it worked.
+    # If testing is in "fake" mode, returns `true` as if broadcasting worked. If not in "fake"
+    # mode, broadcasts the event using the original `broadcast` method.
     # This allows tests to determine whether an event was broadcast, and optionally skip the
     # delivery of the event.
-    def broadcast(event, *args)
+    def broadcast_testing(event, *args)
       Publisher.record_testing_event(event, *args)
       if Wisper::Testing.fake?
         true
@@ -55,9 +74,19 @@ module Wisper
         broadcast_real(event, *args)
       end
     end
-    alias_method :publish, :broadcast
 
-    private :broadcast, :publish
+    def self.wisper_testing_patch!
+      alias_method :broadcast_real, :broadcast
+      alias_method :broadcast, :broadcast_testing
+      alias_method :publish, :broadcast_testing
+      private :broadcast, :publish
+    end
+
+    def self.wisper_testing_unpatch!
+      alias_method :broadcast, :broadcast_real
+      alias_method :publish, :broadcast_real
+      private :broadcast, :publish
+    end
 
     # Allows tests to ask a Wisper publisher whether a listener has been subscribed to events
     # from it.
@@ -104,4 +133,8 @@ module Wisper
       }
     end
   end
+end
+
+unless ENV['SKIP_WISPER_TESTING_PATCH']
+  Wisper::Testing.patch!
 end
