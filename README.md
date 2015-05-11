@@ -103,7 +103,20 @@ Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq) or
 [wisper-activejob](https://github.com/krisleech/wisper-activejob).
 
-Depending on the adapter used the listener may need to be a class instead of an object.
+Depending on the adapter used the listener may need to be a class instead of an object. In this situation, every method corresponding to events should be declared as class method, too. For example:
+
+```ruby
+class OrderNotifier
+  # declare class method if you are subscribing the listener class instead its instance like:
+  #   cancel_order.subscribe(OrderNotifier)
+  # 
+  def self.cancel_order_successful(order_id)
+    order = Order.find_by_id(order_id)
+
+    # notify someone ...    
+  end
+end
+```
 
 ### ActionController
 
