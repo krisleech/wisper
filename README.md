@@ -92,6 +92,19 @@ cancel_order.on(:cancel_order_successful) { |order_id| ... }
 cancel_order.call(order_id)
 ```
 
+You can also subscribe to multiple events using `on` by passing
+additional events as arguments.
+
+```ruby
+cancel_order = CancelOrder.new
+
+cancel_order.on(:cancel_order_successful) { |order_id| ... }
+            .on(:cancel_order_failed,
+                :cancel_order_invalid)    { |order_id| ... }
+
+cancel_order.call(order_id)
+```
+
 ### Handling Events Asynchronously
 
 ```ruby
