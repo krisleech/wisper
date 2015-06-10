@@ -13,6 +13,10 @@ module Wisper
       new.registrations
     end
 
+    def self.listeners
+      new.listeners
+    end
+
     def subscribe(*listeners, &block)
       options = listeners.last.is_a?(Hash) ? listeners.pop : {}
       begin
@@ -26,6 +30,10 @@ module Wisper
 
     def registrations
       Thread.current[key] ||= Set.new
+    end
+
+    def listeners
+      registrations.map(&:listener).freeze
     end
 
     private

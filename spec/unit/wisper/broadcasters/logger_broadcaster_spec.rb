@@ -1,6 +1,5 @@
 module Wisper
   module Broadcasters
-
     describe LoggerBroadcaster do
 
       describe 'integration tests:' do
@@ -52,7 +51,6 @@ module Wisper
               subject.broadcast(listener, publisher, event, args)
             end
           end
-
         end
 
         # provides a way to specify `double.class.name` easily
