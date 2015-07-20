@@ -105,6 +105,10 @@ cancel_order.on(:cancel_order_successful) { |order_id| ... }
 cancel_order.call(order_id)
 ```
 
+Do not `return` from inside a subscribed block, due to the way
+[Ruby treats blocks](http://product.reverb.com/2015/02/28/the-strange-case-of-wisper-and-ruby-blocks-behaving-like-procs/)
+this will prevent any subsequent listeners having their events delivered.
+
 ### Handling Events Asynchronously
 
 ```ruby
