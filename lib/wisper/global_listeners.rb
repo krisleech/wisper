@@ -24,6 +24,15 @@ module Wisper
       self
     end
 
+    def unsubscribe(*listeners)
+      with_mutex do
+        @registrations.delete_if do |registration|
+          listeners.include?(registration.listener)
+        end
+      end
+      self
+    end
+
     def registrations
       with_mutex { @registrations }
     end
@@ -38,6 +47,10 @@ module Wisper
 
     def self.subscribe(*listeners)
       instance.subscribe(*listeners)
+    end
+
+    def self.unsubscribe(*listeners)
+      instance.unsubscribe(*listeners)
     end
 
     def self.registrations

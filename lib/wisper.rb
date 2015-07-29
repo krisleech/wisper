@@ -33,6 +33,10 @@ module Wisper
     end
   end
 
+  def self.unsubscribe(*listeners)
+    GlobalListeners.unsubscribe(*listeners)
+  end
+
   def self.publisher
     Publisher
   end
