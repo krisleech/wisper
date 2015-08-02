@@ -293,11 +293,14 @@ report_creator.subscribe(MailResponder.new, on:   :create_report_failed,
 You could also alias the method within your listener, as such
 `alias successful create_report_successful`.
 
-## RSpec
+## Testing
 
-Please see [wisper-rspec](https://github.com/krisleech/wisper-rspec).
+Testing matchers and stubs are in seperate gems.
 
-## Clearing Global Listeners
+* [wisper-rspec](https://github.com/krisleech/wisper-rspec)
+* [wisper-minitest](https://github.com/digitalcuisine/wisper-minitest)
+
+### Clearing Global Listeners
 
 If you use global listeners in non-feature tests you _might_ want to clear them
 in a hook to prevent global subscriptions persisting between tests.
