@@ -322,6 +322,10 @@ rspec spec
 There is both a `Rakefile` and `Guardfile`, if you like you prefer to run the
 specs using `guard-rspec` or `rake`.
 
+## Contributing
+
+Please read the [Contributing Guidelines](https://github.com/krisleech/wisper/blob/master/CONTRIBUTING.md).
+
 ## License
 
 (The MIT License)

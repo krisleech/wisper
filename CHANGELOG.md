@@ -6,6 +6,7 @@ Authors: Kris Leech
 * remove: rspec matcher and stubbing (moved to [wisper-rspec](https://github.com/krisleech/wisper-rspec))
 * feature: add regexp support to `on` argument
 * remove: announce alias for broadcasting
+* docs: add Code of Conduct
 
 ## 1.6.0 (25 Oct 2014)
 

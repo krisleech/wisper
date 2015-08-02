@@ -2,6 +2,10 @@
 
 We very much welcome contributions to Wisper.
 
+This project is intended to be a safe, welcoming space for collaboration,
+and contributors are expected to adhere to the
+[Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
 ## Getting started
 
 Please first check the existing [Issues](https://github.com/krisleech/wisper/issues) 
