@@ -35,6 +35,29 @@ describe Wisper do
     end
   end
 
+  describe '.unsubscribe' do
+    it 'removes listener from list of listeners' do
+      listener = double('listener')
+
+      Wisper.subscribe(listener)
+      expect(Wisper::GlobalListeners.listeners).to eq [listener]
+
+      Wisper.unsubscribe(listener)
+      expect(Wisper::GlobalListeners.listeners).to eq []
+    end
+
+    it 'removes listeners from list of listeners' do
+      listener_1 = double('listener')
+      listener_2 = double('listener')
+
+      Wisper.subscribe(listener_1, listener_2)
+      expect(Wisper::GlobalListeners.listeners).to include listener_1, listener_2
+
+      Wisper.unsubscribe(listener_1, listener_2)
+      expect(Wisper::GlobalListeners.listeners).to eq []
+    end
+  end
+
   describe '.publisher' do
     it 'returns the Publisher module' do
       expect(Wisper.publisher).to eq Wisper::Publisher
