@@ -20,5 +20,17 @@ module Wisper
         end
       end
     end
+
+    describe '#default_prefix=' do
+      let(:prefix_class)  { ValueObjects::Prefix }
+      let(:default_value) { double }
+
+      before { allow(prefix_class).to receive(:default=) }
+
+      it 'sets the default value for prefixes' do
+        expect(prefix_class).to receive(:default=).with(default_value)
+        subject.default_prefix = default_value
+      end
+    end
   end
 end
