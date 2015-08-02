@@ -7,6 +7,7 @@ Authors: Kris Leech
 * feature: add regexp support to `on` argument
 * remove: announce alias for broadcasting
 * docs: add Code of Conduct
+* drop support for Ruby 1.9
 
 ## 1.6.0 (25 Oct 2014)
 
