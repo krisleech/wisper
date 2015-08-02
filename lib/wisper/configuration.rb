@@ -29,7 +29,7 @@ module Wisper
     class Broadcasters
       extend Forwardable
 
-      def_delegators :@data, :[], :[]=, :empty?, :include?, :clear
+      def_delegators :@data, :[], :[]=, :empty?, :include?, :clear, :keys, :to_h
 
       def initialize
         @data = {}
