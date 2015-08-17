@@ -16,7 +16,7 @@ module Wisper
       private
 
       def name(object)
-        id_method  = %w(id uuid key object_id).find { |id_method| object.respond_to?(id_method) }
+        id_method  = %w(id uuid key object_id).find { |possibility| object.respond_to?(possibility) }
         id         = object.send(id_method)
         class_name = object.class == Class ? object.name : object.class.name
         "#{class_name}##{id}"
