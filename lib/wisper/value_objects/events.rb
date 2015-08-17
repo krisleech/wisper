@@ -31,8 +31,6 @@ module Wisper
 
       private
 
-      attr_reader :list
-
       def methods
         {
           NilClass   => ->(_event) { true },
@@ -41,6 +39,10 @@ module Wisper
           Enumerable => ->(event)  { list.map(&:to_s).include? event },
           Regexp     => ->(event)  { list.match(event) || false }
         }
+      end
+
+      def list
+        @list
       end
 
       def appropriate_method
