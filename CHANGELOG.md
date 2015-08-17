@@ -1,3 +1,9 @@
+## 1.6.1 (17 Aug 2015)
+
+Authors: Kris Leech
+
+* Fixed Ruby warnings
+
 ## 1.6.0 (25 Oct 2014)
 
 Authors: Kris Leech
