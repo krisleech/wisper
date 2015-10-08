@@ -269,7 +269,7 @@ broadcast. However it can be mapped to a different method using `with:`.
 report_creator.subscribe(MailResponder.new, with: :successful)
 ```
 
-This is pretty useless unless used in conjuction with `on:`, since all events
+This is pretty useless unless used in conjunction with `on:`, since all events
 will get mapped to `:successful`. Instead you might do something like this:
 
 ```ruby
