@@ -11,6 +11,7 @@ module Wisper
     #
     # @return [self]
     def subscribe(listener, options = {})
+      raise ArgumentError, "#{__method__} does not take a block, did you mean to call #on instead?" if block_given?
       local_registrations << ObjectRegistration.new(listener, options)
       self
     end

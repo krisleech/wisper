@@ -211,6 +211,15 @@ describe Wisper::Publisher do
     it 'is aliased to .subscribe' do
       expect(publisher).to respond_to(:subscribe)
     end
+
+    it 'raises a helpful error if trying to pass a block' do
+      invalid = ->{
+        publisher.subscribe(:success) do
+          puts
+        end
+      }
+      expect{ invalid.call }.to raise_error(ArgumentError)
+    end
   end
 
   describe '.on' do
