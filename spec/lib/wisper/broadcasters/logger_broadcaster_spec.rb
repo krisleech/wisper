@@ -28,12 +28,12 @@ module Wisper
           context 'without arguments' do
             let(:args) { [] }
 
-            it 'logs publised event' do
+            it 'logs published event' do
               expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments')
               subject.broadcast(listener, publisher, event, args)
             end
 
-            it 'delgates broadcast to given broadcaster' do
+            it 'delegates broadcast to a given broadcaster' do
               expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
               subject.broadcast(listener, publisher, event, args)
             end
@@ -47,7 +47,7 @@ module Wisper
               subject.broadcast(listener, publisher, event, args)
             end
 
-            it 'delgates broadcast to given broadcaster' do
+            it 'delegates broadcast to a given broadcaster' do
               expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
               subject.broadcast(listener, publisher, event, args)
             end
