@@ -210,9 +210,12 @@ class.
 
 ```ruby
 Wisper.subscribe(MyListener.new, scope: :MyPublisher)
+Wisper.subscribe(MyListener.new, scope: MyPublisher)
+Wisper.subscribe(MyListener.new, scope: "MyPublisher")
+Wisper.subscribe(MyListener.new, scope: [:MyPublisher, :MyOtherPublisher])
 ```
 
-This will subscribe the listener to all instances of `MyPublisher` and its
+This will subscribe the listener to all instances of the specified class(es) and their
 subclasses.
 
 Alternatively you can also do exactly the same with a publisher class itself:
