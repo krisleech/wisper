@@ -1,4 +1,8 @@
 language: ruby
+install:
+  - gem uninstall bundler
+  - gem install bundler
+  - bundle --version
 bundler_args: --without=extras
 script: rspec spec
 sudo: false
@@ -12,9 +16,6 @@ rvm:
   # see how compatible we are with dev versions, but do not fail the build
   - ruby-head
   - jruby-head
-before_install:
-  - gem update bundler
-  - bundle --version
 allow_failures:
   - rvm: ruby-head
   - rvm: jruby-head
