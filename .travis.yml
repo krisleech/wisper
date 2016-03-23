@@ -1,8 +1,7 @@
 language: ruby
-install:
-  - gem uninstall bundler
-  - gem install bundler
-  - bundle --version
+before_install:
+  - gem update --system
+  - gem update bundler
 bundler_args: --without=extras
 script: rspec spec
 sudo: false
