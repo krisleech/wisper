@@ -2,8 +2,9 @@ language: ruby
 before_install:
   - gem update --system
   - gem update bundler
+  - bundle --version
 bundler_args: --without=extras
-script: rspec spec
+script: bundle exec rspec spec
 sudo: false
 rvm:
   - '2.0.0'
