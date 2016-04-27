@@ -51,6 +51,15 @@ module Wisper
               expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
               subject.broadcast(listener, publisher, event, args)
             end
+
+            context 'when argument is a hash' do
+              let(:args) { [{key: 'value'}] }
+
+              it 'logs published event and arguments' do
+                expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with Hash#[:key]')
+                subject.broadcast(listener, publisher, event, args)
+              end
+            end
           end
 
         end
