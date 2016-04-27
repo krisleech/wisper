@@ -15,6 +15,7 @@ rvm:
   # see how compatible we are with dev versions, but do not fail the build
   - ruby-head
   - jruby-head
-allow_failures:
-  - rvm: ruby-head
-  - rvm: jruby-head
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-head
