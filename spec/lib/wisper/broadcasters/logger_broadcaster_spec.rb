@@ -61,6 +61,16 @@ module Wisper
                 subject.broadcast(listener, publisher, event, args)
               end
             end
+
+            context 'when argument is an integer' do
+              let(:args) { [number] }
+              let(:number) { 10 }
+
+              it 'logs published event and arguments' do
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Fixnum##{number.object_id}: 10")
+                subject.broadcast(listener, publisher, event, args)
+              end
+            end
           end
 
         end
