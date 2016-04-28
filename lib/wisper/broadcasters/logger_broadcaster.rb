@@ -28,7 +28,7 @@ module Wisper
         return 'no arguments' if args.empty?
         args.map do |arg|
           arg_string = name(arg)
-          arg_string += ": #{arg.inspect}" if [Numeric, Array, Hash, String].include?(arg.class)
+          arg_string += ": #{arg.inspect}" if [Numeric, Array, Hash, String].any? {|klass| arg.is_a?(klass) }
           arg_string
         end.join(', ')
       end
