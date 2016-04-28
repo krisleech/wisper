@@ -9,22 +9,28 @@ module Wisper
       end
 
       def broadcast(listener, publisher, event, args)
-        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(listener)} with #{arg_names(args)}")
+        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(listener)} with #{args_info(args)}")
         @broadcaster.broadcast(listener, publisher, event, args)
       end
 
       private
 
       def name(object)
-        id_method  = %w(id uuid key object_id).find { |method_name| object.respond_to?(method_name) }
+        id_method  = %w(id uuid key object_id).find do |method_name|
+          object.respond_to?(method_name) && object.method(method_name).arity <= 0
+        end
         id         = object.send(id_method)
         class_name = object.class == Class ? object.name : object.class.name
         "#{class_name}##{id}"
       end
 
-      def arg_names(args)
+      def args_info(args)
         return 'no arguments' if args.empty?
-        args.map { |arg| name(arg) }.join(', ')
+        args.map do |arg|
+          arg_string = name(arg)
+          arg_string += ": #{arg.inspect}" if [Numeric, Array, Hash, String].include?(arg.class)
+          arg_string
+        end.join(', ')
       end
     end
   end
