@@ -1,3 +1,9 @@
+## HEAD (unreleased)
+
+Authors: Sergey Mostovoy
+
+* fix: logger raises exception if hash is passed as an argument to a listener
+
 ## 2.0.0.rc1 (17 Dec 2014)
 
 Authors: Kris Leech
