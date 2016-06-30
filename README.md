@@ -201,6 +201,16 @@ Wisper.subscribe(MyListener.new)
 
 In a Rails app you might want to add your global listeners in an initalizer.
 
+```ruby
+# config/initializers/wisper.rb
+# to_prepare is required for code autoreload to work correctly
+Rails.application.config.to_prepare do
+  Wisper.clear if Rails.env.development?
+  
+  Wisper.subscribe(MyListener.new)
+end
+```
+
 Global listeners are threadsafe.
 
 ### Scoping by publisher class
