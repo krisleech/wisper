@@ -1,8 +1,9 @@
 ## HEAD (unreleased)
 
-Authors: Sergey Mostovoy
+Authors: Sergey Mostovoy, Maxim Polunin
 
 * fix: logger raises exception if hash is passed as an argument to a listener
+* fix: support nested temporary global listeners
 
 ## 2.0.0.rc1 (17 Dec 2014)
 
