@@ -38,6 +38,7 @@ to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 ### Publishing
 
 ```ruby
+# Publish from an instance
 class CancelOrder
   include Wisper::Publisher
 
@@ -51,6 +52,17 @@ class CancelOrder
     else
       broadcast(:cancel_order_failed, order.id)
     end
+  end
+end
+
+# Or publish at the class level
+class CRMService
+  include Wisper::Publisher
+
+  def self.add_user(attributes)
+    # business logic...
+
+    broadcast(:user_added_to_crm, attributes)
   end
 end
 ```
@@ -73,6 +85,10 @@ cancel_order = CancelOrder.new
 cancel_order.subscribe(OrderNotifier.new)
 
 cancel_order.call(order_id)
+
+# Subscribe at the class level
+# This will receieve events from the class and instances
+CRMService.subscribe(MetricsGatherer)
 ```
 
 The listener would need to implement a method for every event it wishes to receive.
