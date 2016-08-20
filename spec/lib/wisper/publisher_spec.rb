@@ -231,6 +231,10 @@ describe Wisper::Publisher do
       expect { publisher.on() {} }.to raise_error(ArgumentError)
     end
 
+    it 'raises an error of no block given' do
+      expect { publisher.on(:something) }.to raise_error(ArgumentError)
+    end
+
     it 'returns publisher so methods can be chained' do
       expect(publisher.on(:foo) {}).to eq publisher
     end
