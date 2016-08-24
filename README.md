@@ -32,7 +32,7 @@ gem 'wisper', '2.0.0.rc1'
 
 ## Usage
 
-Any class with the `Wisper::Publisher` module included can broadcast events 
+Any class with the `Wisper::Publisher` module included can broadcast events
 to subscribed listeners. Listeners subscribe, at runtime, to the publisher.
 
 ### Publishing
@@ -55,7 +55,7 @@ class CancelOrder
 end
 ```
 
-When a publisher broadcasts an event it can include number of arguments. 
+When a publisher broadcasts an event it can include any number of arguments.
 
 The `broadcast` method is also aliased as `publish`.
 
@@ -81,7 +81,7 @@ The listener would need to implement a method for every event it wishes to recei
 class OrderNotifier
   def cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
-       
+
     # notify someone ...    
   end
 end
@@ -96,7 +96,7 @@ cancel_order = CancelOrder.new
 
 cancel_order.on(:cancel_order_successful) { |order_id| ... }
             .on(:cancel_order_failed)     { |order_id| ... }
-            
+
 cancel_order.call(order_id)
 ```
 
@@ -126,16 +126,16 @@ cancel_order.subscribe(OrderNotifier.new, async: true)
 Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq),
-[wisper-activejob](https://github.com/krisleech/wisper-activejob), or 
+[wisper-activejob](https://github.com/krisleech/wisper-activejob), or
 [wisper-que](https://github.com/joevandyk/wisper-que).
 
-Depending on the adapter used the listener may need to be a class instead of an object. In this situation, every method corresponding to events should be declared as class method, too. For example:
+Depending on the adapter used the listener may need to be a class instead of an object. In this situation, every method corresponding to events should be declared as a class method, too. For example:
 
 ```ruby
 class OrderNotifier
-  # declare class method if you are subscribing the listener class instead its instance like:
+  # declare a class method if you are subscribing the listener class instead of its instance like:
   #   cancel_order.subscribe(OrderNotifier)
-  # 
+  #
   def self.cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
 
@@ -148,7 +148,7 @@ end
 
 ```ruby
 class CancelOrderController < ApplicationController
- 
+
   def create
     cancel_order = CancelOrder.new
 
@@ -171,7 +171,7 @@ If you wish to publish directly from ActiveRecord models you can broadcast event
 ```ruby
 class Order < ActiveRecord::Base
   include Wisper::Publisher
-  
+
   after_commit     :publish_creation_successful, on: :create
   after_validation :publish_creation_failed,     on: :create
 
@@ -235,7 +235,7 @@ end
 ```
 
 Any events broadcast within the block by any publisher will be sent to the
-listeners. 
+listeners.
 
 This is useful for capturing events published by objects to which you do not have access in a given context.
 
@@ -244,11 +244,11 @@ Temporary Global Listeners are threadsafe.
 ## Subscribing to selected events
 
 By default a listener will get notified of all events it can respond to. You
-can limit which events a listener is notified of by passing an string, symbol,
+can limit which events a listener is notified of by passing a string, symbol,
 array or regular expression to `on`:
 
 ```ruby
-post_creater.subscribe(PusherListener.new, on: :create_post_successful)
+post_creator.subscribe(PusherListener.new, on: :create_post_successful)
 ```
 
 ## Prefixing broadcast events
@@ -257,10 +257,10 @@ If you would prefer listeners to receive events with a prefix, for example
 `on`, you can do so by passing a string or symbol to `prefix:`.
 
 ```ruby
-post_creater.subscribe(PusherListener.new, prefix: :on)
+post_creator.subscribe(PusherListener.new, prefix: :on)
 ```
 
-If `post_creater` were to broadcast the event `post_created` the subscribed
+If `post_creator` were to broadcast the event `post_created` the subscribed
 listeners would receive `on_post_created`. You can also pass `true` which will
 use the default prefix, "on".
 
