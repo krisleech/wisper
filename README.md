@@ -313,6 +313,14 @@ in a hook to prevent global subscriptions persisting between tests.
 after { Wisper.clear }
 ```
 
+## Need help?
+
+The [Wiki](https://github.com/krisleech/wisper/wiki) has more examples,
+articles and talks.
+
+Got a specific question, try the
+[Wisper tag on StackOverflow](http://stackoverflow.com/questions/tagged/wisper).
+
 ## Compatibility
 
 Tested with MRI 2.x, JRuby and Rubinius.
