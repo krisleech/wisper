@@ -24,6 +24,7 @@ module Wisper
     # @return [self]
     def on(*events, &block)
       raise ArgumentError, 'must give at least one event' if events.empty?
+      raise ArgumentError, 'must pass a block' if !block
       local_registrations << BlockRegistration.new(block, on: events)
       self
     end
