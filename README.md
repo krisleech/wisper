@@ -2,10 +2,10 @@
 
 *A micro library providing Ruby objects with Publish-Subscribe capabilities*
 
-[![Gem Version](https://badge.fury.io/rb/wisper.png)](http://badge.fury.io/rb/wisper)
-[![Code Climate](https://codeclimate.com/github/krisleech/wisper.png)](https://codeclimate.com/github/krisleech/wisper)
-[![Build Status](https://travis-ci.org/krisleech/wisper.png?branch=master)](https://travis-ci.org/krisleech/wisper)
-[![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.png?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
+[![Gem Version](https://badge.fury.io/rb/wisper.svg)](http://badge.fury.io/rb/wisper)
+[![Code Climate](https://codeclimate.com/github/krisleech/wisper.svg)](https://codeclimate.com/github/krisleech/wisper)
+[![Build Status](https://travis-ci.org/krisleech/wisper.svg?branch=master)](https://travis-ci.org/krisleech/wisper)
+[![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.svg?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
 
 * Decouple core business logic from external concerns in Hexagonal style architectures
 * Use as an alternative to ActiveRecord callbacks and Observers in Rails apps
