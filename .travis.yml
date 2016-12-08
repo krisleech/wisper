@@ -6,11 +6,11 @@ bundler_args: --without=extras
 script: rspec spec
 sudo: false
 rvm:
-  - '2.0.0'
-  - '2.1.2'
-  - '2.2.2'
-  - jruby-9.0.5.0
-  - rbx-2
+  - '2.1.10'
+  - '2.2.6'
+  - '2.3.3'
+  - jruby-9.1.6.0
+  # - rbx-2
   ### ALLOWED FAILURES ###
   # see how compatible we are with dev versions, but do not fail the build
   - ruby-head
