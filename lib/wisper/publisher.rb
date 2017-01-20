@@ -49,7 +49,7 @@ module Wisper
 
     private :broadcast, :publish
 
-    module ClassMethods
+    module ClassSubscribeMethods
       # subscribe a listener
       #
       # @example
@@ -83,7 +83,10 @@ module Wisper
     end
 
     def self.included(base)
-      base.extend(ClassMethods)
+      # Classes can also be publishers
+      base.extend(Publisher)
+      # But subscribing to a class subscribes to all instances too
+      base.extend(ClassSubscribeMethods)
     end
   end
 end

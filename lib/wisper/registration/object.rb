@@ -22,7 +22,9 @@ module Wisper
     private
 
     def publisher_in_scope?(publisher)
-      allowed_classes.empty? || publisher.class.ancestors.any? { |ancestor| allowed_classes.include?(ancestor.to_s) }
+      allowed_classes.empty? ||
+        publisher.class.ancestors.any? { |ancestor| allowed_classes.include?(ancestor.to_s) } ||
+        (publisher.is_a?(Class) && publisher.ancestors.any? { |ancestor| allowed_classes.include?(ancestor.to_s) })
     end
 
     def map_event_to_method(event)
