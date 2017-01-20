@@ -67,7 +67,7 @@ module Wisper
               let(:number) { 10 }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Fixnum##{number.object_id}: 10")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10")
                 subject.broadcast(listener, publisher, event, args)
               end
             end
