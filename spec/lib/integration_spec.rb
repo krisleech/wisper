@@ -89,4 +89,13 @@ describe Wisper do
       command.execute
     end
   end
+
+  it 'raises an exception when attempting to register a local listener on a frozen publisher' do
+    listener = double('listener')
+
+    command = MyCommand.new
+    command.freeze
+
+    expect { command.subscribe(listener) }.to raise_error(ArgumentError)
+  end
 end
