@@ -11,6 +11,18 @@ class MyCommand
   end
 end
 
+class MyCommandWithConstructor
+  include Wisper::Publisher
+
+  def initialize(message)
+    @message = message
+  end
+
+  def execute
+    broadcast('success', @message)
+  end
+end
+
 describe Wisper do
 
   it 'subscribes object to all published events' do
@@ -52,5 +64,29 @@ describe Wisper do
 
     command.execute(true)
     command.execute(false)
+  end
+
+  it 'publishes events from frozen publishers' do
+    listener = double('listener')
+    expect(listener).to receive(:success).with('hello')
+
+    command = MyCommand.new
+    command.freeze
+
+    Wisper.subscribe(listener) do
+      command.execute(true)
+    end
+  end
+
+  it 'publishes events from frozen publishers with custom constructors' do
+    listener = double('listener')
+    expect(listener).to receive(:success).with('constructor argument')
+
+    command = MyCommandWithConstructor.new('constructor argument')
+    command.freeze
+
+    Wisper.subscribe(listener) do
+      command.execute
+    end
   end
 end
