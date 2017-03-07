@@ -14,20 +14,12 @@
 
 Note: Wisper was originally extracted from a Rails codebase but is not dependant on Rails.
 
--------------------------------------------------------------------------------
-
-This is the README for the unreleased version 2.0 of Wisper.
-
-Jump to the [Version 1.x README](https://github.com/krisleech/wisper/tree/v1).
-
--------------------------------------------------------------------------------
-
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wisper', '2.0.0.rc1'
+gem 'wisper', '2.0.0'
 ```
 
 ## Usage
