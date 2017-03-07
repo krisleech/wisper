@@ -2,9 +2,20 @@
 
 ## 2.0.0 (7th Mar 2017)
 
-Authors: Sergey Mostovoy
+Authors: Sergey Mostovoy, Andrew Kozin, Kyle Tolle, Martin, Rob Miller, Mike
+Dalto, orthographic-pedant, Drew Ulmer, Mikey Hogarth, Attila Domokos, Josh
+Miltz, Pascal Betz, Vasily Kolesnikov, Julien Letessier, Kris Leech
 
-* fix: logger raises exception if hash is passed as an argument to a listener
+* Fix: logger raises exception if hash is passed as an argument to a listener #133, #136
+* Fix: deprecation warnings #120
+* Doc improvements: #106, #111, #116, #122, #128, #130, #147, #149, #150, #151
+* Adds: Allow configuration of default prefix when using `prefix: true`. #105
+* Adds: Allow unsubscribing of global listeners #118
+* Adds: Helpful error message when passing a block to `#subscribe` of `#on` #125
+* Adds: raise an error message when `#on` is not passed a block #146
+* Adds: Support for JRuby 9.x #148
+* Adds: Support for MRI 2.4.0 #155
+* Refactor specs #126, #131
 
 ## 2.0.0.rc1 (17 Dec 2014)
 
