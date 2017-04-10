@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/krisleech/wisper"
   gem.license       = "MIT"
 
-  signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
+  signing_key = File.expand_path(ENV['HOME'].to_s + '/.ssh/gem-private_key.pem')
 
   if File.exist?(signing_key)
     gem.signing_key = signing_key
