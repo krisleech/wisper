@@ -8,6 +8,19 @@ module Wisper
       @listener = listener
       @on = ValueObjects::Events.new options[:on]
     end
+    
+    def listener
+      case @listener
+        when Class
+          clazz = Kernel.const_get(@listener.to_s)
+          clazz.new
+        when String
+          clazz = Kernel.const_get(@listener)
+          clazz.new
+        else
+          @listener
+      end
+    end
 
     private
 
