@@ -1,0 +1,503 @@
+commit 21cd9cd505e837f5571f08cf56d8c7ab57db14d7
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Tue Mar 7 18:38:35 2017 +0000
+
+    v2.0.0
+
+commit d9a12160bfa8eebfacf0168126920d7e057e6142
+Merge: aba24c9 85aa6c8
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Fri Jan 20 12:05:01 2017 +0000
+
+    Merge pull request #155 from mezis/fix-for-ruby-240
+    
+    Fixes Fixnum v Integer in MRI 2.4.0
+
+commit 85aa6c8ccc0fca30eca47058abfe8c2392b045a7
+Author: Julien Letessier <julien.letessier@gmail.com>
+Date:   Mon Jan 2 11:15:38 2017 +0100
+
+    Fixes Fixnum v Integer in MRI 2.4.0
+
+commit aba24c91374ab42f929b43d806491d11a8b10d15
+Merge: fd01f02 df3b905
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Dec 8 10:42:45 2016 +0000
+
+    Merge branch 'update-ci-rubies'
+
+commit df3b9057d4d261763ccb0a02dc224235115e633f
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Dec 8 10:34:35 2016 +0000
+
+    disabling rbx on CI (Travis) as it does not install
+
+commit 43112db3a9390e15b4f91ff68d0da4b3bc150238
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Dec 8 10:02:47 2016 +0000
+
+    use newer rubies, remove EOL rubies, for CI (Travis)
+
+commit fd01f02f7d9f96ccf57d4048841de4c07e9e6b0c
+Merge: 3115444 510998e
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Dec 8 09:31:22 2016 +0000
+
+    Merge pull request #149 from v-kolesnikov/patch-1
+    
+    Update README.md
+
+commit 510998e80f2c502ceb4694ef1cf5f3d4c4651b47
+Author: Vasily Kolesnikov <re.vkolesnikov@gmail.com>
+Date:   Sun Sep 11 02:22:25 2016 +0300
+
+    Update README.md
+    
+    Use SVG badges
+
+commit 311544431e006391f6c621a25456ad8a0941c82f
+Merge: 8a4c15a bf8a689
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Fri Sep 2 20:43:45 2016 +0100
+
+    Merge pull request #146 from pascalbetz/raise-when-no-block
+    
+    Raise an error when block is missing
+
+commit bf8a689ec6ecb53d34ff123f8c226a32c64e5463
+Author: Pascal Betz <pascal.betz@gmail.com>
+Date:   Sat Aug 20 11:46:00 2016 +0200
+
+    Raise an error when block os missing
+    
+    
+    
+    https://github.com/krisleech/wisper/issues/145
+
+commit 8a4c15ad6f01b707e7d2de9a3697cf9362116f9c
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Aug 31 12:04:50 2016 +0100
+
+    add Need Help? section to the README [skip ci]
+
+commit 29cb7a0712a0e6d94d2767e30be780ca0abef72c
+Merge: 2fbb530 940a192
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Aug 31 11:49:22 2016 +0100
+
+    Merge pull request #148 from krisleech/fix-travis
+    
+    update JRuby version in CI build
+
+commit 940a192b8a45e647dc4df649a99d76c6778be6e6
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Aug 31 11:45:08 2016 +0100
+
+    ignore vendor directory [skip ci]
+
+commit 2fbb530e79a99e4a04d2af10c92aafa390814229
+Merge: b6fec04 50f1113
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Aug 24 10:02:22 2016 +0100
+
+    Merge pull request #147 from miltzi/master
+    
+    Fix typographical errors in the readme
+
+commit 3ab6262d1a5033629e3203ccbbcb507a90671e9a
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Aug 24 09:59:42 2016 +0100
+
+    update JRuby version in CI build
+
+commit 50f1113729805456d27cc14ee820cd4681a20351
+Author: Josh Miltz <josh@miltz.co.za>
+Date:   Wed Aug 24 08:57:33 2016 +0200
+
+    Fix typographical errors in the readme [skip ci]
+
+commit b6fec0430424c322befdcba56eff81a6496dc98d
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sat Jul 2 17:09:10 2016 +0100
+
+    add note about signing of releases and commits
+
+commit 2500385f896c2a5f22c510d2fab812ef6c07ca61
+Merge: ceb3f44 21ab920
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Apr 28 22:37:31 2016 +0100
+
+    Merge pull request #131 from adomokos/upgrade-rspec
+    
+    Upgrade to RSpec latest
+
+commit ceb3f446a69d84ac51d4e551acd9913ffa8d5495
+Merge: 113f672 0290675
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Apr 28 22:35:16 2016 +0100
+
+    Merge pull request #136 from smostovoy/fix_logger_on_hash_arg
+    
+    fix integer logging
+
+commit 0290675062f7c2df8ba720be9fd5a510a8f1eef9
+Author: Sergey Mostovoy <svmostovoy@gmail.com>
+Date:   Thu Apr 28 21:30:18 2016 +0300
+
+    fix integer logging
+
+commit 113f672ce276f4d47eb35d0f85d598cc17df242d
+Merge: e3b5374 0cdf0ff
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Apr 28 15:40:41 2016 +0100
+
+    Merge pull request #133 from smostovoy/fix_logger_on_hash_arg
+    
+    Fix issue with logger on hash arguments
+
+commit 0cdf0ffd4cd276116dadcb75f94bf781e0b850c3
+Author: Sergey Mostovoy <svmostovoy@gmail.com>
+Date:   Thu Apr 28 17:12:38 2016 +0300
+
+    changelog update
+
+commit 21ab9201439bb727aa4f2dc35382263684f29af1
+Merge: 4247665 e3b5374
+Author: Attila Domokos <adomokos@gmail.com>
+Date:   Wed Apr 27 08:09:56 2016 -0500
+
+    Merge branch 'master' into upgrade-rspec
+    
+    * master:
+      fixes: allowed_failures in Travis not working
+
+commit e3b53747385236d722d0ffb2506350e11fbbfd1a
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Apr 27 14:00:07 2016 +0100
+
+    fixes: allowed_failures in Travis not working
+
+commit 0896124d8eeee64813a69288b2ded40e58fa39a6
+Author: Sergey Mostovoy <svmostovoy@gmail.com>
+Date:   Wed Apr 27 13:56:33 2016 +0300
+
+    fix hash key logging, add values to args info
+
+commit ae072345f15d4a0018ab2749c24ba424c0fbb83e
+Author: Sergey Mostovoy <svmostovoy@gmail.com>
+Date:   Wed Apr 27 10:32:45 2016 +0300
+
+    fix logger on hash arguments
+
+commit 424766557105bb2bafbb4fc395f9900721f72a7c
+Author: Attila Domokos <adomokos@gmail.com>
+Date:   Wed Mar 23 10:55:02 2016 -0500
+
+    Update bundler in before_install
+
+commit b1a949645d0b3fd03b04a4ecac3dcf571f7e8515
+Author: Attila Domokos <adomokos@gmail.com>
+Date:   Wed Mar 23 10:14:09 2016 -0500
+
+    Uninstall and install bundler - get latest version
+
+commit 79578f259818f027edfb5abb0431d88cc67998f5
+Author: Attila Domokos <adomokos@gmail.com>
+Date:   Wed Mar 23 10:06:25 2016 -0500
+
+    Update bundler to latest with every build
+
+commit e6d9d592e9bddcd1d3fefa7af0a7b26c2d1ddcf5
+Author: Attila Domokos <adomokos@gmail.com>
+Date:   Tue Mar 22 10:16:57 2016 -0500
+
+    Upgrade to RSpec latest
+
+commit e24beff89e80732899f60dabe4020c769914372f
+Merge: 702e64b ed3129c
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Fri Mar 18 20:09:29 2016 +0000
+
+    Merge pull request #130 from mikeyhogarth/master
+    
+    Update documentation [skip ci]
+
+commit ed3129c0a08e066ad548a748e3e044bc896614db
+Author: Mikey Hogarth <mikehogarth20@hotmail.com>
+Date:   Fri Mar 18 15:28:27 2016 +0000
+
+    Update documentation [skip ci]
+
+commit 702e64b3e208e5b9e2f98e33fc2a122c1ea1afee
+Merge: 8cf7f0a 18f7d87
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Tue Jan 19 09:06:36 2016 +0000
+
+    Merge pull request #128 from joevandyk/patch-1
+    
+    add wisper-que to README
+
+commit 18f7d87bdc99b534559ecf455252019e2f039c4f
+Author: Joe Van Dyk <joe@tanga.com>
+Date:   Fri Jan 15 05:06:01 2016 -0800
+
+    add wisper-que to README
+
+commit 8cf7f0aa3182172bbe2e643ee68fa5e7243760b2
+Merge: 6a064c6 dadb4c9
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Tue Dec 15 15:57:46 2015 +0000
+
+    Merge pull request #126 from maokomioko/patch-1
+    
+    Update logger_broadcaster_spec.rb
+
+commit dadb4c99322a43c3931fcf0803b12f31c9622cee
+Author: Mike <maokomioko@users.noreply.github.com>
+Date:   Tue Dec 15 15:44:53 2015 +0100
+
+    Update logger_broadcaster_spec.rb
+    
+    fixed spelling typos
+
+commit 6a064c604fcac5f47d727c2e0a38adadd52c3f51
+Merge: 7f52ad4 c7d141b
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Fri Dec 4 10:27:08 2015 +0000
+
+    Merge pull request #125 from latortuga/block-guidance
+    
+    Add error message guidance when passing a block to #subscribe
+
+commit c7d141b6f21a0aa1b02710de27d8c96ea2143577
+Author: Drew Ulmer <drew@unabridgedsoftware.com>
+Date:   Thu Dec 3 20:57:23 2015 -0600
+
+    Add error message guidance when passing a block to #subscribe
+
+commit 7f52ad4e0abbb06dd4322f28ca81395462703236
+Merge: 8740e6c 9532538
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Thu Oct 8 09:14:45 2015 +0100
+
+    Merge pull request #122 from orthographic-pedant/spell_check/conjunction
+    
+    Fix typographical error(s)
+
+commit 9532538926e9738a7ce5afeaef0214c26e2577bd
+Author: orthographic-pedant <travis.hoppe+orthographicpendant@gmail.com>
+Date:   Wed Oct 7 14:46:25 2015 -0400
+
+    Fix typographical error(s)
+    
+    Changed conjuction to conjunction in README.
+
+commit 8740e6c267410d408a214c48eb8cb6cd9d78b67d
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Mon Aug 17 19:15:33 2015 +0100
+
+    Remove “warning: private attribute?” warning
+
+commit 0a16e63c6aa5efbefed57a229ce10dde1b84c1f9
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Mon Aug 3 00:10:33 2015 +0100
+
+    Drop support for Ruby 1.9
+
+commit eb37f24738e1dcb7b822eb6b2bf351ffe48686be
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 23:43:41 2015 +0100
+
+    Expose #to_h and #keys for inspecting Broadcaster configuration.
+
+commit 57528ae7cad9728c8c93102a9259bd85338641d1
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 15:55:50 2015 +0100
+
+    Remove Guardfile [skip ci]
+
+commit f16bc58e9b7f57d5d27dbc347e5698252784e5ce
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 15:44:50 2015 +0100
+
+    Add a link to Wisper-Minitest [skip ci]
+    closes #115
+
+commit 23307558387955f4359e973abf066b3a767dd6a0
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 14:57:40 2015 +0100
+
+    Add Code of Conduct for contributors [skip ci]
+
+commit 95759936e127d6235f86437b969b0b93777155a8
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 14:56:51 2015 +0100
+
+    Add temporary link to v1.x README while v2 remains unreleased [skip ci]
+
+commit 337e16f843b3fcc6c4ea1253b550b90899f7e06e
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Tue Jul 21 00:35:09 2015 +0100
+
+    Add a note about returning from within a subscribed block [skip ci]
+
+commit dffb2cecce8d7d4519b2cc1d5ea45ad73adeb8cf
+Merge: bd10b0f e73fbff
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 14:09:46 2015 +0100
+
+    Merge pull request #118 from kcdragon/unsubscribe-from-global-listeners
+    
+    Add support for unsubscribing a global listener
+
+commit bd10b0fe2d108f1967ce1c5e083ccad8aaf11b82
+Merge: 26d9d5b 8153e99
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Sun Aug 2 14:04:52 2015 +0100
+
+    Merge pull request #105 from nepalez/master
+    
+    Add setting for Registration::Object default prefix
+
+commit e73fbff09d8df1e518922cfcdc45e91aa39c3e92
+Author: Mike Dalton <michaelcdalton@gmail.com>
+Date:   Wed Jul 29 08:12:52 2015 -0400
+
+    Add support for unsubscribing a global listener
+
+commit 26d9d5b113e68f5e324f04c836c66245143c09f6
+Merge: 5c1aa5e e090379
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Mon Jun 8 12:45:21 2015 +0100
+
+    Merge pull request #111 from Martin91/master
+    
+    update readme with case using class as subscriber
+
+commit 5c1aa5e7ef8e4f37a71bd4afaa6ce59828c66d8d
+Merge: c4e68f3 b9fae23
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Mon Jun 8 12:41:28 2015 +0100
+
+    Merge pull request #116 from robmiller/readme/multiple-events
+    
+    README: mention subscribing to multiple events
+
+commit b9fae23ae39bc63e851b87c21541e1d03d02e124
+Author: Rob Miller <rob@bigfish.co.uk>
+Date:   Mon Jun 8 12:18:32 2015 +0100
+
+    README: mention subscribing to multiple events
+    
+    `on` supports subscribing to multiple events, so mention this in the
+    README.
+
+commit e0903799125062098b14f91bd032b7962b9df55a
+Author: Martin <hongzeqin@gmail.com>
+Date:   Mon May 11 20:39:32 2015 +0800
+
+    update readme with case using class as subscriber
+
+commit c4e68f3e831de426290c7fa11ac22e274c80e1a0
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Tue Apr 21 09:41:04 2015 +0100
+
+    Add link to Waffle
+
+commit 6dc9a89537a0dbcc070eccbc45c9afaec35022ec
+Merge: 00fe31e 2632c69
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Mon Mar 9 09:49:10 2015 +0000
+
+    Merge pull request #106 from kyletolle/patch-1
+    
+    Fix typo in README
+
+commit 2632c697ebe5011e1d455f78af7bd62cfabfff64
+Author: Kyle Tolle <kyle@nullsix.com>
+Date:   Sun Mar 8 01:17:24 2015 -0700
+
+    Fix typo in README
+
+commit 8153e99c7439d173627fc55c31d037737d8f735d
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 20:29:33 2015 +0300
+
+    allow events to be defined as String sublings
+
+commit 1c267c1ede3d74ea622cfba6cfd6929128319c4e
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 17:07:28 2015 +0300
+
+    refactor Wisper::Registration on the base of Wisper::ValueObjects::Events
+
+commit f65a0cf89c1e3c79dfc69093967dd2fdf2ccbd19
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 17:05:49 2015 +0300
+
+    extract Events list from Wisper::Registration
+    
+    Instances of Wisper::ValueObject::Events quack like arrays
+    in respond to #include?(event).
+
+commit 83bef969716155db1945b43ed670a85c1e73b0ca
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 13:54:24 2015 +0300
+
+    refactor spec for Configuration#default_prefix=
+    
+    The specs became non-mutating the Prefix.default value.
+
+commit 0fb3a68a25c3a78418781db8dfa04cdfd31c70c8
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 01:20:58 2015 +0300
+
+    add the 'default_prefix' setting to Configuration
+
+commit 6f79071513dfd54ca6cd1873637de47b2a1ca66e
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 01:11:01 2015 +0300
+
+    refactor Wisper::Registration::Object
+    
+    ValueObjects::Prefix used in the #initializer
+
+commit 9070948683b839e793f336e2ec814cfedf216f6a
+Author: Andrew Kozin <andrew.kozin@gmail.com>
+Date:   Tue Mar 3 01:08:32 2015 +0300
+
+    Extract ValueObjects::Prefix from Registration::Object
+
+commit 00fe31e7c4c54134a05485ad6acc6d52482dd077
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Feb 18 17:20:45 2015 +0000
+
+    refactor spec for readability, particularly when using doc format
+
+commit 920c67224170677f94d4ff486590a61e13cbde3b
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Feb 18 16:57:46 2015 +0000
+
+    raise/rescue a specific error to prevent false positives
+    
+    * include minor refactor of specs for readability
+
+commit 7c714b58db8a49f42d24288e8b2750d60368f769
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Feb 18 16:42:53 2015 +0000
+
+    remove helper method no longer used in specs
+
+commit eba226a7e7ba845676dbd65dc5df67bc1009e338
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Feb 18 16:39:36 2015 +0000
+
+    silence "shadowing outer local variable" and "method redefined" warnings
+
+commit 60829272c84b84c7871da6927a3528f11d47cb19
+Author: Kris Leech <kris.leech@gmail.com>
+Date:   Wed Feb 18 16:34:46 2015 +0000
+
+    Add better description and summary to gemspec [skip ci]
+
+

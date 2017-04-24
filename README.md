@@ -295,6 +295,7 @@ Testing matchers and stubs are in seperate gems.
 
 * [wisper-rspec](https://github.com/krisleech/wisper-rspec)
 * [wisper-minitest](https://github.com/digitalcuisine/wisper-minitest)
+* [wisper-testing](https://github.com/krisleech/wisper-testing)
 
 ### Clearing Global Listeners
 
