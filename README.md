@@ -10,9 +10,11 @@
 * Decouple core business logic from external concerns in Hexagonal style architectures
 * Use as an alternative to ActiveRecord callbacks and Observers in Rails apps
 * Connect objects based on context without permanence
-* React to events synchronously or asynchronously
+* Publish events synchronously or asynchronously
 
 Note: Wisper was originally extracted from a Rails codebase but is not dependant on Rails.
+
+Please also see the [Wiki](https://github.com/krisleech/wisper/wiki) for more additional information and articles.
 
 ## Installation
 
