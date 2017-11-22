@@ -341,6 +341,7 @@ Please read the [Contributing Guidelines](https://github.com/krisleech/wisper/bl
 
 * gem releases are [signed](http://guides.rubygems.org/security/) ([public key](https://github.com/krisleech/wisper/blob/master/gem-public_cert.pem))
 * commits are GPG signed ([public key](https://pgp.mit.edu/pks/lookup?op=get&search=0x3ABC74851F7CCC88))
+* my [keybase.io profile](https://keybase.io/krisleech)
 
 ## License
 
