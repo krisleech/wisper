@@ -120,8 +120,9 @@ cancel_order.subscribe(OrderNotifier.new, async: true)
 Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq),
-[wisper-activejob](https://github.com/krisleech/wisper-activejob), or
-[wisper-que](https://github.com/joevandyk/wisper-que).
+[wisper-activejob](https://github.com/krisleech/wisper-activejob),
+[wisper-que](https://github.com/joevandyk/wisper-que) or 
+[wisper-resque](https://github.com/bzurkowski/wisper-resque).
 
 Depending on the adapter used the listener may need to be a class instead of an object. In this situation, every method corresponding to events should be declared as a class method, too. For example:
 
