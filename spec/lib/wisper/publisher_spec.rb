@@ -201,6 +201,26 @@ describe Wisper::Publisher do
           publisher.send(:broadcast, event_name)
         end
       end
+
+      describe 'callable broadcasters' do
+        let(:broadcaster) { Struct.new(:options) }
+        let(:async_options) { { queue: 'custom', retry: false } }
+
+        before do
+          Wisper.configure { |c| c.broadcaster(:async, Proc.new { |options| broadcaster.new(options) }) }
+        end
+
+        it 'initializes broadcaster with configured options during subscribe action' do
+          expect(broadcaster).to receive(:new).with(async_options)
+          publisher.subscribe(listener, async: async_options)
+        end
+
+        it 'invokes configured broadcaster action during event broadcast' do
+          publisher.subscribe(listener, async: async_options)
+          expect_any_instance_of(broadcaster).to receive('broadcast')
+          publisher.send(:broadcast, event_name)
+        end
+      end
     end
 
     it 'returns publisher so methods can be chained' do

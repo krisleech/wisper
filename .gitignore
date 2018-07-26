@@ -1,6 +1,7 @@
 *.gem
 *.rbc
 .ruby-version
+.ruby-gemspec
 .bundle
 .config
 .yardoc

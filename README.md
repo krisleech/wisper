@@ -76,7 +76,7 @@ class OrderNotifier
   def cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
 
-    # notify someone ...    
+    # notify someone ...
   end
 end
 ```
@@ -117,6 +117,14 @@ this will prevent any subsequent listeners having their events delivered.
 cancel_order.subscribe(OrderNotifier.new, async: true)
 ```
 
+You can also pass additional configuration options to the job using the following syntax:
+
+```ruby
+cancel_order.subscribe(OrderNotifier.new, async: { queue: 'custom', retry: false })
+```
+
+The list of supported handler options is determined by adapter
+
 Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq),
@@ -134,7 +142,7 @@ class OrderNotifier
   def self.cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
 
-    # notify someone ...    
+    # notify someone ...
   end
 end
 ```
