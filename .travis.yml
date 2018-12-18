@@ -7,10 +7,10 @@ script: rspec spec
 sudo: false
 rvm:
   - 2.1.10
-  - 2.2.6
-  - 2.3.3
-  - 2.4.0
-  - 2.5.1
+  - 2.2.10
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
   - jruby-9.1.17.0
   # - rbx-2
   ### ALLOWED FAILURES ###
