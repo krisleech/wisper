@@ -196,7 +196,8 @@ Wisper.subscribe(MyListener.new)
 
 In a Rails app you might want to add your global listeners in an initalizer.
 
-Global listeners are threadsafe.
+Global listeners are threadsafe. Subscribers will receive events from publishers on current and future threads owned by the ruby process.
+
 
 ### Scoping by publisher class
 
@@ -234,7 +235,7 @@ listeners.
 
 This is useful for capturing events published by objects to which you do not have access in a given context.
 
-Temporary Global Listeners are threadsafe.
+Temporary Global Listeners are threadsafe. Subscribers will receive only events from publishers on the same thread.
 
 ## Subscribing to selected events
 
