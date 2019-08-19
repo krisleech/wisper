@@ -32,6 +32,42 @@ describe Wisper::TemporaryListeners do
       publisher.instance_eval { broadcast(:failure) }
     end
 
+    it 'globally subscribes listeners for duration of nested block' do
+
+      expect(listener_1).to receive(:success)
+      expect(listener_1).to receive(:failure)
+
+      expect(listener_2).to receive(:success)
+      expect(listener_2).to_not receive(:failure)
+
+      Wisper::TemporaryListeners.subscribe(listener_1) do
+        Wisper::TemporaryListeners.subscribe(listener_2) do
+          publisher.instance_eval { broadcast(:success) }
+        end
+        publisher.instance_eval { broadcast(:failure) }
+      end
+    end
+
+    it 'clears registrations for the block which exits' do
+
+      # listener_1 is subscribed twice hence it's supposed to get the message twice
+      expect(listener_1).to receive(:success).twice
+      expect(listener_1).to receive(:failure)
+      expect(listener_1).to_not receive(:ignored)
+
+      expect(listener_2).to receive(:success)
+      expect(listener_2).to_not receive(:failure)
+      expect(listener_2).to_not receive(:ignored)
+
+      Wisper::TemporaryListeners.subscribe(listener_1) do
+        Wisper::TemporaryListeners.subscribe(listener_1, listener_2) do
+          publisher.instance_eval { broadcast(:success) }
+        end
+        publisher.instance_eval { broadcast(:failure) }
+      end
+      publisher.instance_eval { broadcast(:ignored) }
+    end
+
     it 'is thread safe' do
       num_threads = 20
       (1..num_threads).to_a.map do
