@@ -76,7 +76,7 @@ class OrderNotifier
   def cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
 
-    # notify someone ...    
+    # notify someone ...
   end
 end
 ```
@@ -121,7 +121,7 @@ Wisper has various adapters for asynchronous event handling, please refer to
 [wisper-celluloid](https://github.com/krisleech/wisper-celluloid),
 [wisper-sidekiq](https://github.com/krisleech/wisper-sidekiq),
 [wisper-activejob](https://github.com/krisleech/wisper-activejob),
-[wisper-que](https://github.com/joevandyk/wisper-que) or 
+[wisper-que](https://github.com/joevandyk/wisper-que) or
 [wisper-resque](https://github.com/bzurkowski/wisper-resque).
 
 Depending on the adapter used the listener may need to be a class instead of an object. In this situation, every method corresponding to events should be declared as a class method, too. For example:
@@ -134,7 +134,7 @@ class OrderNotifier
   def self.cancel_order_successful(order_id)
     order = Order.find_by_id(order_id)
 
-    # notify someone ...    
+    # notify someone ...
   end
 end
 ```
@@ -194,7 +194,7 @@ This is useful for cross cutting concerns such as recording statistics, indexing
 Wisper.subscribe(MyListener.new)
 ```
 
-In a Rails app you might want to add your global listeners in an initalizer.
+In a Rails app you might want to add your global listeners in an initializer.
 
 Global listeners are threadsafe.
 
@@ -294,7 +294,7 @@ You could also alias the method within your listener, as such
 
 ## Testing
 
-Testing matchers and stubs are in seperate gems.
+Testing matchers and stubs are in separate gems.
 
 * [wisper-rspec](https://github.com/krisleech/wisper-rspec)
 * [wisper-minitest](https://github.com/digitalcuisine/wisper-minitest)
