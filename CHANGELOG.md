@@ -1,5 +1,7 @@
 ## HEAD (unreleased)
 
+## 2.0.1 (29th Aug 2019)
+
 Authors: David Wilkie, hosseintoussi, Maxim Polunin, Tristan
 Harmer, Bartosz Żurkowski, Kris Leech
 
