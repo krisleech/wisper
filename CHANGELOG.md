@@ -1,9 +1,14 @@
 ## HEAD (unreleased)
 
-Authors: Maxim Polunin, Tristan Harmer
+Authors: David Wilkie, hosseintoussi, Maxim Polunin, Tristan
+Harmer, Bartosz Żurkowski, Kris Leech
 
 * fix: support nested temporary global listeners
 * docs: add threadsafe notes to README for global and temporary listeners
+* docs: fix spelling mistakes in README
+* fix: safely get signing key in gemspec when HOME is not set
+* adds: add console to aid experiments and REPL driven development
+* adds: Latest Ruby to CI
 
 ## 2.0.0 (7th Mar 2017)
 
