@@ -1,5 +1,10 @@
 ## HEAD (unreleased)
 
+Authors: Maxim Polunin, Tristan Harmer
+
+* fix: support nested temporary global listeners
+* docs: add threadsafe notes to README for global and temporary listeners
+
 ## 2.0.0 (7th Mar 2017)
 
 Authors: Sergey Mostovoy, Andrew Kozin, Kyle Tolle, Martin, Rob Miller, Mike

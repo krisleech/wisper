@@ -4,7 +4,6 @@
 
 module Wisper
   class TemporaryListeners
-
     def self.subscribe(*listeners, &block)
       new.subscribe(*listeners, &block)
     end
@@ -13,13 +12,14 @@ module Wisper
       new.registrations
     end
 
-    def subscribe(*listeners, &block)
-      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+    def subscribe(*listeners, &_block)
+      new_registrations = build_registrations(listeners)
+
       begin
-        listeners.each { |listener| registrations << ObjectRegistration.new(listener, options) }
+        registrations.merge new_registrations
         yield
       ensure
-        clear
+        registrations.subtract new_registrations
       end
       self
     end
@@ -30,8 +30,9 @@ module Wisper
 
     private
 
-    def clear
-      registrations.clear
+    def build_registrations(listeners)
+      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
+      listeners.map { |listener| ObjectRegistration.new(listener, options) }
     end
 
     def key
