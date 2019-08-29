@@ -28,10 +28,6 @@ appropriate as an extension to Wisper.
 
 We also have a [Gitter channel](https://gitter.im/krisleech/wisper) if you wish to discuss your ideas.
 
-## Backlog /  Roadmap
-
-The backlog for Wisper and related gems is on [Waffle](https://waffle.io/krisleech/wisper).
-
 ## Questions
 
 Try the [Wiki](https://github.com/krisleech/wisper/wiki) first, the examples
@@ -43,7 +39,7 @@ Feel free to ping me the URL on [Twitter](https://twitter.com/krisleech).
 
 ## Pull requests
 
-* Fork the project, create a new branch from `v1` or `master`.
+* Fork the project, create a new branch `master`.
 * Squash commits which are related.
 * Write a [good commit message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
 * Documentation only changes should have `[skip ci]` in the commit message
@@ -58,4 +54,4 @@ not backwards compatible.
 The `v1` branch is a long lived branch and you should
 branch from this if you wish to fix an issue in version `~> 1.0`.
 
-The `master` branch will target the next version of Wisper.
+Otherwise branch from `master` branch.
