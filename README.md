@@ -16,6 +16,9 @@ Note: Wisper was originally extracted from a Rails codebase but is not dependant
 
 Please also see the [Wiki](https://github.com/krisleech/wisper/wiki) for more additional information and articles.
 
+**For greenfield applications you might also be interested in
+[WisperNext](https://gitlab.com/kris.leech/wisper_next) and [Ma](https://gitlab.com/kris.leech/ma).**
+
 ## Installation
 
 Add this line to your application's Gemfile:
