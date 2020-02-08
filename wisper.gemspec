@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
     gem.cert_chain  = ['gem-public_cert.pem']
   end
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = `git ls-files`.split($/).reject { |f| /^bin\// === f }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 end
