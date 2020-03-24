@@ -32,21 +32,40 @@ describe Wisper::GlobalListeners do
       publisher.send(:broadcast, :it_happened)
     end
 
-    it 'can be scoped to classes' do
-      publisher_1 = publisher_class.new
-      publisher_2 = publisher_class.new
-      publisher_3 = publisher_class.new
+    context 'with :scope option' do
+      let(:anonymous_class_1) { publisher_class }
+      let(:anonymous_class_2) { publisher_class }
+      let(:anonymous_class_3) { publisher_class }
 
-      Wisper::GlobalListeners.subscribe(global_listener, :scope => [publisher_1.class,
-                                                              publisher_2.class])
+      before do
+        Publisher1 = publisher_class
+        Publisher2 = publisher_class
+        Publisher3 = publisher_class
+      end
 
-      expect(global_listener).to receive(:it_happened_1).once
-      expect(global_listener).to receive(:it_happened_2).once
-      expect(global_listener).not_to receive(:it_happened_3)
+      after do
+        Object.send(:remove_const, :Publisher1)
+        Object.send(:remove_const, :Publisher2)
+        Object.send(:remove_const, :Publisher3)
+      end
 
-      publisher_1.send(:broadcast, :it_happened_1)
-      publisher_2.send(:broadcast, :it_happened_2)
-      publisher_3.send(:broadcast, :it_happened_3)
+      it 'can be scoped to constant classes and anonymous classes' do
+        Wisper::GlobalListeners.subscribe(global_listener, scope: [Publisher1, 'Publisher2', anonymous_class_1, anonymous_class_2.to_s])
+
+        expect(global_listener).to receive(:it_happened_1).once
+        expect(global_listener).to receive(:it_happened_2).once
+        expect(global_listener).not_to receive(:it_happened_3)
+        expect(global_listener).to receive(:it_happened_4).once
+        expect(global_listener).to receive(:it_happened_5).once
+        expect(global_listener).not_to receive(:it_happened_6)
+
+        Publisher1.new.send(:broadcast, :it_happened_1)
+        Publisher2.new.send(:broadcast, :it_happened_2)
+        Publisher3.new.send(:broadcast, :it_happened_3)
+        anonymous_class_1.new.send(:broadcast, :it_happened_4)
+        anonymous_class_2.new.send(:broadcast, :it_happened_5)
+        anonymous_class_3.new.send(:broadcast, :it_happened_6)
+      end
     end
 
     it 'is threadsafe' do
