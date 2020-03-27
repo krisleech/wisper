@@ -12,7 +12,7 @@ module Wisper
     # @return [self]
     def subscribe(listener, options = {})
       raise ArgumentError, "#{__method__} does not take a block, did you mean to call #on instead?" if block_given?
-      local_registrations << ObjectRegistration.new(listener, options)
+      add_local_registration(ObjectRegistration.new(listener, options))
       self
     end
 
@@ -25,7 +25,7 @@ module Wisper
     def on(*events, &block)
       raise ArgumentError, 'must give at least one event' if events.empty?
       raise ArgumentError, 'must pass a block' if !block
-      local_registrations << BlockRegistration.new(block, on: events)
+      add_local_registration(BlockRegistration.new(block, on: events))
       self
     end
 
@@ -63,7 +63,11 @@ module Wisper
     private
 
     def local_registrations
-      @local_registrations ||= Set.new
+      if defined? @local_registrations
+        @local_registrations
+      else
+        Set.new
+      end
     end
 
     def global_registrations
@@ -76,6 +80,12 @@ module Wisper
 
     def registrations
       local_registrations + global_registrations + temporary_registrations
+    end
+
+    def add_local_registration(registration)
+      raise ArgumentError, 'only global subscriptions available on frozen publisher objects' if frozen?
+      @local_registrations ||= Set.new
+      @local_registrations << registration
     end
 
     def clean_event(event)
