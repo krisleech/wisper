@@ -8,7 +8,7 @@ module Wisper
       super(listener, options)
       @with   = options[:with]
       @prefix = ValueObjects::Prefix.new options[:prefix]
-      @allowed_classes = Array(options[:scope]).map(&:to_s).to_set
+      @allowed_classes = Array(options[:scope]).to_set
       @broadcaster = map_broadcaster(options[:async] || options[:broadcaster])
     end
 
@@ -22,7 +22,22 @@ module Wisper
     private
 
     def publisher_in_scope?(publisher)
-      allowed_classes.empty? || publisher.class.ancestors.any? { |ancestor| allowed_classes.include?(ancestor.to_s) }
+      constantized_classes.empty? || publisher.class.ancestors.any? { |ancestor| constantized_classes.include?(ancestor) }
+    end
+
+    def constantized_classes
+      @constantized_classes = allowed_classes.map do |klass|
+        if klass.is_a?(String)
+          class_from_string(klass)
+        else
+          klass
+        end
+      end
+    end
+
+    # support constant names, and also object IDs (<Class:objectid>
+    def class_from_string(string)
+      Object.const_get(string)
     end
 
     def map_event_to_method(event)

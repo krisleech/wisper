@@ -32,7 +32,7 @@ describe Wisper::GlobalListeners do
       publisher.send(:broadcast, :it_happened)
     end
 
-    it 'can be scoped to classes' do
+    it 'can be scoped to anonymous classes' do
       publisher_1 = publisher_class.new
       publisher_2 = publisher_class.new
       publisher_3 = publisher_class.new
@@ -47,6 +47,32 @@ describe Wisper::GlobalListeners do
       publisher_1.send(:broadcast, :it_happened_1)
       publisher_2.send(:broadcast, :it_happened_2)
       publisher_3.send(:broadcast, :it_happened_3)
+    end
+
+    context 'with named classes' do
+      before do
+        Publisher1 = publisher_class
+        Publisher2 = publisher_class
+        Publisher3 = publisher_class
+      end
+
+      after do
+        Object.send(:remove_const, :Publisher1)
+        Object.send(:remove_const, :Publisher2)
+        Object.send(:remove_const, :Publisher3)
+      end
+
+      it 'can be scoped' do
+        Wisper::GlobalListeners.subscribe(global_listener, :scope => [Publisher1, 'Publisher2'])
+
+        expect(global_listener).to receive(:it_happened_1).once
+        expect(global_listener).to receive(:it_happened_2).once
+        expect(global_listener).not_to receive(:it_happened_3)
+
+        Publisher1.new.send(:broadcast, :it_happened_1)
+        Publisher2.new.send(:broadcast, :it_happened_2)
+        Publisher3.new.send(:broadcast, :it_happened_3)
+      end
     end
 
     it 'is threadsafe' do
