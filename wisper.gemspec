@@ -27,4 +27,5 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($/).reject { |f| f.split('/').first == 'bin' }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+  gem.executables   = []
 end
