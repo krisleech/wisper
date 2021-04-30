@@ -6,9 +6,8 @@ bundler_args: --without=extras
 script: rspec spec
 sudo: false
 rvm:
-  - 2.6.3
-  - 2.5.5
-  - 2.4.6
+  - 3.0.1
+  - 2.7.3
   - jruby-9.2
   # - rbx-2
   ### ALLOWED FAILURES ###
