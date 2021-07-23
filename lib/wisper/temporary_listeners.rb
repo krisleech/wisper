@@ -4,16 +4,16 @@
 
 module Wisper
   class TemporaryListeners
-    def self.subscribe(*listeners, &block)
-      new.subscribe(*listeners, &block)
+    def self.subscribe(*listeners, **options, &block)
+      new.subscribe(*listeners, **options, &block)
     end
 
     def self.registrations
       new.registrations
     end
 
-    def subscribe(*listeners, &_block)
-      new_registrations = build_registrations(listeners)
+    def subscribe(*listeners, **options, &_block)
+      new_registrations = build_registrations(*listeners, **options)
 
       begin
         registrations.merge new_registrations
@@ -30,9 +30,8 @@ module Wisper
 
     private
 
-    def build_registrations(listeners)
-      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
-      listeners.map { |listener| ObjectRegistration.new(listener, options) }
+    def build_registrations(*listeners, **options)
+      listeners.map { |listener| ObjectRegistration.new(listener, **options) }
     end
 
     def key

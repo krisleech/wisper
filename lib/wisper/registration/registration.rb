@@ -4,7 +4,7 @@ module Wisper
   class Registration
     attr_reader :on, :listener
 
-    def initialize(listener, options)
+    def initialize(listener, **options)
       @listener = listener
       @on = ValueObjects::Events.new options[:on]
     end

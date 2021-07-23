@@ -27,11 +27,11 @@ module Wisper
   #     # ..
   #   end
   #
-  def self.subscribe(*args, &block)
+  def self.subscribe(*args, **kwargs, &block)
     if block_given?
-      TemporaryListeners.subscribe(*args, &block)
+      TemporaryListeners.subscribe(*args, **kwargs, &block)
     else
-      GlobalListeners.subscribe(*args)
+      GlobalListeners.subscribe(*args, **kwargs)
     end
   end
 

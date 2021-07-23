@@ -8,9 +8,9 @@ module Wisper
         @broadcaster = broadcaster
       end
 
-      def broadcast(listener, publisher, event, args)
-        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(listener)} with #{args_info(args)}")
-        @broadcaster.broadcast(listener, publisher, event, args)
+      def broadcast(listener, publisher, event, *args, **kwargs)
+        @logger.info("[WISPER] #{name(publisher)} published #{event} to #{name(listener)} with #{args_info(args)} and #{kwargs_info(kwargs)}")
+        @broadcaster.broadcast(listener, publisher, event, *args, **kwargs)
       end
 
       private
@@ -31,6 +31,10 @@ module Wisper
           arg_string += ": #{arg.inspect}" if [Numeric, Array, Hash, String].any? {|klass| arg.is_a?(klass) }
           arg_string
         end.join(', ')
+      end
+
+      def kwargs_info(kwargs)
+        kwargs.empty? ? 'no keyword arguments' : "keyword arguments #{kwargs.inspect}"
       end
     end
   end

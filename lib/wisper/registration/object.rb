@@ -4,18 +4,18 @@ module Wisper
   class ObjectRegistration < Registration
     attr_reader :with, :prefix, :allowed_classes, :broadcaster
 
-    def initialize(listener, options)
-      super(listener, options)
+    def initialize(listener, **options)
+      super(listener, **options)
       @with   = options[:with]
       @prefix = ValueObjects::Prefix.new options[:prefix]
       @allowed_classes = Array(options[:scope]).map(&:to_s).to_set
       @broadcaster = map_broadcaster(options[:async] || options[:broadcaster])
     end
 
-    def broadcast(event, publisher, *args)
+    def broadcast(event, publisher, *args, **kwargs)
       method_to_call = map_event_to_method(event)
       if should_broadcast?(event) && listener.respond_to?(method_to_call) && publisher_in_scope?(publisher)
-        broadcaster.broadcast(listener, publisher, method_to_call, args)
+        broadcaster.broadcast(listener, publisher, method_to_call, *args, **kwargs)
       end
     end
 

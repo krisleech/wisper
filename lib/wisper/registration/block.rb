@@ -2,9 +2,9 @@
 
 module Wisper
   class BlockRegistration < Registration
-    def broadcast(event, publisher, *args)
+    def broadcast(event, publisher, *args, **kwargs)
       if should_broadcast?(event)
-        listener.call(*args)
+        listener.call(*args, **kwargs)
       end
     end
   end
