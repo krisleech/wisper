@@ -27,38 +27,41 @@ module Wisper
         describe '#broadcast' do
           context 'without arguments' do
             let(:args) { [] }
+            let(:kwargs) { {} }
 
             it 'logs published event' do
-              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments')
-              subject.broadcast(listener, publisher, event, args)
+              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and no keyword arguments')
+              subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
 
             it 'delegates broadcast to a given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
-              subject.broadcast(listener, publisher, event, args)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
           end
 
           context 'with arguments' do
             let(:args) { [arg_double(id: 3), arg_double(id: 4)] }
+            let(:kwargs) { {x: :y} }
 
             it 'logs published event and arguments' do
-              expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4')
-              subject.broadcast(listener, publisher, event, args)
+              expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments #{kwargs.inspect}")
+              subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
 
             it 'delegates broadcast to a given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, args)
-              subject.broadcast(listener, publisher, event, args)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
 
             context 'when argument is a hash' do
               let(:args) { [hash] }
               let(:hash) { {key: 'value'} }
+              let(:kwargs) { {x: :y} }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect}")
-                subject.broadcast(listener, publisher, event, args)
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments #{kwargs.inspect}")
+                subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
 
@@ -67,8 +70,17 @@ module Wisper
               let(:number) { 10 }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10")
-                subject.broadcast(listener, publisher, event, args)
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments #{kwargs.inspect}")
+                subject.broadcast(listener, publisher, event, *args, **kwargs)
+              end
+            end
+
+            context 'when only keyword arguments are present' do
+              let(:args) { [] }
+
+              it 'logs published event and arguments' do
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments #{kwargs.inspect}")
+                subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
           end

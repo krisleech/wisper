@@ -10,9 +10,9 @@ module Wisper
     #   my_publisher.subscribe(MyListener.new)
     #
     # @return [self]
-    def subscribe(listener, options = {})
+    def subscribe(listener, **options)
       raise ArgumentError, "#{__method__} does not take a block, did you mean to call #on instead?" if block_given?
-      local_registrations << ObjectRegistration.new(listener, options)
+      local_registrations << ObjectRegistration.new(listener, **options)
       self
     end
 
@@ -38,9 +38,9 @@ module Wisper
     #   end
     #
     # @return [self]
-    def broadcast(event, *args)
+    def broadcast(event, *args, **kwargs)
       registrations.each do | registration |
-        registration.broadcast(clean_event(event), self, *args)
+        registration.broadcast(clean_event(event), self, *args, **kwargs)
       end
       self
     end
@@ -55,8 +55,8 @@ module Wisper
       # @example
       #   MyPublisher.subscribe(MyListener.new)
       #
-      def subscribe(listener, options = {})
-        GlobalListeners.subscribe(listener, options.merge(:scope => self))
+      def subscribe(listener, **options)
+        GlobalListeners.subscribe(listener, **options.merge(:scope => self))
       end
     end
 

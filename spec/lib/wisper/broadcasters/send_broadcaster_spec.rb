@@ -10,7 +10,7 @@ module Wisper
 
           it 'sends event to listener without any arguments' do
             expect(listener).to receive(event).with(no_args())
-            subject.broadcast(listener, anything, event, args)
+            subject.broadcast(listener, anything, event, *args)
           end
         end
 
@@ -19,7 +19,7 @@ module Wisper
 
           it 'sends event to listener with arguments' do
             expect(listener).to receive(event).with(*args)
-            subject.broadcast(listener, anything, event, args)
+            subject.broadcast(listener, anything, event, *args)
           end
         end
       end
