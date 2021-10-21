@@ -1,4 +1,5 @@
 require 'set'
+require 'ruby2_keywords'
 require 'wisper/version'
 require 'wisper/configuration'
 require 'wisper/publisher'
@@ -27,13 +28,14 @@ module Wisper
   #     # ..
   #   end
   #
-  def self.subscribe(*args, **kwargs, &block)
+  def self.subscribe(*args, &block)
     if block_given?
-      TemporaryListeners.subscribe(*args, **kwargs, &block)
+      TemporaryListeners.subscribe(*args, &block)
     else
-      GlobalListeners.subscribe(*args, **kwargs)
+      GlobalListeners.subscribe(*args)
     end
   end
+  singleton_class.send(:ruby2_keywords, :subscribe)
 
   def self.unsubscribe(*listeners)
     GlobalListeners.unsubscribe(*listeners)

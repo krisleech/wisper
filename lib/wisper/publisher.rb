@@ -38,9 +38,9 @@ module Wisper
     #   end
     #
     # @return [self]
-    def broadcast(event, *args, **kwargs)
+    ruby2_keywords def broadcast(event, *args)
       registrations.each do | registration |
-        registration.broadcast(clean_event(event), self, *args, **kwargs)
+        registration.broadcast(clean_event(event), self, *args)
       end
       self
     end

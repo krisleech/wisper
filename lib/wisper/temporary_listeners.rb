@@ -4,16 +4,17 @@
 
 module Wisper
   class TemporaryListeners
-    def self.subscribe(*listeners, **options, &block)
-      new.subscribe(*listeners, **options, &block)
+    def self.subscribe(*listeners, &block)
+      new.subscribe(*listeners, &block)
     end
+    singleton_class.send(:ruby2_keywords, :subscribe)
 
     def self.registrations
       new.registrations
     end
 
-    def subscribe(*listeners, **options, &_block)
-      new_registrations = build_registrations(*listeners, **options)
+    ruby2_keywords def subscribe(*listeners, &_block)
+      new_registrations = build_registrations(*listeners)
 
       begin
         registrations.merge new_registrations

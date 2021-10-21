@@ -10,7 +10,12 @@ module Wisper
 
         it 'broadcasts the event to the listener' do
           publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
-          expect(listener).to receive(:it_happened).with(1, 2)
+
+          expected = [1, 2]
+          expected.push({}) if RUBY_VERSION < "2.7"
+
+          expect(listener).to receive(:it_happened).with(*expected)
+
           publisher.send(:broadcast, :it_happened, 1, 2)
         end
       end

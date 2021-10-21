@@ -43,9 +43,10 @@ module Wisper
       with_mutex { @registrations.clear }
     end
 
-    def self.subscribe(*listeners, **options)
-      instance.subscribe(*listeners, **options)
+    def self.subscribe(*listeners)
+      instance.subscribe(*listeners)
     end
+    singleton_class.send(:ruby2_keywords, :subscribe)
 
     def self.unsubscribe(*listeners)
       instance.unsubscribe(*listeners)

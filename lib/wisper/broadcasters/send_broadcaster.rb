@@ -1,8 +1,8 @@
 module Wisper
   module Broadcasters
     class SendBroadcaster
-      def broadcast(listener, publisher, event, *args, **kwargs)
-        listener.public_send(event, *args, **kwargs)
+      ruby2_keywords def broadcast(listener, publisher, event, *args)
+        listener.public_send(event, *args)
       end
     end
   end

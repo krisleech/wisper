@@ -15,7 +15,11 @@ describe Wisper do
 
   it 'subscribes object to all published events' do
     listener = double('listener')
-    expect(listener).to receive(:success).with('hello')
+
+    expected = ['hello']
+    expected.push({}) if RUBY_VERSION < "2.7"
+
+    expect(listener).to receive(:success).with(*expected)
 
     command = MyCommand.new
 
@@ -27,8 +31,15 @@ describe Wisper do
   it 'maps events to different methods' do
     listener_1 = double('listener')
     listener_2 = double('listener')
-    expect(listener_1).to receive(:happy_days).with('hello')
-    expect(listener_2).to receive(:sad_days).with('world')
+
+    expected = ['hello']
+    expected.push({}) if RUBY_VERSION < "2.7"
+
+    expect(listener_1).to receive(:happy_days).with(*expected)
+
+    expected = ['world']
+    expected.push({}) if RUBY_VERSION < "2.7"
+    expect(listener_2).to receive(:sad_days).with(*expected)
 
     command = MyCommand.new
 

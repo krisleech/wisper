@@ -11,8 +11,12 @@ end
 describe 'simple publishing' do
   it 'subscribes listener to events' do
     listener = double('listener')
-    expect(listener).to receive(:foo).with instance_of MyPublisher
-    expect(listener).to receive(:bar).with instance_of MyPublisher
+
+    expected = [instance_of(MyPublisher)]
+    expected.push({}) if RUBY_VERSION < "2.7"
+
+    expect(listener).to receive(:foo).with(*expected)
+    expect(listener).to receive(:bar).with(*expected)
 
     my_publisher = MyPublisher.new
     my_publisher.subscribe(listener)

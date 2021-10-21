@@ -17,7 +17,9 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/krisleech/wisper"
   gem.license       = "MIT"
 
-  gem.required_ruby_version = '>= 2.7'
+  gem.required_ruby_version = '>= 2.6'
+
+  gem.add_dependency 'ruby2_keywords'
 
   signing_key = File.expand_path(ENV['HOME'].to_s + '/.ssh/gem-private_key.pem')
 
