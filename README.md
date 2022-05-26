@@ -322,7 +322,15 @@ Got a specific question, try the
 
 ## Compatibility
 
+### 2.0
+
 Tested with MRI 2.x, JRuby and Rubinius.
+
+See the [build status](https://travis-ci.org/krisleech/wisper) for details.
+
+### Master / 3.0 Branch
+
+Tested with MRI 2.7, MRI 3.0 and JRuby 9.x.
 
 See the [build status](https://travis-ci.org/krisleech/wisper) for details.
 
