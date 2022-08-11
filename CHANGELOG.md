@@ -1,5 +1,9 @@
 ## HEAD (unreleased)
 
+Authors: Keith Bennett
+
+* fix: exclude bin directory from gem #181
+
 ## 2.0.1 (29th Aug 2019)
 
 Authors: David Wilkie, hosseintoussi, Maxim Polunin, Tristan
