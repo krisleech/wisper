@@ -45,7 +45,7 @@ module Wisper
             let(:kwargs) { {x: :y} }
 
             it 'logs published event and arguments' do
-              expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments #{kwargs.inspect}")
+              expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments {:x=>:y}")
               subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
 
@@ -60,7 +60,7 @@ module Wisper
               let(:kwargs) { {x: :y} }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments #{kwargs.inspect}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments {:x=>:y}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
@@ -70,7 +70,7 @@ module Wisper
               let(:number) { 10 }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments #{kwargs.inspect}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments {:x=>:y}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
@@ -79,7 +79,7 @@ module Wisper
               let(:args) { [] }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments #{kwargs.inspect}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments {:x=>:y}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end

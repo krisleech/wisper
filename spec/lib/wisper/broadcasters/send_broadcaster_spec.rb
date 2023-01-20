@@ -6,6 +6,13 @@ module Wisper
 
       describe '#broadcast' do
         context 'without arguments' do
+          it 'sends event to listener without any arguments' do
+            expect(listener).to receive(event).with(no_args())
+            subject.broadcast(listener, anything, event)
+          end
+        end
+
+        context 'with empty arguments' do
           let(:args) { [] }
 
           it 'sends event to listener without any arguments' do
