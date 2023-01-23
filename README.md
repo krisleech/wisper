@@ -24,7 +24,7 @@ Please also see the [Wiki](https://github.com/krisleech/wisper/wiki) for more ad
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wisper', '2.0.0'
+gem 'wisper', '3.0.0'
 ```
 
 ## Usage
@@ -322,18 +322,7 @@ Got a specific question, try the
 
 ## Compatibility
 
-### 2.0
-
-Tested with MRI 2.x, JRuby and Rubinius.
-
-See the [build status](https://travis-ci.org/krisleech/wisper) for details.
-
-### Master
-
-**Not compatible with ruby <= 2.6.x**
-
-Tested with MRI 2.7, MRI 3.0 and JRuby 9.x.
-
+Tested with MRI 2.7, 3.x, and JRuby.
 
 See the [build status](https://travis-ci.org/krisleech/wisper) for details.
 

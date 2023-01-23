@@ -1,6 +1,7 @@
 ## HEAD (unreleased)
 
-Authors: doits, jstoks
+## 3.0 (20th Jan 2023)
+Authors: doits, jstoks, merringtion
 
 * Adds: Support for Ruby 3.0 keyword arguments
 * Removes: Support for Ruby 2.6 and lower
