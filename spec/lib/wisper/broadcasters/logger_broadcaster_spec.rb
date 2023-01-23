@@ -8,10 +8,20 @@ module Wisper
         let(:listener)  { double }
         let(:logger)    { double.as_null_object }
 
-        it 'broadcasts the event to the listener' do
-          publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
-          expect(listener).to receive(:it_happened).with(1, 2)
-          publisher.send(:broadcast, :it_happened, 1, 2)
+        context 'without keyword arguments' do
+          it 'broadcasts the event to the listener' do
+            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            expect(listener).to receive(:it_happened).with(1, 2, {})
+            publisher.send(:broadcast, :it_happened, 1, 2)
+          end
+        end
+
+        context 'with keyword arguments' do
+          it 'broadcasts the event to the listener' do
+            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            expect(listener).to receive(:it_happened).with(key: 'value')
+            publisher.send(:broadcast, :it_happened, key: 'value')
+          end
         end
       end
 
