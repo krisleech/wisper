@@ -8,19 +8,33 @@ module Wisper
         let(:listener)  { double }
         let(:logger)    { double.as_null_object }
 
-        context 'without keyword arguments' do
+        context 'with only positional arguments' do
           it 'broadcasts the event to the listener' do
             publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
-            expect(listener).to receive(:it_happened).with(1, 2, {})
+            if RUBY_VERSION < '3.0'
+              # Ruby 2.7 receives **{} as a positional argument
+              expect(listener).to receive(:it_happened).with(1, 2, {})
+            else
+              # Ruby 3.0 doesn't pass **empty_hash
+              expect(listener).to receive(:it_happened).with(1, 2)
+            end
             publisher.send(:broadcast, :it_happened, 1, 2)
           end
         end
 
-        context 'with keyword arguments' do
+        context 'with only keyword arguments' do
           it 'broadcasts the event to the listener' do
             publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
             expect(listener).to receive(:it_happened).with(key: 'value')
             publisher.send(:broadcast, :it_happened, key: 'value')
+          end
+        end
+
+        context 'with positional and keyword arguments' do
+          it 'broadcasts the event to the listener' do
+            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            expect(listener).to receive(:it_happened).with(1, 2, key: 'value')
+            publisher.send(:broadcast, :it_happened, 1, 2, key: 'value')
           end
         end
       end
