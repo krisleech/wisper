@@ -197,7 +197,14 @@ This is useful for cross cutting concerns such as recording statistics, indexing
 Wisper.subscribe(MyListener.new)
 ```
 
-In a Rails app you might want to add your global listeners in an initializer.
+In a Rails app you might want to add your global listeners in an initializer like:
+
+```ruby
+# config/initializers/listeners.rb
+Rails.application.reloader.to_prepare do
+  Wisper.subscribe(MyListener.new)
+end
+```
 
 Global listeners are threadsafe. Subscribers will receive events published on all threads.
 
