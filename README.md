@@ -4,7 +4,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/wisper.svg)](http://badge.fury.io/rb/wisper)
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.svg)](https://codeclimate.com/github/krisleech/wisper)
-[![Build Status](https://travis-ci.org/krisleech/wisper.svg?branch=master)](https://travis-ci.org/krisleech/wisper)
+[![Build Status](https://github.com/krisleech/wisper/actions/workflows/test/badge.svg)](https://github.com/krisleech/wisper/actions)
 [![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.svg?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
 
 * Decouple core business logic from external concerns in Hexagonal style architectures
@@ -329,9 +329,9 @@ Got a specific question, try the
 
 ## Compatibility
 
-Tested with MRI 2.x, JRuby and Rubinius.
+Tested with MRI 2.x and JRuby.
 
-See the [build status](https://travis-ci.org/krisleech/wisper) for details.
+See the [build status](https://github.com/krisleech/wisper/actions) for details.
 
 ## Running Specs
 
