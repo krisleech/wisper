@@ -4,7 +4,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/wisper.svg)](http://badge.fury.io/rb/wisper)
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.svg)](https://codeclimate.com/github/krisleech/wisper)
-[![Build Status](https://github.com/krisleech/wisper/actions/workflows/test/badge.svg)](https://github.com/krisleech/wisper/actions)
+[![Build Status](https://github.com/krisleech/wisper/actions/workflows/test.yml/badge.svg)](https://github.com/krisleech/wisper/actions)
 [![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.svg?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
 
 * Decouple core business logic from external concerns in Hexagonal style architectures
