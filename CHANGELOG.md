@@ -1,8 +1,10 @@
 ## HEAD (unreleased)
 
-Authors: Keith Bennett
+Authors: Keith Bennett, doits, jstoks, merringtion, thirunjuguna
 
 * fix: exclude bin directory from gem #181
+* Adds: Support for Ruby 3.0 keyword arguments
+* Removes: Support for Ruby 2.6 and lower [breaking change]
 
 ## 2.0.1 (29th Aug 2019)
 

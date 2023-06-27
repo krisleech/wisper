@@ -329,8 +329,6 @@ Got a specific question, try the
 
 ## Compatibility
 
-Tested with MRI 2.x and JRuby.
-
 See the [build status](https://github.com/krisleech/wisper/actions) for details.
 
 ## Running Specs

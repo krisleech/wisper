@@ -2,7 +2,7 @@ describe Wisper::ObjectRegistration do
 
   describe 'broadcaster' do
     it 'defaults to SendBroadcaster' do
-      subject = Wisper::ObjectRegistration.new(double('listener'), {})
+      subject = Wisper::ObjectRegistration.new(double('listener'))
       expect(subject.broadcaster).to be_instance_of(Wisper::Broadcasters::SendBroadcaster)
     end
 

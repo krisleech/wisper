@@ -13,12 +13,10 @@ module Wisper
       @mutex         = Mutex.new
     end
 
-    def subscribe(*listeners)
-      options = listeners.last.is_a?(Hash) ? listeners.pop : {}
-
+    def subscribe(*listeners, **options)
       with_mutex do
         listeners.each do |listener|
-          @registrations << ObjectRegistration.new(listener, options)
+          @registrations << ObjectRegistration.new(listener, **options)
         end
       end
       self
@@ -45,8 +43,8 @@ module Wisper
       with_mutex { @registrations.clear }
     end
 
-    def self.subscribe(*listeners)
-      instance.subscribe(*listeners)
+    def self.subscribe(*listeners, **options)
+      instance.subscribe(*listeners, **options)
     end
 
     def self.unsubscribe(*listeners)
