@@ -1,5 +1,7 @@
 ## HEAD (unreleased)
 
+## 3.0.0.rc1 (6th July 2023)
+
 Authors: Keith Bennett, doits, jstoks, merringtion, thirunjuguna
 
 * fix: exclude bin directory from gem #181
