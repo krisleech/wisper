@@ -202,6 +202,8 @@ In a Rails app you might want to add your global listeners in an initializer lik
 ```ruby
 # config/initializers/listeners.rb
 Rails.application.reloader.to_prepare do
+  Wisper.clear if Rails.env.development?
+
   Wisper.subscribe(MyListener.new)
 end
 ```
