@@ -58,7 +58,7 @@ Authors: Kris Leech
 Authors: Kris Leech
 
 * feature: allow events to be published asynchronously
-* feature: broadcasting of events is plugable and configurable
+* feature: broadcasting of events is pluggable and configurable
 * feature: broadcasters can be aliased via a symbol
 * feature: logging broadcaster
 

@@ -12,7 +12,7 @@
 * Connect objects based on context without permanence
 * Publish events synchronously or asynchronously
 
-Note: Wisper was originally extracted from a Rails codebase but is not dependant on Rails.
+Note: Wisper was originally extracted from a Rails codebase but is not dependent on Rails.
 
 Please also see the [Wiki](https://github.com/krisleech/wisper/wiki) for more additional information and articles.
 

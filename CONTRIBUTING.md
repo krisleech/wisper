@@ -10,7 +10,7 @@ and contributors are expected to adhere to the
 
 Please first check the existing [Issues](https://github.com/krisleech/wisper/issues) 
 and [Pull Requests](https://github.com/krisleech/wisper/pulls) to ensure your
-issue has not already been discused.
+issue has not already been discussed.
 
 ## Bugs
 
@@ -20,7 +20,7 @@ and Ruby you are using and a small code sample (or better yet a failing test).
 ## Features
 
 Please open an issue with your proposed feature. We can discuss the feature and
-if it is acceptable we can also discuss implimentation details. You will in
+if it is acceptable we can also discuss implementation details. You will in
 most cases have to submit a PR which adds the feature. 
 
 Wisper is a micro library and will remain lean. Some features would be most
