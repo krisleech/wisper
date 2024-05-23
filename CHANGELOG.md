@@ -1,5 +1,11 @@
 ## HEAD (unreleased)
 
+## 3.0.0 (23rd May 2024)
+
+Authors: maboelnour, kianmeng 
+
+* docs: fix typos and example code
+
 ## 3.0.0.rc1 (6th July 2023)
 
 Authors: Keith Bennett, doits, jstoks, merringtion, thirunjuguna
