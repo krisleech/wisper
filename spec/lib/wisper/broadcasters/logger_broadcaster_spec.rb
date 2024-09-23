@@ -37,6 +37,14 @@ module Wisper
             publisher.send(:broadcast, :it_happened, 1, 2, key: 'value')
           end
         end
+
+        context 'with specified method' do
+          it 'broadcasts the event to the listener' do
+            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new), :with => :call)
+            expect(listener).to receive(:call).with(1, 2, key: 'value')
+            publisher.send(:broadcast, :it_happened, 1, 2, key: 'value')
+          end
+        end
       end
 
       describe 'unit tests:' do
@@ -45,6 +53,7 @@ module Wisper
         let(:logger)      { double('Logger').as_null_object }
         let(:broadcaster) { double('Broadcaster').as_null_object }
         let(:event)       { 'thing_created' }
+        let(:method_to_call) { 'call' }
 
         subject           { LoggerBroadcaster.new(logger, broadcaster) }
 
@@ -55,12 +64,12 @@ module Wisper
 
             it 'logs published event' do
               expect(logger).to receive(:info).with('[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and no keyword arguments')
-              subject.broadcast(listener, publisher, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
             end
 
             it 'delegates broadcast to a given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, *args, **kwargs)
-              subject.broadcast(listener, publisher, event, *args, **kwargs)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, method_to_call, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
             end
           end
 
@@ -70,12 +79,12 @@ module Wisper
 
             it 'logs published event and arguments' do
               expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments {:x=>:y}")
-              subject.broadcast(listener, publisher, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
             end
 
             it 'delegates broadcast to a given broadcaster' do
-              expect(broadcaster).to receive(:broadcast).with(listener, publisher, event, *args, **kwargs)
-              subject.broadcast(listener, publisher, event, *args, **kwargs)
+              expect(broadcaster).to receive(:broadcast).with(listener, publisher, method_to_call, event, *args, **kwargs)
+              subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
             end
 
             context 'when argument is a hash' do
@@ -85,7 +94,7 @@ module Wisper
 
               it 'logs published event and arguments' do
                 expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments {:x=>:y}")
-                subject.broadcast(listener, publisher, event, *args, **kwargs)
+                subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
               end
             end
 
@@ -95,7 +104,7 @@ module Wisper
 
               it 'logs published event and arguments' do
                 expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments {:x=>:y}")
-                subject.broadcast(listener, publisher, event, *args, **kwargs)
+                subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
               end
             end
 
@@ -104,7 +113,7 @@ module Wisper
 
               it 'logs published event and arguments' do
                 expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments {:x=>:y}")
-                subject.broadcast(listener, publisher, event, *args, **kwargs)
+                subject.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
               end
             end
           end
