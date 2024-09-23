@@ -1,18 +1,19 @@
 module Wisper
   module Broadcasters
     describe SendBroadcaster do
-      let(:listener) { double('listener') }
-      let(:event)      { 'thing_created' }
+      let(:listener)       { double('listener') }
+      let(:method_to_call) { 'call' }
+      let(:event)          { 'thing_created' }
 
       describe '#broadcast' do
         context 'without arguments' do
           it 'sends event to listener without any arguments' do
             if RUBY_VERSION < '3.0'
-              expect(listener).to receive(event).with({})
+              expect(listener).to receive(method_to_call).with({})
             else
-              expect(listener).to receive(event).with(no_args)
+              expect(listener).to receive(method_to_call).with(no_args)
             end
-            subject.broadcast(listener, anything, event)
+            subject.broadcast(listener, anything, method_to_call, event)
           end
         end
 
@@ -21,11 +22,11 @@ module Wisper
 
           it 'sends event to listener without any arguments' do
             if RUBY_VERSION < '3.0'
-              expect(listener).to receive(event).with({})
+              expect(listener).to receive(method_to_call).with({})
             else
-              expect(listener).to receive(event).with(no_args)
+              expect(listener).to receive(method_to_call).with(no_args)
             end
-            subject.broadcast(listener, anything, event, *args)
+            subject.broadcast(listener, anything, method_to_call, event, *args)
           end
         end
 
@@ -35,11 +36,11 @@ module Wisper
 
             it 'sends event to listener with arguments' do
               if RUBY_VERSION < '3.0'
-                expect(listener).to receive(event).with(1, 2, 3, {})
+                expect(listener).to receive(method_to_call).with(1, 2, 3, {})
               else
-                expect(listener).to receive(event).with(1, 2, 3)
+                expect(listener).to receive(method_to_call).with(1, 2, 3)
               end
-              subject.broadcast(listener, anything, event, *args)
+              subject.broadcast(listener, anything, method_to_call, event, *args)
             end
           end
 
@@ -47,8 +48,8 @@ module Wisper
             let(:kwargs) { { key: 'value' } }
 
             it 'sends event to listener with arguments' do
-              expect(listener).to receive(event).with({key: 'value'})
-              subject.broadcast(listener, anything, event, **kwargs)
+              expect(listener).to receive(method_to_call).with({key: 'value'})
+              subject.broadcast(listener, anything, method_to_call, event, **kwargs)
             end
           end
 
@@ -57,8 +58,8 @@ module Wisper
             let(:kwargs) { { key: 'value' } }
 
             it 'sends event to listener with arguments' do
-              expect(listener).to receive(event).with(1,2,3, {key: 'value'})
-              subject.broadcast(listener, anything, event, *args, **kwargs)
+              expect(listener).to receive(method_to_call).with(1,2,3, {key: 'value'})
+              subject.broadcast(listener, anything, method_to_call, event, *args, **kwargs)
             end
           end
         end

@@ -15,7 +15,7 @@ module Wisper
     def broadcast(event, publisher, *args, **kwargs)
       method_to_call = map_event_to_method(event)
       if should_broadcast?(event) && listener.respond_to?(method_to_call) && publisher_in_scope?(publisher)
-        broadcaster.broadcast(listener, publisher, method_to_call, *args, **kwargs)
+        broadcaster.broadcast(listener, publisher, method_to_call, event, *args, **kwargs)
       end
     end
 

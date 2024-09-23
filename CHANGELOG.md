@@ -1,8 +1,12 @@
 ## HEAD (unreleased)
 
+Authors: Anthony Chao
+
+* fix: Incorrect event name logging with :with option
+
 ## 3.0.0 (23rd May 2024)
 
-Authors: maboelnour, kianmeng 
+Authors: maboelnour, kianmeng
 
 * docs: fix typos and example code
 
