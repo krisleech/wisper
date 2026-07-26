@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 module Wisper
-  module ValueObjects #:nodoc:
+  module ValueObjects # :nodoc:
     # Describes allowed events
     #
     # Duck-types the argument to quack like array of strings
     # when responding to the {#include?} method call.
     class Events
-
       # @!scope class
       # @!method new(on)
       # Initializes a 'list' of events
@@ -33,29 +34,27 @@ module Wisper
 
       def methods
         {
-          NilClass   => ->(_event) { true },
-          String     => ->(event)  { list == event },
-          Symbol     => ->(event)  { list.to_s == event },
-          Enumerable => ->(event)  { list.map(&:to_s).include? event },
-          Regexp     => ->(event)  { list.match(event) || false }
+          NilClass => ->(_event) { true },
+          String => ->(event)  { list == event },
+          Symbol => ->(event)  { list.to_s == event },
+          Enumerable => ->(event) { list.map(&:to_s).include? event },
+          Regexp => ->(event) { list.match(event) || false }
         }
       end
 
-      def list
-        @list
-      end
+      attr_reader :list
 
       def appropriate_method
         @appropriate_method ||= methods[recognized_type]
       end
 
       def recognized_type
-        methods.keys.detect(&list.method(:is_a?)) || type_not_recognized
+        methods.keys.detect { |type| list.is_a?(type) } || type_not_recognized
       end
 
       def type_not_recognized
-        fail(ArgumentError, "#{list.class} not supported for `on` argument")
+        raise(ArgumentError, "#{list.class} not supported for `on` argument")
       end
-    end # class Events
-  end # module ValueObjects
-end # module Wisper
+    end
+  end
+end

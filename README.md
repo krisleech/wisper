@@ -5,7 +5,6 @@
 [![Gem Version](https://badge.fury.io/rb/wisper.svg)](http://badge.fury.io/rb/wisper)
 [![Code Climate](https://codeclimate.com/github/krisleech/wisper.svg)](https://codeclimate.com/github/krisleech/wisper)
 [![Build Status](https://github.com/krisleech/wisper/actions/workflows/test.yml/badge.svg)](https://github.com/krisleech/wisper/actions)
-[![Coverage Status](https://coveralls.io/repos/krisleech/wisper/badge.svg?branch=master)](https://coveralls.io/r/krisleech/wisper?branch=master)
 
 * Decouple core business logic from external concerns in Hexagonal style architectures
 * Use as an alternative to ActiveRecord callbacks and Observers in Rails apps
@@ -26,6 +25,9 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'wisper', '~> 3.0'
 ```
+
+Wisper requires Ruby 3.2 or newer, and is tested against 3.2, 3.3, 3.4 and
+4.0 (see the [build status](https://github.com/krisleech/wisper/actions)).
 
 ## Usage
 
@@ -339,10 +341,19 @@ See the [build status](https://github.com/krisleech/wisper/actions) for details.
 bundle exec rspec
 ```
 
+The suite enforces 100% line and branch coverage via [SimpleCov](https://github.com/simplecov-ruby/simplecov);
+a report is written to `coverage/index.html`.
+
 To run the specs on code changes try [entr](http://entrproject.org/):
 
 ```
 ls **/*.rb | entr bundle exec rspec
+```
+
+## Linting
+
+```
+bundle exec rubocop
 ```
 
 ## Contributing
@@ -354,6 +365,13 @@ Please read the [Contributing Guidelines](https://github.com/krisleech/wisper/bl
 * gem releases are [signed](http://guides.rubygems.org/security/) ([public key](https://github.com/krisleech/wisper/blob/master/gem-public_cert.pem))
 * commits are GPG signed ([public key](https://pgp.mit.edu/pks/lookup?op=get&search=0x3ABC74851F7CCC88))
 * My [Keybase.io profile](https://keybase.io/krisleech)
+* publishing to RubyGems requires MFA (`rubygems_mfa_required` in the gemspec)
+* dependencies are scanned for known vulnerabilities with
+  [bundler-audit](https://github.com/rubysec/bundler-audit):
+
+  ```
+  bundle exec bundler-audit check --update
+  ```
 
 ## License
 

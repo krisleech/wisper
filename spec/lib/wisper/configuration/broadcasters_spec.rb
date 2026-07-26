@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wisper
   describe Configuration::Broadcasters do
     describe 'broadcasters' do

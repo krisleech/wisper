@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Wisper::Publisher do
   let(:listener)  { double('listener') }
   let(:publisher) { publisher_class.new }
@@ -50,7 +52,7 @@ describe Wisper::Publisher do
           expect(listener).to receive(:and_this)
           expect(listener).not_to receive(:so_did_this)
 
-          publisher.subscribe(listener, on: ['this_happened', 'and_this'])
+          publisher.subscribe(listener, on: %w[this_happened and_this])
 
           publisher.send(:broadcast, 'this_happened')
           publisher.send(:broadcast, 'so_did_this')
@@ -143,7 +145,7 @@ describe Wisper::Publisher do
       end
     end
 
-    describe ':broadcaster argument'do
+    describe ':broadcaster argument' do
       let(:broadcaster) { double('broadcaster') }
       let(:listener)    { double('listener') }
       let(:event_name)  { 'it_happened' }
@@ -213,35 +215,33 @@ describe Wisper::Publisher do
     end
 
     it 'raises a helpful error if trying to pass a block' do
-      invalid = ->{
+      invalid = lambda {
         publisher.subscribe(:success) do
-          puts
         end
       }
-      expect{ invalid.call }.to raise_error(ArgumentError)
+      expect { invalid.call }.to raise_error(ArgumentError)
     end
   end
 
   describe '.on' do
-    it 'returns publisher so methods can be chained' do
+    it 'returns publisher so methods can be chained when given a string event' do
       expect(publisher.on('this_thing_happened') {}).to eq publisher
     end
 
     it 'raise an error if no events given' do
-      expect { publisher.on() {} }.to raise_error(ArgumentError)
+      expect { publisher.on {} }.to raise_error(ArgumentError)
     end
 
     it 'raises an error of no block given' do
       expect { publisher.on(:something) }.to raise_error(ArgumentError)
     end
 
-    it 'returns publisher so methods can be chained' do
+    it 'returns publisher so methods can be chained when given a symbol event' do
       expect(publisher.on(:foo) {}).to eq publisher
     end
   end
 
   describe '.broadcast' do
-
     it 'does not publish events which cannot be responded to' do
       expect(listener).not_to receive(:so_did_this)
       allow(listener).to receive(:respond_to?).and_return(false)
@@ -291,9 +291,9 @@ describe Wisper::Publisher do
     end
 
     it 'returns local listeners' do
-       publisher.subscribe(listener)
-       expect(publisher.listeners).to eq [listener]
-       expect(publisher.listeners.size).to eq 1
+      publisher.subscribe(listener)
+      expect(publisher.listeners).to eq [listener]
+      expect(publisher.listeners.size).to eq 1
     end
   end
 

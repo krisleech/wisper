@@ -1,0 +1,95 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'coverage/**/*'
+
+# Wisper is intentionally a small, single-purpose library; classes and
+# methods are kept short by design, so class/method length limits add
+# noise rather than value.
+Metrics:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 130
+  Exclude:
+    - 'spec/**/*'
+
+# The specs use a mix of `key: value` and legacy `:key => value` hash
+# syntax on purpose, to demonstrate/exercise both call styles that
+# Wisper's public API supports (see publisher_spec.rb). Enforcing one
+# style repo-wide would obscure that.
+Style/HashSyntax:
+  Exclude:
+    - 'spec/**/*'
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/lib/simple_example_spec.rb'
+    - 'spec/lib/integration_spec.rb'
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+# `listener_1`/`listener_2`, `publisher_klass_1`/`publisher_klass_2` etc.
+# are the clearest names for these examples; a semantic rename would be
+# more indirect for no real benefit.
+Naming/VariableNumber:
+  Exclude:
+    - 'spec/**/*'
+
+RSpec/IndexedLet:
+  Enabled: false
+
+# The spec file layout mirrors the `lib/wisper/**` structure by intent,
+# not the `describe`d class/module name.
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+# Several specs intentionally assert that a chainable method still
+# returns `self` when given an empty block.
+Lint/EmptyBlock:
+  Exclude:
+    - 'spec/**/*'

@@ -1,5 +1,17 @@
 ## HEAD (unreleased)
 
+* Adds: support for and CI coverage of Ruby 3.2 - 4.0
+* Removes: support for Ruby < 3.2 [breaking change]
+* fix: `Wisper::Broadcasters::LoggerBroadcaster` keyword-argument logging on
+  Ruby 3.4+, where `Hash#inspect` changed its output format for symbol keys
+* chore: replace the abandoned `coveralls` gem (pinned to ancient
+  faraday/thor/tins releases that no longer install on current Ruby) with
+  `simplecov`; the suite now enforces 100% line and branch coverage
+* chore: add RuboCop (with rubocop-performance, rubocop-rspec) and a
+  `.rubocop.yml`; codebase is fully lint-clean and uniformly formatted
+* chore: add `bundler-audit` to CI to catch dependency vulnerabilities
+* docs: add YARD documentation to all public classes and methods
+
 ## 3.0.0 (23rd May 2024)
 
 Authors: maboelnour, kianmeng 

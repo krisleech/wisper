@@ -1,0 +1,20 @@
+{
+  "blocked": false,
+  "blocked_reason": null,
+  "dependency_changes": [
+    "removed coveralls (unmaintained, pulled unresolvable old faraday/thor/tins chain that broke `bundle install` on Ruby 4.0.6)",
+    "added simplecov ~> 1.0 for local coverage reporting, enforced at 100% line and branch via minimum_coverage",
+    "added rubocop ~> 1.88, rubocop-performance ~> 1.26, rubocop-rspec ~> 3.10 for static analysis",
+    "added bundler-audit ~> 0.9 for dependency vulnerability scanning",
+    "removed unused flay dependency",
+    "kept pry and yard (already maintained, unchanged)",
+    "required_ruby_version: >= 2.7 -> >= 3.2"
+  ],
+  "security_findings": [
+    "bundler-audit check --update against ruby-advisory-db (1219 advisories): no vulnerabilities found in the dependency tree",
+    "added gem.metadata['rubygems_mfa_required'] = 'true' to require MFA for future `gem push`",
+    "removed coveralls, which pinned older/less-maintained transitive dependencies (faraday < 1, thor < 1, tins) with no remaining reason to be in the dependency graph"
+  ],
+  "coverage_before": 0.0,
+  "coverage_after": 100.0
+}

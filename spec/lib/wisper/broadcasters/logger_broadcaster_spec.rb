@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
+# used to exercise LoggerBroadcaster's naming of class (rather than
+# instance) listeners/publishers, see below
+class LoggerBroadcasterExampleListener
+  def self.thing_created; end
+end
+
 module Wisper
   module Broadcasters
-
     describe LoggerBroadcaster do
-
       describe 'integration tests:' do
         let(:publisher) { publisher_class.new }
         let(:listener)  { double }
@@ -10,21 +16,15 @@ module Wisper
 
         context 'with only positional arguments' do
           it 'broadcasts the event to the listener' do
-            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
-            if RUBY_VERSION < '3.0'
-              # Ruby 2.7 receives **{} as a positional argument
-              expect(listener).to receive(:it_happened).with(1, 2, {})
-            else
-              # Ruby 3.0 doesn't pass **empty_hash
-              expect(listener).to receive(:it_happened).with(1, 2)
-            end
+            publisher.subscribe(listener, :broadcaster => described_class.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            expect(listener).to receive(:it_happened).with(1, 2)
             publisher.send(:broadcast, :it_happened, 1, 2)
           end
         end
 
         context 'with only keyword arguments' do
           it 'broadcasts the event to the listener' do
-            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            publisher.subscribe(listener, :broadcaster => described_class.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
             expect(listener).to receive(:it_happened).with(key: 'value')
             publisher.send(:broadcast, :it_happened, key: 'value')
           end
@@ -32,7 +32,7 @@ module Wisper
 
         context 'with positional and keyword arguments' do
           it 'broadcasts the event to the listener' do
-            publisher.subscribe(listener, :broadcaster => LoggerBroadcaster.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
+            publisher.subscribe(listener, :broadcaster => described_class.new(logger, Wisper::Broadcasters::SendBroadcaster.new))
             expect(listener).to receive(:it_happened).with(1, 2, key: 'value')
             publisher.send(:broadcast, :it_happened, 1, 2, key: 'value')
           end
@@ -40,13 +40,13 @@ module Wisper
       end
 
       describe 'unit tests:' do
-        let(:publisher)   { classy_double('Publisher',  id: 1) }
-        let(:listener)  { classy_double('Listener', id: 2) }
+        let(:publisher) { classy_double('Publisher', id: 1) }
+        let(:listener) { classy_double('Listener', id: 2) }
         let(:logger)      { double('Logger').as_null_object }
         let(:broadcaster) { double('Broadcaster').as_null_object }
         let(:event)       { 'thing_created' }
 
-        subject           { LoggerBroadcaster.new(logger, broadcaster) }
+        subject           { described_class.new(logger, broadcaster) }
 
         describe '#broadcast' do
           context 'without arguments' do
@@ -66,10 +66,10 @@ module Wisper
 
           context 'with arguments' do
             let(:args) { [arg_double(id: 3), arg_double(id: 4)] }
-            let(:kwargs) { {x: :y} }
+            let(:kwargs) { { x: :y } }
 
             it 'logs published event and arguments' do
-              expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments {:x=>:y}")
+              expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Argument#3, Argument#4 and keyword arguments #{kwargs.inspect}")
               subject.broadcast(listener, publisher, event, *args, **kwargs)
             end
 
@@ -80,11 +80,11 @@ module Wisper
 
             context 'when argument is a hash' do
               let(:args) { [hash] }
-              let(:hash) { {key: 'value'} }
-              let(:kwargs) { {x: :y} }
+              let(:hash) { { key: 'value' } }
+              let(:kwargs) { { x: :y } }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments {:x=>:y}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with Hash##{hash.object_id}: #{hash.inspect} and keyword arguments #{kwargs.inspect}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
@@ -94,7 +94,7 @@ module Wisper
               let(:number) { 10 }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments {:x=>:y}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with #{number.class.name}##{number.object_id}: 10 and keyword arguments #{kwargs.inspect}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
@@ -103,12 +103,22 @@ module Wisper
               let(:args) { [] }
 
               it 'logs published event and arguments' do
-                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments {:x=>:y}")
+                expect(logger).to receive(:info).with("[WISPER] Publisher#1 published thing_created to Listener#2 with no arguments and keyword arguments #{kwargs.inspect}")
                 subject.broadcast(listener, publisher, event, *args, **kwargs)
               end
             end
           end
 
+          context 'when the listener is a class rather than an instance' do
+            let(:listener) { LoggerBroadcasterExampleListener }
+
+            it 'uses the class name itself rather than its metaclass name' do
+              expect(logger).to receive(:info).with(
+                "[WISPER] Publisher#1 published thing_created to LoggerBroadcasterExampleListener##{listener.object_id} with no arguments and no keyword arguments"
+              )
+              subject.broadcast(listener, publisher, event)
+            end
+          end
         end
 
         # provides a way to specify `double.class.name` easily

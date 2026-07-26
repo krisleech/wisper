@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Wisper::TemporaryListeners do
   let(:listener_1) { double('listener', :to_a => nil) } # [1]
   let(:listener_2) { double('listener', :to_a => nil) }
@@ -6,11 +8,10 @@ describe Wisper::TemporaryListeners do
 
   describe '.subscribe' do
     it 'globally subscribes listener for duration of given block' do
-
       expect(listener_1).to receive(:success)
-      expect(listener_1).to_not receive(:failure)
+      expect(listener_1).not_to receive(:failure)
 
-      Wisper::TemporaryListeners.subscribe(listener_1) do
+      described_class.subscribe(listener_1) do
         publisher.instance_eval { broadcast(:success) }
       end
 
@@ -18,14 +19,13 @@ describe Wisper::TemporaryListeners do
     end
 
     it 'globally subscribes listeners for duration of given block' do
-
       expect(listener_1).to receive(:success)
-      expect(listener_1).to_not receive(:failure)
+      expect(listener_1).not_to receive(:failure)
 
       expect(listener_2).to receive(:success)
-      expect(listener_2).to_not receive(:failure)
+      expect(listener_2).not_to receive(:failure)
 
-      Wisper::TemporaryListeners.subscribe(listener_1, listener_2) do
+      described_class.subscribe(listener_1, listener_2) do
         publisher.instance_eval { broadcast(:success) }
       end
 
@@ -33,15 +33,14 @@ describe Wisper::TemporaryListeners do
     end
 
     it 'globally subscribes listeners for duration of nested block' do
-
       expect(listener_1).to receive(:success)
       expect(listener_1).to receive(:failure)
 
       expect(listener_2).to receive(:success)
-      expect(listener_2).to_not receive(:failure)
+      expect(listener_2).not_to receive(:failure)
 
-      Wisper::TemporaryListeners.subscribe(listener_1) do
-        Wisper::TemporaryListeners.subscribe(listener_2) do
+      described_class.subscribe(listener_1) do
+        described_class.subscribe(listener_2) do
           publisher.instance_eval { broadcast(:success) }
         end
         publisher.instance_eval { broadcast(:failure) }
@@ -49,18 +48,17 @@ describe Wisper::TemporaryListeners do
     end
 
     it 'clears registrations for the block which exits' do
-
       # listener_1 is subscribed twice hence it's supposed to get the message twice
       expect(listener_1).to receive(:success).twice
       expect(listener_1).to receive(:failure)
-      expect(listener_1).to_not receive(:ignored)
+      expect(listener_1).not_to receive(:ignored)
 
       expect(listener_2).to receive(:success)
-      expect(listener_2).to_not receive(:failure)
-      expect(listener_2).to_not receive(:ignored)
+      expect(listener_2).not_to receive(:failure)
+      expect(listener_2).not_to receive(:ignored)
 
-      Wisper::TemporaryListeners.subscribe(listener_1) do
-        Wisper::TemporaryListeners.subscribe(listener_1, listener_2) do
+      described_class.subscribe(listener_1) do
+        described_class.subscribe(listener_1, listener_2) do
           publisher.instance_eval { broadcast(:success) }
         end
         publisher.instance_eval { broadcast(:failure) }
@@ -72,29 +70,24 @@ describe Wisper::TemporaryListeners do
       num_threads = 20
       (1..num_threads).to_a.map do
         Thread.new do
-          Wisper::TemporaryListeners.registrations << Object.new
-          expect(Wisper::TemporaryListeners.registrations.size).to eq 1
+          described_class.registrations << Object.new
+          expect(described_class.registrations.size).to eq 1
         end
       end.each(&:join)
 
-      expect(Wisper::TemporaryListeners.registrations).to be_empty
+      expect(described_class.registrations).to be_empty
     end
 
     it 'clears registrations when an exception occurs' do
-      MyError = Class.new(StandardError)
+      expect do
+        described_class.subscribe(listener_1) { raise 'boom' }
+      end.to raise_error('boom')
 
-      begin
-        Wisper::TemporaryListeners.subscribe(listener_1) do
-          raise MyError
-        end
-      rescue MyError
-      end
-
-      expect(Wisper::TemporaryListeners.registrations).to be_empty
+      expect(described_class.registrations).to be_empty
     end
 
     it 'returns self' do
-      expect(Wisper::TemporaryListeners.subscribe {}).to be_an_instance_of(Wisper::TemporaryListeners)
+      expect(described_class.subscribe {}).to be_an_instance_of(described_class)
     end
   end
 end

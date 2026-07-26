@@ -1,10 +1,22 @@
-require "bundler/gem_tasks"
+# frozen_string_literal: true
+
+require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
-require 'coveralls/rake/task'
 
 RSpec::Core::RakeTask.new
-Coveralls::RakeTask.new
 
-task :test_with_coveralls => [:spec, 'coveralls:push']
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+rescue LoadError
+  # rubocop is only available in the :development group
+end
 
-task :default => :spec
+begin
+  require 'bundler/audit/task'
+  Bundler::Audit::Task.new
+rescue LoadError
+  # bundler-audit is only available in the :development group
+end
+
+task default: :spec

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Example
 class MyCommand
   include Wisper::Publisher
@@ -12,7 +14,6 @@ class MyCommand
 end
 
 describe Wisper do
-
   it 'subscribes object to all published events' do
     listener = double('listener')
     expect(listener).to receive(:success).with('hello', **{})
@@ -47,8 +48,8 @@ describe Wisper do
 
     command = MyCommand.new
 
-    command.on(:success) { |message| insider.render('success') }
-           .on(:failure) { |message| insider.render('failure') }
+    command.on(:success) { |_message| insider.render('success') }
+           .on(:failure) { |_message| insider.render('failure') }
 
     command.execute(true)
     command.execute(false)

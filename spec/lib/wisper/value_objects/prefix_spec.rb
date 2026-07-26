@@ -1,27 +1,32 @@
+# frozen_string_literal: true
+
 describe Wisper::ValueObjects::Prefix do
-  
   it 'is a string' do
-    expect(subject).to be_kind_of String
+    expect(subject).to be_a String
   end
 
   describe '.new' do
     context 'without arguments' do
       subject { described_class.new }
+
       it { is_expected.to eq '' }
     end
 
     context 'nil' do
       subject { described_class.new nil }
+
       it { is_expected.to eq '' }
     end
 
     context 'true' do
       subject { described_class.new true }
+
       it { is_expected.to eq 'on_' }
     end
 
     context '"foo"' do
       subject { described_class.new 'foo' }
+
       it { is_expected.to eq 'foo_' }
     end
   end

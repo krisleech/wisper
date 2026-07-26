@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Wisper
-  module ValueObjects #:nodoc:
+  module ValueObjects # :nodoc:
     # Prefix for notifications
     #
     # @example
@@ -15,8 +17,8 @@ module Wisper
       #
       # @return [undefined]
       def initialize(value = nil)
-        super "#{ (value == true) ? default : value }_"
-        replace "" if self == "_"
+        super("#{value == true ? default : value}_")
+        replace '' if self == '_'
       end
 
       private
@@ -24,6 +26,6 @@ module Wisper
       def default
         self.class.default || 'on'
       end
-    end # class Prefix
-  end # module ValueObjects
-end # module Wisper
+    end
+  end
+end
