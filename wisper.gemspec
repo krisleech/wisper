@@ -26,9 +26,8 @@ Gem::Specification.new do |gem|
   # USER are both unset, as on some minimal CI containers); ENV['HOME']
   # degrades gracefully to an empty string instead, so this gem can still
   # build without a signing key in that case.
-  # rubocop:disable Style/EnvHome
+  # rubocop:disable-next Style/EnvHome
   signing_key = File.expand_path("#{ENV.fetch('HOME', nil)}/.ssh/gem-private_key.pem")
-  # rubocop:enable Style/EnvHome
 
   if File.exist?(signing_key)
     gem.signing_key = signing_key
